@@ -1,4 +1,4 @@
-package com.eddy.dsaclockbackend.dsaclock.coltrollers;
+package com.eddy.dsaclockbackend.dsaclock.controllers;
 
 import com.eddy.dsaclockbackend.dsaclock.entities.Users;
 import com.eddy.dsaclockbackend.dsaclock.services.UserService;
