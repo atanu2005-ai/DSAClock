@@ -1,8 +1,7 @@
-package com.eddy.dsaclockbackend.dsaclock;
+package com.eddy.dsaclockbackend.dsaclock.entities;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotBlank;
 
 // -----------User Entity------------
 @Entity
