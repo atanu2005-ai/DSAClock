@@ -5,7 +5,7 @@ import jakarta.validation.constraints.Email;
 
 // -----------User Entity------------
 @Entity
-public class Users {
+public class User {
 
     //User id
     @Id
@@ -20,4 +20,21 @@ public class Users {
     @Email
     @Column(unique = true)
     private String email;
+
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getEmail() {
+        return email;
+    }
 }
