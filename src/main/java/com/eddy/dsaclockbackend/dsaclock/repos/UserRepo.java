@@ -1,7 +1,7 @@
 package com.eddy.dsaclockbackend.dsaclock.repos;
 
-import com.eddy.dsaclockbackend.dsaclock.entities.Users;
+import com.eddy.dsaclockbackend.dsaclock.entities.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface UsersRepo extends JpaRepository<Users, Integer> {
+public interface UserRepo extends JpaRepository<User, Integer> {
 }
