@@ -3,11 +3,12 @@ package com.eddy.dsaclockbackend.dsaclock.entities;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 
-// -----------User Entity------------
+// -----------Users Entity------------
 @Entity
-public class User {
+@Table(name = "Users")
+public class Users {
 
-    //User id
+    //Users id
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id; //used Long instead of long to get null instead of 0 as an empty id
@@ -21,7 +22,7 @@ public class User {
     @Column(unique = true)
     private String email;
 
-
+    //setters
     public void setId(Long id) {
         this.id = id;
     }
@@ -34,6 +35,15 @@ public class User {
         this.email = email;
     }
 
+    public Long getId() {
+        return id;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    //getters
     public String getEmail() {
         return email;
     }
