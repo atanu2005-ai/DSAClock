@@ -34,5 +34,5 @@ public class UserService {
     public Optional<Users> updateUser(Long id) { return userRepo.findById(id); }
 
     //delete user
-    public void deleteUser(Long id) {userRepo.deleteById(id); }
+    public Users deleteUser(Long id) {userRepo.deleteById(id); }
 }
