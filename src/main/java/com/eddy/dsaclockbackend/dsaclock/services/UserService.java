@@ -31,7 +31,7 @@ public class UserService {
     }
 
     //update a user data
-    public Users updateUser(Users user) { return userRepo.save(user); }
+    public Optional<Users> updateUser(Long id) { return userRepo.findById(id); }
 
     //delete user
     public void deleteUser(Long id) {userRepo.deleteById(id); }
