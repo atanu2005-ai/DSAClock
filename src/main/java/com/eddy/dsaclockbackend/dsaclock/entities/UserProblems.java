@@ -5,7 +5,7 @@ import jakarta.persistence.*;
 @Entity
 @Table(name = "UserProblems", uniqueConstraints = {  //This is tell hibernate, "look, this column
                                                      //duo should be unique in th user problems"
-        @UniqueConstraint(columnNames = {"user_id", "problem_id"})
+        @UniqueConstraint(columnNames = {"userId", "problemId"})
 })
 public class UserProblems {
 
