@@ -8,10 +8,10 @@ import jakarta.validation.constraints.Email;
 @Table(name = "Users")
 public class Users {
 
-    //Users id
+    //Users user_id
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id; //used Long instead of long to get null instead of 0 as an empty id
+    private Long user_id; //used Long instead of long to get null instead of 0 as an empty user_id
 
     //username
     @Column(unique = true, nullable = false)
@@ -23,8 +23,8 @@ public class Users {
     private String email;
 
     //setters
-    public void setId(Long id) {
-        this.id = id;
+    public void setUser_id(Long user_id) {
+        this.user_id = user_id;
     }
 
     public void setUsername(String username) {
@@ -35,8 +35,8 @@ public class Users {
         this.email = email;
     }
 
-    public Long getId() {
-        return id;
+    public Long getUser_id() {
+        return user_id;
     }
 
     public String getUsername() {
