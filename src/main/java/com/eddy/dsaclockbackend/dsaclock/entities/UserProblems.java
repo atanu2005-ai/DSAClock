@@ -2,6 +2,8 @@ package com.eddy.dsaclockbackend.dsaclock.entities;
 
 import jakarta.persistence.*;
 
+import java.time.LocalDate;
+
 @Entity
 @Table(name = "UserProblems", uniqueConstraints = {  //This is tell hibernate, "look, this column
                                                      //duo should be unique in th user problems"
@@ -24,6 +26,9 @@ public class UserProblems {
     @JoinColumn(name = "problemId", nullable = false)
     private Problems problem;
 
+    //solved date
+    private LocalDate solved_date;
+
     //This constructor defines clearly that this entity has a relation with user and problem objects
     public UserProblems(Users user, Problems problem) {
         this.user = user;
@@ -41,6 +46,10 @@ public class UserProblems {
         return user;
     }
 
+    public LocalDate getSolved_date() {
+        return solved_date;
+    }
+
     public void setUserProblemId(Long userProblemId) {
         this.userProblemId = userProblemId;
     }
@@ -55,6 +64,10 @@ public class UserProblems {
 
     public Problems getProblem() {
         return problem;
+    }
+
+    public void setSolved_date(LocalDate solved_date) {
+        this.solved_date = solved_date;
     }
 
 }
