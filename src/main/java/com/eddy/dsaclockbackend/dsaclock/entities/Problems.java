@@ -22,14 +22,7 @@ public class Problems {
     //problem difficulty
     private String problem_diff;
 
-    //solved date
-    private LocalDate solved_date;
-
-    //User relation with problem
-    @ManyToOne
-    @JoinColumn(name = "user_id")
-    private Users user;
-
+    //Getters and setters from here
     public Long getProblem_id() {
         return problem_id;
     }
@@ -46,10 +39,6 @@ public class Problems {
         return problem_diff;
     }
 
-    public LocalDate getSolved_date() {
-        return solved_date;
-    }
-
     public void setProblem_id(Long problem_id) {
         this.problem_id = problem_id;
     }
@@ -64,18 +53,6 @@ public class Problems {
 
     public void setProblem_diff(String problem_diff) {
         this.problem_diff = problem_diff;
-    }
-
-    public void setSolved_date(LocalDate solved_date) {
-        this.solved_date = solved_date;
-    }
-
-    public void setUser(Users user) {
-        this.user = user;
-    }
-
-    public Users getUser() {
-        return user;
     }
 
 }
