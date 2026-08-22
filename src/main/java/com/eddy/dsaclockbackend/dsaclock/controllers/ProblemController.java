@@ -23,9 +23,9 @@ public class ProblemController {
     }
 
     //get a problem by id
-    @GetMapping("/{problem_id}")
-    public ResponseEntity<Problems> getProblems(@PathVariable Long problem_id) {
-        Optional<Problems> thisProblem = problemService.getProblem(problem_id);
+    @GetMapping("/{problemId}")
+    public ResponseEntity<Problems> getProblems(@PathVariable Long problemId) {
+        Optional<Problems> thisProblem = problemService.getProblem(problemId);
 
         if(thisProblem.isPresent()) {
             return ResponseEntity.ok(thisProblem.get());
