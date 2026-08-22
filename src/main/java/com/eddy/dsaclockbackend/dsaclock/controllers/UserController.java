@@ -1,22 +1,30 @@
 package com.eddy.dsaclockbackend.dsaclock.controllers;
 
+import com.eddy.dsaclockbackend.dsaclock.entities.Problems;
+import com.eddy.dsaclockbackend.dsaclock.entities.UserProblems;
 import com.eddy.dsaclockbackend.dsaclock.entities.Users;
+import com.eddy.dsaclockbackend.dsaclock.services.UserProblemService;
 import com.eddy.dsaclockbackend.dsaclock.services.UserService;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/users")
 public class UserController {
-    private final UserService userService;
-    public UserController(UserService userService) {
+    private final UserService userService; //user service constructor
+    private final UserProblemService userProblemService;
+    public UserController(UserService userService, UserProblemService userProblemService) {
         this.userService = userService;
+        this.userProblemService = userProblemService;
     }
-    //add user
-    @GetMapping //get all user data
+
+    //get all user data
+    @GetMapping
     public List<Users> getUser() {
         return userService.getUser();
     }
@@ -32,7 +40,8 @@ public class UserController {
         }
     }
 
-    @PostMapping //add new user
+    //add new user
+    @PostMapping
     public Users setUser(@RequestBody Users user) {
         return userService.setUser(user);
     }
@@ -68,4 +77,34 @@ public class UserController {
             return ResponseEntity.notFound().build();
         }
     }
+
+    /*user problem endpoints
+     ----------------------*/
+
+    //get all problems of the current user
+    @GetMapping("/{userId}/problems")
+    public List<Problems> getUserProblems(@PathVariable Long userId) {
+        return userProblemService.getUserProblems(userId);
+    }
+
+    //add a problem to a user
+    @PostMapping("/{userId}/problems/{problemId}")
+    public ResponseEntity<UserProblems> addUserProblem(@PathVariable Long userId,
+                                                       @PathVariable Long problemId,
+                                                       @RequestBody UserProblems userProblems) {
+        //this will return empty optional if the unique constraint already exists
+        Optional<UserProblems> thisUserProblem = userProblemService.addUserProblem(userId, problemId, userProblems);
+
+        if(thisUserProblem.isPresent()) {
+            return ResponseEntity.ok(thisUserProblem.get());
+        }else {
+            return ResponseEntity.status(HttpStatus.CONFLICT).build(); //
+        }
+
+
+    }
+
+    //delete a user problem
+    //@DeleteMapping("/{userId}/problems/{problemId}")
+
 }
