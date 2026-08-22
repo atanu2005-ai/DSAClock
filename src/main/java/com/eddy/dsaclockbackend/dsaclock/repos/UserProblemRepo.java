@@ -9,4 +9,7 @@ public interface UserProblemRepo extends JpaRepository<UserProblems, Long> {
 
     //to find all user problems with relation of the current user
     List<UserProblems> findByUserUserId(Long userId);
+
+    //using unique constraint to check if this pair of user and problem exists
+    boolean existByUserUserIdAndProblemProblemId(Long userId, Long problemId);
 }
