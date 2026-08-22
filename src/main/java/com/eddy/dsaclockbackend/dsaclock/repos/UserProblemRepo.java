@@ -8,5 +8,5 @@ import java.util.List;
 public interface UserProblemRepo extends JpaRepository<UserProblems, Long> {
 
     //to find all user problems with relation of the current user
-    List<UserProblems> findByUserId(Long userId);
+    List<UserProblems> findByUserUserId(Long userId);
 }

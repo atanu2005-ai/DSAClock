@@ -11,7 +11,7 @@ public class Users {
     //Users user_id
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long user_id; //used Long instead of long to get null instead of 0 as an empty user_id
+    private Long userId; //used Long instead of long to get null instead of 0 as an empty user_id
 
     //username
     @Column(unique = true, nullable = false)
@@ -23,10 +23,6 @@ public class Users {
     private String email;
 
     //setters
-    public void setUser_id(Long user_id) {
-        this.user_id = user_id;
-    }
-
     public void setUsername(String username) {
         this.username = username;
     }
@@ -35,8 +31,8 @@ public class Users {
         this.email = email;
     }
 
-    public Long getUser_id() {
-        return user_id;
+    public Long getUserId() {
+        return userId;
     }
 
     public String getUsername() {

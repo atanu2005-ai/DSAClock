@@ -21,10 +21,10 @@ public class UserController {
         return userService.getUser();
     }
 
-    @GetMapping("/{user_id}")  //find single user with id
-    public ResponseEntity<Users> getUser(@PathVariable Long user_id) {
+    @GetMapping("/{userId}")  //find single user with id
+    public ResponseEntity<Users> getUser(@PathVariable Long userId) {
 
-        Optional<Users> user = userService.getUser(user_id);
+        Optional<Users> user = userService.getUser(userId);
         if(user.isPresent()) {
             return ResponseEntity.ok(user.get());
         }else {

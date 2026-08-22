@@ -2,9 +2,7 @@ package com.eddy.dsaclockbackend.dsaclock.services;
 
 import com.eddy.dsaclockbackend.dsaclock.entities.UserProblems;
 import com.eddy.dsaclockbackend.dsaclock.repos.UserProblemRepo;
-import org.springframework.boot.webmvc.autoconfigure.WebMvcProperties;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.PutMapping;
 
 import java.util.List;
 
@@ -17,8 +15,8 @@ public class UserProblemService {
 
 
     //get all problems for a particular user
-    public List<UserProblems> getUserProblems(Long user_id) {
-        return userProblemRepo.findByUserId(user_id);
+    public List<UserProblems> getUserProblems(Long userId) {
+        return userProblemRepo.findByUserUserId(userId);
     }
     //add problem to user problems entity
     public void addUserProblem(UserProblems userProblem) {

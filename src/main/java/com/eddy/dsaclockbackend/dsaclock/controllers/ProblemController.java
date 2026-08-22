@@ -4,7 +4,6 @@ import com.eddy.dsaclockbackend.dsaclock.entities.Problems;
 import com.eddy.dsaclockbackend.dsaclock.services.ProblemService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.function.EntityResponse;
 
 import java.util.List;
 import java.util.Optional;
@@ -43,15 +42,15 @@ public class ProblemController {
     }
 
     //update a problem
-    @PutMapping("/{problem_id}")
+    @PutMapping("/{problemId}")
     public ResponseEntity<Problems> updateProblem(
-            @PathVariable Long problem_id,
+            @PathVariable Long problemId,
             @RequestBody Problems problem) {
 
-        Optional<Problems> thisProblem = problemService.getProblem(problem_id);
+        Optional<Problems> thisProblem = problemService.getProblem(problemId);
 
         if (thisProblem.isPresent()) {
-            problem.setProblem_id(problem_id);
+            problem.setProblemId(problemId);
             problemService.updateProblem(problem);
             return ResponseEntity.ok(problem);
         } else {
@@ -60,13 +59,13 @@ public class ProblemController {
     }
 
     //delete a problem
-    @DeleteMapping("/{problem_id}")
-    public ResponseEntity<Problems> deleteProblem(@PathVariable Long problem_id) {
+    @DeleteMapping("/{problemId}")
+    public ResponseEntity<Problems> deleteProblem(@PathVariable Long problemId) {
 
-        Optional<Problems> thisProblem = problemService.getProblem(problem_id);
+        Optional<Problems> thisProblem = problemService.getProblem(problemId);
 
         if (thisProblem.isPresent()) {
-            problemService.deleteProblem(problem_id);
+            problemService.deleteProblem(problemId);
             return ResponseEntity.ok(thisProblem.get());
         } else {
             return ResponseEntity.notFound().build();

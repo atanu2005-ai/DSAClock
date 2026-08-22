@@ -20,8 +20,8 @@ public class ProblemService {
     }
 
     //return single problem with id
-    public Optional<Problems> getProblem(Long problem_id) {
-        return problemRepo.findById(problem_id);
+    public Optional<Problems> getProblem(Long problemId) {
+        return problemRepo.findById(problemId);
     }
 
     //add new problem
@@ -35,7 +35,7 @@ public class ProblemService {
     }
 
     //delete problem by id
-    public void deleteProblem(Long problem_id) {
-        problemRepo.deleteById(problem_id);
+    public void deleteProblem(Long problemId) {
+        problemRepo.deleteById(problemId);
     }
 }

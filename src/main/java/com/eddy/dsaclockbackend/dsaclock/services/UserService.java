@@ -3,7 +3,6 @@ package com.eddy.dsaclockbackend.dsaclock.services;
 import com.eddy.dsaclockbackend.dsaclock.entities.Users;
 import com.eddy.dsaclockbackend.dsaclock.repos.UserRepo;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.List;
 import java.util.Optional;
@@ -21,8 +20,8 @@ public class UserService {
     }
 
     //return a single user with id
-    public Optional<Users> getUser(Long user_id) { //find user by id
-        return userRepo.findById(user_id);
+    public Optional<Users> getUser(Long userId) { //find user by id
+        return userRepo.findById(userId);
     }
 
     //add new user
@@ -31,8 +30,8 @@ public class UserService {
     }
 
     //update a user data
-    public Optional<Users> updateUser(Long user_id) { return userRepo.findById(user_id); }
+    public Optional<Users> updateUser(Long userId) { return userRepo.findById(userId); }
 
     //delete user
-    public void deleteUser(Long id) {userRepo.deleteById(id); }
+    public void deleteUser(Long userId) {userRepo.deleteById(userId); }
 }

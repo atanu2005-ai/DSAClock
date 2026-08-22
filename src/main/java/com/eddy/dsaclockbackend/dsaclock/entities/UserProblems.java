@@ -16,13 +16,13 @@ public class UserProblems {
 
     //reference to the user who added this problem
     @ManyToOne
-    @JoinColumn(name = "user_id", nullable = false)
-    Users user;
+    @JoinColumn(name = "userId", nullable = false)
+    private Users user;
 
     ///reference to the problem the user added
     @ManyToOne
     @JoinColumn(name = "problem_id", nullable = false)
-    Problems problem;
+    private Problems problem;
 
     //This constructor defines clearly that this entity has a relation with user and problem objects
     public UserProblems(Users user, Problems problem) {
