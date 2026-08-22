@@ -21,8 +21,8 @@ public class UserService {
     }
 
     //return a single user with id
-    public Optional<Users> getUser(Long id) { //find user by id
-        return userRepo.findById(id);
+    public Optional<Users> getUser(Long user_id) { //find user by id
+        return userRepo.findById(user_id);
     }
 
     //add new user
@@ -31,7 +31,7 @@ public class UserService {
     }
 
     //update a user data
-    public Optional<Users> updateUser(Long id) { return userRepo.findById(id); }
+    public Optional<Users> updateUser(Long user_id) { return userRepo.findById(user_id); }
 
     //delete user
     public void deleteUser(Long id) {userRepo.deleteById(id); }

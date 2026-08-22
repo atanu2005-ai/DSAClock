@@ -21,10 +21,10 @@ public class UserController {
         return userService.getUser();
     }
 
-    @GetMapping("/{id}")  //find single user with id
-    public ResponseEntity<Users> getUser(@PathVariable Long id) {
+    @GetMapping("/{user_id}")  //find single user with id
+    public ResponseEntity<Users> getUser(@PathVariable Long user_id) {
 
-        Optional<Users> user = userService.getUser(id);
+        Optional<Users> user = userService.getUser(user_id);
         if(user.isPresent()) {
             return ResponseEntity.ok(user.get());
         }else {
@@ -38,7 +38,7 @@ public class UserController {
     }
 
     //update user if exists
-    @PutMapping("/{id}")
+    @PutMapping("/{user_id}")
     public ResponseEntity<Users> updateUser(
             @PathVariable Long id,
             @RequestBody Users user) {
@@ -57,12 +57,12 @@ public class UserController {
         return ResponseEntity.notFound().build();
     }
     //delete user
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Users> deleteUser(@PathVariable Long id) {
-        Optional<Users> thisUser = userService.getUser(id);
+    @DeleteMapping("/{user_id}")
+    public ResponseEntity<Users> deleteUser(@PathVariable Long user_id) {
+        Optional<Users> thisUser = userService.getUser(user_id);
 
         if(thisUser.isPresent()) {
-            userService.deleteUser(id);
+            userService.deleteUser(user_id);
             return ResponseEntity.ok(thisUser.get());
         }else {
             return ResponseEntity.notFound().build();
