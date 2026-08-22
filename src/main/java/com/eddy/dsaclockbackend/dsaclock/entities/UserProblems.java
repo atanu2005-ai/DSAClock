@@ -21,7 +21,7 @@ public class UserProblems {
 
     ///reference to the problem the user added
     @ManyToOne
-    @JoinColumn(name = "problem_id", nullable = false)
+    @JoinColumn(name = "problemId", nullable = false)
     private Problems problem;
 
     //This constructor defines clearly that this entity has a relation with user and problem objects
