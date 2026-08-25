@@ -105,6 +105,11 @@ public class UserController {
     }
 
     //delete a user problem
-    //@DeleteMapping("/{userId}/problems/{problemId}")
+    @DeleteMapping("/{userId}/problems/{userProblemId}")
+    public ResponseEntity<Void> deleteUserProblem(@PathVariable Long userId,
+                                                  @PathVariable Long userProblemId) {
+        userProblemService.deleteUserProblem(userProblemId);
+        return ResponseEntity.noContent().build();
+    }
 
 }
