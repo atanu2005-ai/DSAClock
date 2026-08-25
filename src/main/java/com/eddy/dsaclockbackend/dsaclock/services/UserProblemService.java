@@ -4,6 +4,7 @@ import com.eddy.dsaclockbackend.dsaclock.entities.Problems;
 import com.eddy.dsaclockbackend.dsaclock.entities.UserProblems;
 import com.eddy.dsaclockbackend.dsaclock.entities.Users;
 import com.eddy.dsaclockbackend.dsaclock.repos.UserProblemRepo;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -36,7 +37,7 @@ public class UserProblemService {
     public Optional<UserProblems> addUserProblem(Long userId,
                                                  Long problemId,
                                                  UserProblems userProblem) {
-        if(userProblemRepo.existByUserUserIdAndProblemProblemId(userId, problemId)) {
+        if(userProblemRepo.existsByUserUserIdAndProblemProblemId(userId, problemId)) {
             return  Optional.empty(); //returns empty optional if user id and problem id duo already exists
         }
 
