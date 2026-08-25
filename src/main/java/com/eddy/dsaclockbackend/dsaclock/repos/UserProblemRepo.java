@@ -4,6 +4,7 @@ import com.eddy.dsaclockbackend.dsaclock.entities.UserProblems;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface UserProblemRepo extends JpaRepository<UserProblems, Long> {
 
@@ -11,5 +12,5 @@ public interface UserProblemRepo extends JpaRepository<UserProblems, Long> {
     List<UserProblems> findByUserUserId(Long userId);
 
     //using unique constraint to check if this pair of user and problem exists
-    boolean existByUserUserIdAndProblemProblemId(Long userId, Long problemId);
+    boolean existsByUserUserIdAndProblemProblemId(Long userId, Long problemId);
 }
