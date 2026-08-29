@@ -9,16 +9,17 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/users")
 public class UserController {
-    private final UserService userService; //user service constructor
-    private final UserProblemService userProblemService;
-    public UserController(UserService userService, UserProblemService userProblemService) {
+    private final UserService userService; //user service reference
+    private final UserProblemService userProblemService; //user problem service reference
+
+    public UserController(UserService userService,
+                          UserProblemService userProblemService) {
         this.userService = userService;
         this.userProblemService = userProblemService;
     }
@@ -42,8 +43,16 @@ public class UserController {
 
     //add new user
     @PostMapping
-    public Users setUser(@RequestBody Users user) {
-        return userService.setUser(user);
+    public ResponseEntity<?> setUser(@RequestBody Users user) {
+        //checking if the email already exists in my table or not
+        if(userService.existsByEmail(user.getEmail())) {
+            return ResponseEntity.status(HttpStatus.CONFLICT)
+                    .body("An account with this email already exists");
+        }else { //else add user
+            userService.setUser(user);
+            return ResponseEntity.status(HttpStatus.CREATED)
+                    .body("Account created successfully");
+        }
     }
 
     //update user if exists
