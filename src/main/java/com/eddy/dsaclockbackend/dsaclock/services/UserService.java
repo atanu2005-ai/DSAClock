@@ -24,6 +24,11 @@ public class UserService {
         return userRepo.findById(userId);
     }
 
+    //check unique email in table
+    public boolean existsByEmail(String email) {
+        return userRepo.existsByEmail(email);
+    }
+
     //add new user
     public Users setUser(Users user) { //add new user
         return userRepo.save(user);
