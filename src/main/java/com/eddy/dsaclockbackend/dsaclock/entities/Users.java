@@ -22,6 +22,9 @@ public class Users {
     @Column(unique = true)
     private String email;
 
+    //password
+    private String password;
+
     //setters
     public void setUsername(String username) {
         this.username = username;
@@ -31,6 +34,11 @@ public class Users {
         this.email = email;
     }
 
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    //getters
     public Long getUserId() {
         return userId;
     }
@@ -39,8 +47,12 @@ public class Users {
         return username;
     }
 
-    //getters
     public String getEmail() {
         return email;
     }
+
+    public String getPassword() {
+        return password;
+    }
+
 }
