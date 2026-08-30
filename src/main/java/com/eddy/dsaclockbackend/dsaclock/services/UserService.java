@@ -2,6 +2,7 @@ package com.eddy.dsaclockbackend.dsaclock.services;
 
 import com.eddy.dsaclockbackend.dsaclock.entities.Users;
 import com.eddy.dsaclockbackend.dsaclock.repos.UserRepo;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -9,9 +10,15 @@ import java.util.Optional;
 
 @Service
 public class UserService {
+    //user repo reference
     private final UserRepo userRepo;
-    public UserService(UserRepo userRepo) {
+
+    //password encoder reference
+    private final PasswordEncoder passwordEncoder;
+
+    public UserService(UserRepo userRepo, PasswordEncoder passwordEncoder) {
         this.userRepo = userRepo;
+        this.passwordEncoder = passwordEncoder;
     }
 
     //return all users
@@ -31,6 +38,7 @@ public class UserService {
 
     //add new user
     public Users setUser(Users user) { //add new user
+        user.setPassword(passwordEncoder.encode(user.getPassword())); //encoding given password
         return userRepo.save(user);
     }
 
