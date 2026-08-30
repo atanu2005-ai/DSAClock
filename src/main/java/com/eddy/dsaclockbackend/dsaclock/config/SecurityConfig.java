@@ -1,5 +1,6 @@
 package com.eddy.dsaclockbackend.dsaclock.config;
 
+import com.eddy.dsaclockbackend.dsaclock.security.JwtFilter;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpMethod;
@@ -9,9 +10,18 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
 public class SecurityConfig {
+
+    //jwt filter reference
+    private final JwtFilter jwtFilter;
+
+    public SecurityConfig(JwtFilter jwtFilter) {
+        this.jwtFilter = jwtFilter;
+    }
+
 
     @Bean //filter chain bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) {
@@ -23,11 +33,16 @@ public class SecurityConfig {
             auth.requestMatchers("/api/problems/**").permitAll();
 
             //AUTHENTICATION FREE REGISTRATION
-            auth.requestMatchers(HttpMethod.POST,("/api/users"));
+            auth.requestMatchers(HttpMethod.POST,("/api/users")).permitAll();
+
+            //AUTHENTICATION FREE LOGIN
+            auth.requestMatchers(HttpMethod.POST,("/api/login")).permitAll();
 
             //AUTHENTICATED ENDPOINTS
             auth.anyRequest().authenticated();
-        }).build();
+        })
+                .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class) //goes through jwt filter first
+                .build();
     }
 
     @Bean //password encoder bean. Returns password encoder object
