@@ -26,4 +26,13 @@ public class JwtService {
                 .expiration(expiry) //expiry date
                 .compact();
     }
+
+    public String extractEmail(String token) {
+        return Jwts.parser()
+                .verifyWith(key)
+                .build()
+                .parseSignedClaims(token)
+                .getPayload()
+                .getSubject();
+    }
 }
