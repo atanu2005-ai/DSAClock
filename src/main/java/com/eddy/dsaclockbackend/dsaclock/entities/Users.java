@@ -19,7 +19,7 @@ public class Users {
 
     //email
     @Email
-    @Column(unique = true)
+    @Column(unique = true, nullable = false)
     private String email;
 
     //password
