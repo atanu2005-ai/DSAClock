@@ -3,10 +3,14 @@ package com.eddy.dsaclockbackend.dsaclock.controllers;
 import com.eddy.dsaclockbackend.dsaclock.entities.Problems;
 import com.eddy.dsaclockbackend.dsaclock.entities.UserProblems;
 import com.eddy.dsaclockbackend.dsaclock.entities.Users;
+import com.eddy.dsaclockbackend.dsaclock.repos.UserRepo;
 import com.eddy.dsaclockbackend.dsaclock.services.UserProblemService;
 import com.eddy.dsaclockbackend.dsaclock.services.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -15,12 +19,17 @@ import java.util.Optional;
 @RestController
 @RequestMapping("/api/users")
 public class UserController {
+
     private final UserService userService; //user service reference
+
+    private final UserRepo userRepo; //user repo reference
+
     private final UserProblemService userProblemService; //user problem service reference
 
-    public UserController(UserService userService,
+    public UserController(UserService userService, UserRepo userRepo,
                           UserProblemService userProblemService) {
         this.userService = userService;
+        this.userRepo = userRepo;
         this.userProblemService = userProblemService;
     }
 
@@ -91,9 +100,23 @@ public class UserController {
      ----------------------*/
 
     //get all problems of the current user
-    @GetMapping("/{userId}/problems")
-    public List<Problems> getUserProblems(@PathVariable Long userId) {
-        return userProblemService.getUserProblems(userId);
+    @GetMapping("/me/problems")
+    public List<Problems> getUserProblems() {
+
+        Authentication auth =
+                SecurityContextHolder
+                .getContext()
+                .getAuthentication(); //fetching current user's authentication object
+
+        assert auth != null;
+        String email = auth.getName(); //fetching email of current user using auth object
+
+        Users user =
+                userRepo
+                .findByEmail(email) //create user object with th email
+                        .orElseThrow(() -> new UsernameNotFoundException("User not found"));
+
+        return userProblemService.getUserProblems(user.getUserId()); //fetch user problems with id of the user
     }
 
     //add a problem to a user
