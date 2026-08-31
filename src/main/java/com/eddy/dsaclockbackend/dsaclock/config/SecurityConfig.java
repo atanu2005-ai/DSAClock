@@ -30,7 +30,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth ->{
 
             //PUBLIC ENDPOINTS
-            auth.requestMatchers("/api/problems/**").permitAll();
+            auth.requestMatchers(HttpMethod.GET,("/api/problems/**")).permitAll();
 
             //AUTHENTICATION FREE REGISTRATION
             auth.requestMatchers(HttpMethod.POST,("/api/users")).permitAll();
