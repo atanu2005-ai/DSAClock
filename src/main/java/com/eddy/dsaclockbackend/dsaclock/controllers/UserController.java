@@ -119,29 +119,4 @@ public class UserController {
         return userProblemService.getUserProblems(user.getUserId()); //fetch user problems with id of the user
     }
 
-    //add a problem to a user
-    @PostMapping("/{userId}/problems/{problemId}")
-    public ResponseEntity<UserProblems> addUserProblem(@PathVariable Long userId,
-                                                       @PathVariable Long problemId,
-                                                       @RequestBody UserProblems userProblems) {
-        //this will return empty optional if the unique constraint already exists
-        Optional<UserProblems> thisUserProblem = userProblemService.addUserProblem(userId, problemId, userProblems);
-
-        if(thisUserProblem.isPresent()) {
-            return ResponseEntity.ok(thisUserProblem.get());
-        }else {
-            return ResponseEntity.status(HttpStatus.CONFLICT).build(); //
-        }
-
-
-    }
-
-    //delete a user problem
-    @DeleteMapping("/{userId}/problems/{userProblemId}")
-    public ResponseEntity<Void> deleteUserProblem(@PathVariable Long userId,
-                                                  @PathVariable Long userProblemId) {
-        userProblemService.deleteUserProblem(userProblemId);
-        return ResponseEntity.noContent().build();
-    }
-
 }
