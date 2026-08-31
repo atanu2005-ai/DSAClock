@@ -25,7 +25,7 @@ public class MyUserDetailsService implements UserDetailsService {
 
         //extracting user's username, password from user object
         return User
-                .withUsername(thisUser.getUsername())
+                .withUsername(thisUser.getEmail())
                 .password(thisUser.getPassword())
                 .build();
     }
