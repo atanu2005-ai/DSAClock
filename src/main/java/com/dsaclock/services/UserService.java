@@ -1,6 +1,8 @@
 package com.dsaclock.services;
 
 import com.dsaclock.entities.Users;
+import com.dsaclock.exceptions.UserAlreadyExistsException;
+import com.dsaclock.exceptions.UserNotFoundException;
 import com.dsaclock.repos.UserRepo;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -27,8 +29,11 @@ public class UserService {
     }
 
     //return a single user with id
-    public Optional<Users> getUser(Long userId) { //find user by id
-        return userRepo.findById(userId);
+    public Users getUser(Long userId) { //find user by id
+
+       return userRepo.findById(userId).orElseThrow(() ->
+                new UserNotFoundException("User not found"));
+
     }
 
     //check unique email in table
@@ -39,11 +44,26 @@ public class UserService {
     //add new user
     public Users setUser(Users user) { //add new user
         user.setPassword(passwordEncoder.encode(user.getPassword())); //encoding given password
+
+        if(userRepo.findByEmail(user.getEmail()).isPresent()) {
+            throw new UserAlreadyExistsException("User with this email already exists");
+        }
         return userRepo.save(user);
     }
 
     //update a user data
-    public Optional<Users> updateUser(Long userId) { return userRepo.findById(userId); }
+    public Users updateUser(Long userId, Users user) {
+
+        Users existingUser = userRepo.findByEmail(user.getEmail()).orElseThrow(() ->
+                new UserNotFoundException("This user doesn't even exist bro!"));
+
+        user.setPassword(passwordEncoder.encode(user.getPassword())); //encoding given password
+
+        existingUser.setUsername(user.getUsername());
+        existingUser.setEmail(user.getEmail());
+
+        return existingUser;
+    }
 
     //delete user
     public void deleteUser(Long userId) {userRepo.deleteById(userId); }
