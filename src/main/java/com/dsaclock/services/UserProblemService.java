@@ -3,6 +3,10 @@ package com.dsaclock.services;
 import com.dsaclock.entities.Problems;
 import com.dsaclock.entities.UserProblems;
 import com.dsaclock.entities.Users;
+import com.dsaclock.exceptions.ProblemNotFoundException;
+import com.dsaclock.exceptions.UserNotFoundException;
+import com.dsaclock.exceptions.UserProblemAlreadyExistsException;
+import com.dsaclock.exceptions.UserProblemNotFoundException;
 import com.dsaclock.repos.UserProblemRepo;
 import org.springframework.stereotype.Service;
 
@@ -33,26 +37,34 @@ public class UserProblemService {
                 .toList();
     }
     //add problem to user problems entity
-    public Optional<UserProblems> addUserProblem(Long userId,
+    public UserProblems addUserProblem(Long userId,
                                                  Long problemId,
                                                  UserProblems userProblem) {
-        if(userProblemRepo.existsByUserUserIdAndProblemProblemId(userId, problemId)) {
-            return  Optional.empty(); //returns empty optional if user id and problem id duo already exists
+        if(userProblemRepo.existsByUserUserIdAndProblemProblemId(userId, problemId)) { //throws exception
+            throw new UserProblemAlreadyExistsException(
+                    "This problem is already added to your list!");
         }
 
         //extract the user and problem with the ids
-        Users user = userService.getUser(userId).orElseThrow();
-        Problems problem = problemService.getProblem(problemId).orElseThrow();
+        Users user = userService.getUser(userId).orElseThrow(() ->
+                new UserNotFoundException("User not found!")); //throws user not found exception
+
+        Problems problem = problemService.getProblem(problemId); //throws problem not found exception in
+                                                                 //problem service layer
 
         //set the user and problem reference to the user problem
         userProblem.setUser(user);
         userProblem.setProblem(problem);
 
-        return Optional.of(userProblemRepo.save(userProblem));
+        return userProblemRepo.save(userProblem);
     }
 
     //delete a user problem object
-    public void deleteUserProblem(Long userProblemId) {
-        userProblemRepo.deleteById(userProblemId);
+    public void deleteUserProblem(Long userId, Long problemId) {
+
+        if(!userProblemRepo.existsByUserUserIdAndProblemProblemId(userId, problemId)) {
+            throw new UserProblemNotFoundException("This problem doesn't belong to your list");
+        }
+        userProblemRepo.deleteById(problemId);
     }
 }
