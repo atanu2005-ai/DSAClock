@@ -45,14 +45,9 @@ public class ProblemController {
 
     //get a problem by id
     @GetMapping("/{problemId}")
-    public ResponseEntity<Problems> getProblems(@PathVariable Long problemId) {
-        Optional<Problems> thisProblem = problemService.getProblem(problemId);
+    public Problems getProblems(@PathVariable Long problemId) {
 
-        if(thisProblem.isPresent()) {
-            return ResponseEntity.ok(thisProblem.get());
-        }else {
-            return ResponseEntity.notFound().build();
-        }
+        return problemService.getProblem(problemId);
     }
 
     //add a new problem
@@ -64,33 +59,23 @@ public class ProblemController {
 
     //update a problem
     @PutMapping("/{problemId}")
-    public ResponseEntity<Problems> updateProblem(
+    public ResponseEntity<?> updateProblem(
             @PathVariable Long problemId,
             @RequestBody Problems problem) {
 
-        Optional<Problems> thisProblem = problemService.getProblem(problemId);
+        problem.setProblemId(problemId);
+        problemService.updateProblem(problem);
 
-        if (thisProblem.isPresent()) {
-            problem.setProblemId(problemId);
-            problemService.updateProblem(problem);
-            return ResponseEntity.ok(problem);
-        } else {
-            return ResponseEntity.notFound().build();
-        }
+        return ResponseEntity.ok(problem);
     }
 
     //delete a problem
     @DeleteMapping("/{problemId}")
-    public ResponseEntity<Problems> deleteProblem(@PathVariable Long problemId) {
+    public ResponseEntity<?> deleteProblem(@PathVariable Long problemId) {
 
-        Optional<Problems> thisProblem = problemService.getProblem(problemId);
+        problemService.deleteProblem(problemId);
 
-        if (thisProblem.isPresent()) {
-            problemService.deleteProblem(problemId);
-            return ResponseEntity.ok(thisProblem.get());
-        } else {
-            return ResponseEntity.notFound().build();
-        }
+        return ResponseEntity.ok().body("Problem deleted successfully!");
     }
 
     /*
@@ -99,7 +84,7 @@ public class ProblemController {
 
     //add a problem to a user
     @PostMapping("{problemId}/add")
-    public ResponseEntity<UserProblems> addUserProblem(@PathVariable Long problemId,
+    public UserProblems addUserProblem(@PathVariable Long problemId,
                                                        @RequestBody UserProblems userProblems) { //for solved date
 
         Authentication auth =
@@ -115,17 +100,27 @@ public class ProblemController {
                         .findByEmail(email) //create user object with th email
                         .orElseThrow(() -> new UsernameNotFoundException("User not found"));
 
-        //this will return empty optional if the unique constraint already exists
-        Optional<UserProblems> thisUserProblem =
-                userProblemService
-                        .addUserProblem(user.getUserId(), problemId, userProblems);
+        return userProblemService.addUserProblem(user.getUserId(), problemId, userProblems);
+    }
 
-        if(thisUserProblem.isPresent()) {
-            return ResponseEntity.ok(thisUserProblem.get());
-        }else {
-            return ResponseEntity.status(HttpStatus.CONFLICT).build(); //
-        }
+    //delete a user problem
+    @DeleteMapping("/{problemId}/delete")
+    public ResponseEntity<?> deleteUserProblem(@PathVariable Long problemId) {
 
+        Authentication auth =
+                SecurityContextHolder
+                        .getContext()
+                        .getAuthentication(); //fetching current user's authentication object
 
+        assert auth != null;
+        String email = auth.getName(); //fetching email of current user using auth object
+
+        Users user =
+                userRepo
+                        .findByEmail(email) //create user object with th email
+                        .orElseThrow(() -> new UsernameNotFoundException("User not found"));
+
+       userProblemService.deleteUserProblem(user.getUserId(), problemId);
+       return ResponseEntity.ok().body("problem deleted from your list");
     }
 }

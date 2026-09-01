@@ -38,61 +38,71 @@ public class UserController {
         return userService.getUser();
     }
 
-    @GetMapping("/{userId}")  //find single user with id
-    public ResponseEntity<Users> getUser(@PathVariable Long userId) {
+    @GetMapping("/me")  //find single user with id
+    public Users getUserByUserId() {
 
-        Optional<Users> user = userService.getUser(userId);
-        if(user.isPresent()) {
-            return ResponseEntity.ok(user.get());
-        }else {
-            return ResponseEntity.notFound().build();
-        }
+        Authentication auth =
+                SecurityContextHolder
+                        .getContext()
+                        .getAuthentication(); //fetching current user's authentication object
+
+        assert auth != null;
+        String email = auth.getName(); //fetching email of current user using auth object
+
+        Users user =
+                userRepo
+                        .findByEmail(email) //create user object with th email
+                        .orElseThrow(() -> new UsernameNotFoundException("User not found"));
+
+        return userService.getUser(user.getUserId());
     }
 
     //add new user
     @PostMapping
-    public ResponseEntity<?> setUser(@RequestBody Users user) {
-        //checking if the email already exists in my table or not
-        if(userService.existsByEmail(user.getEmail())) {
-            return ResponseEntity.status(HttpStatus.CONFLICT)
-                    .body("An account with this email already exists");
-        }else { //else add user
-            userService.setUser(user);
-            return ResponseEntity.status(HttpStatus.CREATED)
-                    .body("Account created successfully");
-        }
+    public Users setUser(@RequestBody Users user) {
+
+        return userService.setUser(user);
     }
 
     //update user if exists
-    @PutMapping("/{userId}")
-    public ResponseEntity<Users> updateUser(
-            @PathVariable Long userId,
-            @RequestBody Users user) {
+    @PutMapping("/me")
+    public Users updateUser(@RequestBody Users user) {
 
-        Optional<Users> thisUser = userService.getUser(userId);
+        Authentication auth =
+                SecurityContextHolder
+                        .getContext()
+                        .getAuthentication(); //fetching current user's authentication object
 
-        if (thisUser.isPresent()) {
-            Users existingUser = thisUser.get();
+        assert auth != null;
+        String email = auth.getName(); //fetching email of current user using auth object
 
-            existingUser.setUsername(user.getUsername());
-            existingUser.setEmail(user.getEmail());
+        Users thisUser =
+                userRepo
+                        .findByEmail(email) //create user object with th email
+                        .orElseThrow(() -> new UsernameNotFoundException("User not found"));
 
-            return ResponseEntity.ok(userService.setUser(existingUser));
-        }
-
-        return ResponseEntity.notFound().build();
+        return userService.updateUser(thisUser.getUserId(), user);
     }
     //delete user
-    @DeleteMapping("/{userId}")
-    public ResponseEntity<Users> deleteUser(@PathVariable Long userId) {
-        Optional<Users> thisUser = userService.getUser(userId);
+    @DeleteMapping("/me")
+    public ResponseEntity<?> deleteUser() {
 
-        if(thisUser.isPresent()) {
-            userService.deleteUser(userId);
-            return ResponseEntity.ok(thisUser.get());
-        }else {
-            return ResponseEntity.notFound().build();
-        }
+        Authentication auth =
+                SecurityContextHolder
+                        .getContext()
+                        .getAuthentication(); //fetching current user's authentication object
+
+        assert auth != null;
+        String email = auth.getName(); //fetching email of current user using auth object
+
+        Users user =
+                userRepo
+                        .findByEmail(email) //create user object with th email
+                        .orElseThrow(() -> new UsernameNotFoundException("User not found"));
+
+        userService.deleteUser(user.getUserId());
+
+        return ResponseEntity.ok().body("User deleted successfully!");
     }
 
     /*user problem endpoints
