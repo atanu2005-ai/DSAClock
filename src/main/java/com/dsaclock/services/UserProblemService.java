@@ -1,10 +1,9 @@
-package com.eddy.dsaclockbackend.dsaclock.services;
+package com.dsaclock.services;
 
-import com.eddy.dsaclockbackend.dsaclock.entities.Problems;
-import com.eddy.dsaclockbackend.dsaclock.entities.UserProblems;
-import com.eddy.dsaclockbackend.dsaclock.entities.Users;
-import com.eddy.dsaclockbackend.dsaclock.repos.UserProblemRepo;
-import org.springframework.http.ResponseEntity;
+import com.dsaclock.entities.Problems;
+import com.dsaclock.entities.UserProblems;
+import com.dsaclock.entities.Users;
+import com.dsaclock.repos.UserProblemRepo;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

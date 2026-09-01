@@ -1,4 +1,4 @@
-package com.eddy.dsaclockbackend.dsaclock.services;
+package com.dsaclock.services;
 
 import io.jsonwebtoken.Jwt;
 import io.jsonwebtoken.Jwts;

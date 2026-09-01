@@ -1,6 +1,6 @@
-package com.eddy.dsaclockbackend.dsaclock.repos;
+package com.dsaclock.repos;
 
-import com.eddy.dsaclockbackend.dsaclock.entities.UserProblems;
+import com.dsaclock.entities.UserProblems;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;

@@ -1,6 +1,6 @@
-package com.eddy.dsaclockbackend.dsaclock.dto;
+package com.dsaclock.dto;
 
-import com.eddy.dsaclockbackend.dsaclock.services.JwtService;
+import com.dsaclock.services.JwtService;
 import org.springframework.security.core.Authentication;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;

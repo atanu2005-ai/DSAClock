@@ -1,7 +1,6 @@
-package com.eddy.dsaclockbackend.dsaclock.repos;
+package com.dsaclock.repos;
 
-import com.eddy.dsaclockbackend.dsaclock.entities.Users;
-import com.fasterxml.jackson.annotation.OptBoolean;
+import com.dsaclock.entities.Users;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;

@@ -1,7 +1,7 @@
-package com.eddy.dsaclockbackend.dsaclock.security;
+package com.dsaclock.security;
 
-import com.eddy.dsaclockbackend.dsaclock.services.JwtService;
-import com.eddy.dsaclockbackend.dsaclock.services.MyUserDetailsService;
+import com.dsaclock.services.JwtService;
+import com.dsaclock.services.MyUserDetailsService;
 import io.jsonwebtoken.Jwts;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;

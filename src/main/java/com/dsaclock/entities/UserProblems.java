@@ -1,4 +1,4 @@
-package com.eddy.dsaclockbackend.dsaclock.entities;
+package com.dsaclock.entities;
 
 import jakarta.persistence.*;
 

@@ -1,10 +1,10 @@
-package com.eddy.dsaclockbackend.dsaclock.controllers;
+package com.dsaclock.controllers;
 
-import com.eddy.dsaclockbackend.dsaclock.entities.UserProblems;
-import com.eddy.dsaclockbackend.dsaclock.entities.Users;
-import com.eddy.dsaclockbackend.dsaclock.repos.UserProblemRepo;
-import com.eddy.dsaclockbackend.dsaclock.repos.UserRepo;
-import com.eddy.dsaclockbackend.dsaclock.services.UserProblemService;
+import com.dsaclock.entities.UserProblems;
+import com.dsaclock.entities.Users;
+import com.dsaclock.repos.UserProblemRepo;
+import com.dsaclock.repos.UserRepo;
+import com.dsaclock.services.UserProblemService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.swing.text.html.Option;
 import java.util.Optional;
 
 @RestController

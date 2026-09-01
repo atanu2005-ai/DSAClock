@@ -1,6 +1,6 @@
-package com.eddy.dsaclockbackend.dsaclock.config;
+package com.dsaclock.config;
 
-import com.eddy.dsaclockbackend.dsaclock.security.JwtFilter;
+import com.dsaclock.security.JwtFilter;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpMethod;

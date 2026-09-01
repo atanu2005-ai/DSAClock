@@ -1,7 +1,7 @@
-package com.eddy.dsaclockbackend.dsaclock.services;
+package com.dsaclock.services;
 
-import com.eddy.dsaclockbackend.dsaclock.entities.Problems;
-import com.eddy.dsaclockbackend.dsaclock.repos.ProblemRepo;
+import com.dsaclock.entities.Problems;
+import com.dsaclock.repos.ProblemRepo;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

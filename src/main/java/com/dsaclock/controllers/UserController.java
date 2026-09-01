@@ -1,11 +1,10 @@
-package com.eddy.dsaclockbackend.dsaclock.controllers;
+package com.dsaclock.controllers;
 
-import com.eddy.dsaclockbackend.dsaclock.entities.Problems;
-import com.eddy.dsaclockbackend.dsaclock.entities.UserProblems;
-import com.eddy.dsaclockbackend.dsaclock.entities.Users;
-import com.eddy.dsaclockbackend.dsaclock.repos.UserRepo;
-import com.eddy.dsaclockbackend.dsaclock.services.UserProblemService;
-import com.eddy.dsaclockbackend.dsaclock.services.UserService;
+import com.dsaclock.entities.Problems;
+import com.dsaclock.entities.Users;
+import com.dsaclock.repos.UserRepo;
+import com.dsaclock.services.UserProblemService;
+import com.dsaclock.services.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;

@@ -1,7 +1,7 @@
-package com.eddy.dsaclockbackend.dsaclock.services;
+package com.dsaclock.services;
 
-import com.eddy.dsaclockbackend.dsaclock.entities.Users;
-import com.eddy.dsaclockbackend.dsaclock.repos.UserRepo;
+import com.dsaclock.entities.Users;
+import com.dsaclock.repos.UserRepo;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
