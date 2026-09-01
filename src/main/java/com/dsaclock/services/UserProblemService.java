@@ -46,8 +46,7 @@ public class UserProblemService {
         }
 
         //extract the user and problem with the ids
-        Users user = userService.getUser(userId).orElseThrow(() ->
-                new UserNotFoundException("User not found!")); //throws user not found exception
+        Users user = userService.getUser(userId);//throws user not found exception in user service layer
 
         Problems problem = problemService.getProblem(problemId); //throws problem not found exception in
                                                                  //problem service layer
