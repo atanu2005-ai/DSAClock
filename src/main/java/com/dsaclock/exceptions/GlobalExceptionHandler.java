@@ -25,6 +25,14 @@ public class GlobalExceptionHandler {
                 .body(ex.getMessage());
     }
 
+    @ExceptionHandler(UserAlreadyExistsException.class) //handles exception if user already exists
+    public ResponseEntity<?> handlesUserAlreadyExists(UserAlreadyExistsException ex) {
+
+        return ResponseEntity
+                .status(HttpStatus.CONFLICT) //returns exception if user already exists
+                .body(ex.getMessage());
+    }
+
     @ExceptionHandler(UserProblemAlreadyExistsException.class)  //handles user problem confliction
     public ResponseEntity<?> handleUserProblemAlreadyExists(UserProblemAlreadyExistsException ex) {
 
