@@ -1,5 +1,7 @@
 package com.dsaclock.services;
 
+import com.dsaclock.dto.RegisterRequest;
+import com.dsaclock.dto.UserResponse;
 import com.dsaclock.entities.Users;
 import com.dsaclock.exceptions.UserAlreadyExistsException;
 import com.dsaclock.exceptions.UserNotFoundException;
@@ -42,13 +44,30 @@ public class UserService {
     }
 
     //add new user
-    public Users setUser(Users user) { //add new user
-        user.setPassword(passwordEncoder.encode(user.getPassword())); //encoding given password
+    public UserResponse setUser(RegisterRequest request) { //add new user
+
+        Users user = new Users();
+
+        //setting properties of request object to the new user object
+        user.setUsername(request.getUsername());
+        user.setEmail(request.getEmail());
+        user.setPassword(passwordEncoder.encode(request.getPassword())); // encoding given password
 
         if(userRepo.findByEmail(user.getEmail()).isPresent()) {
             throw new UserAlreadyExistsException("User with this email already exists");
         }
-        return userRepo.save(user);
+
+        //saving the new user object and keeping it as a new user object named savedUser
+        Users savedUser = userRepo.save(user);
+
+        //creating a user response object
+        UserResponse response = new UserResponse();
+
+        //setting saved user's properties such as id and username to the response object
+        response.setUserId(savedUser.getUserId());
+        response.setUsername(savedUser.getUsername());
+
+        return response; //returning the response object
     }
 
     //update a user data
