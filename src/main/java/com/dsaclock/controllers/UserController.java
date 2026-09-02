@@ -1,10 +1,13 @@
 package com.dsaclock.controllers;
 
+import com.dsaclock.dto.RegisterRequest;
+import com.dsaclock.dto.UserResponse;
 import com.dsaclock.entities.Problems;
 import com.dsaclock.entities.Users;
 import com.dsaclock.repos.UserRepo;
 import com.dsaclock.services.UserProblemService;
 import com.dsaclock.services.UserService;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -59,9 +62,9 @@ public class UserController {
 
     //add new user
     @PostMapping
-    public Users setUser(@RequestBody Users user) {
+    public UserResponse setUser(@Valid @RequestBody RegisterRequest request) {
 
-        return userService.setUser(user);
+        return userService.setUser(request);
     }
 
     //update user if exists
