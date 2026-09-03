@@ -2,6 +2,7 @@ package com.dsaclock.controllers;
 
 import com.dsaclock.dto.RegisterRequest;
 import com.dsaclock.dto.UserResponse;
+import com.dsaclock.dto.UserUpdateRequest;
 import com.dsaclock.entities.Problems;
 import com.dsaclock.entities.Users;
 import com.dsaclock.repos.UserRepo;
@@ -68,8 +69,8 @@ public class UserController {
     }
 
     //update user if exists
-    @PutMapping("/me")
-    public Users updateUser(@RequestBody Users user) {
+    @PatchMapping("/me")
+    public UserResponse updateUser(@RequestBody UserUpdateRequest request) {
 
         Authentication auth =
                 SecurityContextHolder
@@ -84,7 +85,7 @@ public class UserController {
                         .findByEmail(email) //create user object with th email
                         .orElseThrow(() -> new UsernameNotFoundException("User not found"));
 
-        return userService.updateUser(thisUser.getUserId(), user);
+        return userService.updateUser(thisUser.getUserId(), request);
     }
     //delete user
     @DeleteMapping("/me")
