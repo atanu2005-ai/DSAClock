@@ -1,11 +1,12 @@
 package com.dsaclock.services;
 
-import com.dsaclock.dto.RegisterRequest;
-import com.dsaclock.dto.UserResponse;
+import com.dsaclock.dto.*;
 import com.dsaclock.entities.Users;
 import com.dsaclock.exceptions.UserAlreadyExistsException;
 import com.dsaclock.exceptions.UserNotFoundException;
 import com.dsaclock.repos.UserRepo;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -20,9 +21,17 @@ public class UserService {
     //password encoder reference
     private final PasswordEncoder passwordEncoder;
 
-    public UserService(UserRepo userRepo, PasswordEncoder passwordEncoder) {
+    //authentication manager reference
+    private final AuthenticationManager authenticationManager;
+
+    //jwt service reference
+    private final JwtService jwtService;
+
+    public UserService(UserRepo userRepo, PasswordEncoder passwordEncoder, AuthenticationManager authenticationManager, JwtService jwtService) {
         this.userRepo = userRepo;
         this.passwordEncoder = passwordEncoder;
+        this.authenticationManager = authenticationManager;
+        this.jwtService = jwtService;
     }
 
     //return all users
@@ -70,18 +79,48 @@ public class UserService {
         return response; //returning the response object
     }
 
-    //update a user data
-    public Users updateUser(Long userId, Users user) {
+    //USER LOGIN
+    public LoginResponse login(LoginRequest request) {
 
-        Users existingUser = userRepo.findByEmail(user.getEmail()).orElseThrow(() ->
+        authenticationManager.authenticate(new UsernamePasswordAuthenticationToken( //authenticate this user
+                request.getEmail(), request.getPassword()));
+
+        String token = jwtService.generateToken(request.getEmail());
+
+        LoginResponse response = new LoginResponse();
+        response.setToken(token);
+
+        return response;
+    }
+
+    //update a user data
+    public UserResponse updateUser(Long userId, UserUpdateRequest request) {
+
+        Users existingUser = userRepo.findById(userId).orElseThrow(() ->
                 new UserNotFoundException("This user doesn't even exist bro!"));
 
-        user.setPassword(passwordEncoder.encode(user.getPassword())); //encoding given password
+        if(request.getUsername() != null) {
+            existingUser.setUsername(request.getUsername()); //updating username if request obj have that
+        }
 
-        existingUser.setUsername(user.getUsername());
-        existingUser.setEmail(user.getEmail());
+        if(request.getEmail() != null) {
+            existingUser.setEmail(request.getEmail()); //updating user email if request obj have that
+        }
 
-        return existingUser;
+        if(request.getPassword() != null) {
+
+            //updating password if the request obj have that
+            existingUser.setPassword(passwordEncoder.encode(request.getPassword()));
+        }
+
+        Users user = userRepo.save(existingUser);
+
+        UserResponse response = new UserResponse();
+
+        response.setUserId(user.getUserId());
+        response.setUsername(user.getUsername());
+
+        return response;
     }
 
     //delete user
