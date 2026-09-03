@@ -2,6 +2,7 @@ package com.dsaclock.security;
 
 import com.dsaclock.services.JwtService;
 import com.dsaclock.services.MyUserDetailsService;
+import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -41,20 +42,25 @@ public class JwtFilter extends OncePerRequestFilter {
         if(authHeader != null && authHeader.startsWith("Bearer ")) { //as our header must look like: "Bearer ..."
             String token = authHeader.substring(7); //cuts Bearer
 
-            String userName = jwtService.extractEmail(token); //extract email from token after verifying authentication with the token
+            try {
+                String userName = jwtService.extractEmail(token); //extract email from token after verifying authentication with the token
 
-            UserDetails userDetails = myUserDetailsService.loadUserByUsername(userName); //email here
+                UserDetails userDetails = myUserDetailsService.loadUserByUsername(userName); //email here
 
-            UsernamePasswordAuthenticationToken authentication =
-                    new UsernamePasswordAuthenticationToken( //creating authenticated object
-                            userDetails, //passing user details
-                            null, //keeping password null as already verified by jwt
-                            userDetails.getAuthorities()); //passing request authorities of the user
+                UsernamePasswordAuthenticationToken authentication =
+                        new UsernamePasswordAuthenticationToken( //creating authenticated object
+                                userDetails, //passing user details
+                                null, //keeping password null as already verified by jwt
+                                userDetails.getAuthorities()); //passing request authorities of the user
 
-            SecurityContextHolder
-                    .getContext()
-                    .setAuthentication(authentication); //passing authenticated object into spring
-                                                        //security context
+                SecurityContextHolder
+                        .getContext()
+                        .setAuthentication(authentication); //passing authenticated object into spring
+                //security context
+            }catch (JwtException | IllegalArgumentException ex) {
+                response.setStatus(HttpServletResponse.SC_UNAUTHORIZED); //throws exception when token is empty or garbage
+                return;
+            }
 
         }
 
