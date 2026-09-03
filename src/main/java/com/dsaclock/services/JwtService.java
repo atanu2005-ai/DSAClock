@@ -13,7 +13,7 @@ import java.util.Date;
 public class JwtService {
 
     //secret key field
-    private SecretKey key = Jwts.SIG.HS256.key().build();
+    private final SecretKey key = Jwts.SIG.HS256.key().build();
 
     //method to generate jwt token
     public String generateToken(String email) {
