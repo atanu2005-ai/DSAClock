@@ -19,9 +19,20 @@ public class Problems {
     //problem difficulty
     private String problem_diff;
 
+    //problem url
+    private String problem_url;
+
     //Getters and setters from here
     public Long getProblemId() {
         return problemId;
+    }
+
+    public String getProblem_url() {
+        return problem_url;
+    }
+
+    public void setProblem_url(String problem_url) {
+        this.problem_url = problem_url;
     }
 
     public String getProblem_title() {
