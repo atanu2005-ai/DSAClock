@@ -6,7 +6,6 @@ import com.dsaclock.entities.Users;
 import com.dsaclock.repos.UserRepo;
 import com.dsaclock.services.ProblemService;
 import com.dsaclock.services.UserProblemService;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -84,8 +83,7 @@ public class ProblemController {
 
     //add a problem to a user
     @PostMapping("{problemId}/add")
-    public UserProblems addUserProblem(@PathVariable Long problemId,
-                                                       @RequestBody UserProblems userProblems) { //for solved date
+    public UserProblems addUserProblem(@PathVariable Long problemId) { //for solved date
 
         Authentication auth =
                 SecurityContextHolder
@@ -100,7 +98,7 @@ public class ProblemController {
                         .findByEmail(email) //create user object with th email
                         .orElseThrow(() -> new UsernameNotFoundException("User not found"));
 
-        return userProblemService.addUserProblem(user.getUserId(), problemId, userProblems);
+        return userProblemService.addUserProblem(user.getUserId(), problemId);
     }
 
     //revise a user problem
