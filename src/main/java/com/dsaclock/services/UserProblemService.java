@@ -6,10 +6,12 @@ import com.dsaclock.entities.Users;
 import com.dsaclock.exceptions.UserProblemAlreadyExistsException;
 import com.dsaclock.exceptions.UserProblemNotFoundException;
 import com.dsaclock.repos.UserProblemRepo;
+import org.apache.catalina.User;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class UserProblemService {
@@ -35,9 +37,8 @@ public class UserProblemService {
                 .toList();
     }
     //add problem to user problems entity
-    public UserProblems addUserProblem(Long userId,
-                                                 Long problemId,
-                                                 UserProblems userProblem) {
+    public UserProblems addUserProblem(Long userId, Long problemId) {
+
         if(userProblemRepo.existsByUserUserIdAndProblemProblemId(userId, problemId)) { //throws exception
             throw new UserProblemAlreadyExistsException(
                     "This problem is already added to your list!");
@@ -50,11 +51,14 @@ public class UserProblemService {
                                                                  //problem service layer
 
         //set the user and problem reference to the user problem
+        UserProblems userProblem = new UserProblems();
         userProblem.setUser(user);
         userProblem.setProblem(problem);
         userProblem.setRevision_count(0);
 
         LocalDate today = LocalDate.now(); //current date
+
+        userProblem.setSolved_date(today);
 
         userProblem.setNext_revision_date(today.plusDays(2)); // revision after 2 days for first time adding
 
@@ -89,9 +93,13 @@ public class UserProblemService {
     //delete a user problem object
     public void deleteUserProblem(Long userId, Long problemId) {
 
-        if(!userProblemRepo.existsByUserUserIdAndProblemProblemId(userId, problemId)) {
-            throw new UserProblemNotFoundException("This problem doesn't belong to your list");
-        }
-        userProblemRepo.deleteById(problemId);
+        Optional<UserProblems> thisUserProblem = userProblemRepo
+                .findByUser_UserIdAndProblem_ProblemId(userId, problemId);
+
+       if(thisUserProblem.isPresent()) {
+           userProblemRepo.delete(thisUserProblem.get());
+       }else {
+           throw new UserProblemNotFoundException("No such problem belongs to you");
+       }
     }
 }
