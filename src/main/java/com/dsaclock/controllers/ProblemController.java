@@ -103,6 +103,27 @@ public class ProblemController {
         return userProblemService.addUserProblem(user.getUserId(), problemId, userProblems);
     }
 
+    //revise a user problem
+    @PutMapping("{problemId}/revise")
+    public ResponseEntity<UserProblems> reviseProblem(@PathVariable Long problemId) {
+
+        Authentication auth =
+                SecurityContextHolder
+                        .getContext()
+                        .getAuthentication(); //fetching current user's authentication object
+
+        assert auth != null;
+        String email = auth.getName(); //fetching email of current user using auth object
+
+        Users user =
+                userRepo
+                        .findByEmail(email) //create user object with th email
+                        .orElseThrow(() -> new UsernameNotFoundException("User not found"));
+
+        return ResponseEntity.ok(userProblemService
+                .updateUserProblem(user.getUserId(), problemId));
+    }
+
     //delete a user problem
     @DeleteMapping("/{problemId}/delete")
     public ResponseEntity<?> deleteUserProblem(@PathVariable Long problemId) {
