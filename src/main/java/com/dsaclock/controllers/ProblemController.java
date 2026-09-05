@@ -1,5 +1,6 @@
 package com.dsaclock.controllers;
 
+import com.dsaclock.dto.UserProblemResponse;
 import com.dsaclock.entities.Problems;
 import com.dsaclock.entities.UserProblems;
 import com.dsaclock.entities.Users;
@@ -83,7 +84,7 @@ public class ProblemController {
 
     //add a problem to a user
     @PostMapping("{problemId}/add")
-    public UserProblems addUserProblem(@PathVariable Long problemId) { //for solved date
+    public UserProblemResponse addUserProblem(@PathVariable Long problemId) { //for solved date
 
         Authentication auth =
                 SecurityContextHolder
@@ -103,7 +104,7 @@ public class ProblemController {
 
     //revise a user problem
     @PutMapping("{problemId}/revise")
-    public ResponseEntity<UserProblems> reviseProblem(@PathVariable Long problemId) {
+    public ResponseEntity<UserProblemResponse> reviseProblem(@PathVariable Long problemId) {
 
         Authentication auth =
                 SecurityContextHolder
