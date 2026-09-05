@@ -1,5 +1,6 @@
 package com.dsaclock.services;
 
+import com.dsaclock.dto.UserProblemResponse;
 import com.dsaclock.entities.Problems;
 import com.dsaclock.entities.UserProblems;
 import com.dsaclock.entities.Users;
@@ -7,9 +8,11 @@ import com.dsaclock.exceptions.UserProblemAlreadyExistsException;
 import com.dsaclock.exceptions.UserProblemNotFoundException;
 import com.dsaclock.repos.UserProblemRepo;
 import org.apache.catalina.User;
+import org.jspecify.annotations.NonNull;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -30,14 +33,24 @@ public class UserProblemService {
 
 
     //get all problems for a particular user
-    public List<Problems> getUserProblems(Long userId) {
-        return userProblemRepo.findByUserUserId(userId)
-                .stream()
-                .map(UserProblems::getProblem)
-                .toList();
+    public List<UserProblemResponse> getUserProblems(Long userId) {
+
+        List<UserProblems> userProblemsList =
+                userProblemRepo.findByUserUserId(userId);
+
+        List<UserProblemResponse> responses = new ArrayList<>();
+
+        for(UserProblems userProblem : userProblemsList) {
+            responses.add(getUserProblemResponse(userProblem.getProblem().getProblemId(),
+                    userProblem,
+                    userProblem.getSolved_date()) //construct response obj for each userProblem
+            );
+        }
+
+        return responses;
     }
     //add problem to user problems entity
-    public UserProblems addUserProblem(Long userId, Long problemId) {
+    public UserProblemResponse addUserProblem(Long userId, Long problemId) {
 
         if(userProblemRepo.existsByUserUserIdAndProblemProblemId(userId, problemId)) { //throws exception
             throw new UserProblemAlreadyExistsException(
@@ -62,11 +75,30 @@ public class UserProblemService {
 
         userProblem.setNext_revision_date(today.plusDays(2)); // revision after 2 days for first time adding
 
-        return userProblemRepo.save(userProblem);
+        userProblemRepo.save(userProblem);
+
+        return getUserProblemResponse(problemId, userProblem, today); //construct response dto and return
+    }
+
+    //method to construct userProblem dto object
+    private static @NonNull UserProblemResponse getUserProblemResponse(Long problemId,
+                                                                       UserProblems userProblem,
+                                                                       LocalDate today) {
+        Problems thisProblem = userProblem.getProblem(); //constructing the current added problem obj
+        UserProblemResponse response = new UserProblemResponse();
+
+        response.setProblemId(problemId);
+        response.setTitle(thisProblem.getProblem_title());
+        response.setDifficulty(thisProblem.getProblem_diff());
+        response.setSolved_date(today);
+        response.setNext_revision_date(userProblem.getNext_revision_date());
+        response.setRevision_count(userProblem.getRevision_count());
+
+        return response;
     }
 
     //update user problem (after a revision)
-    public UserProblems updateUserProblem(Long userId, Long problemId) {
+    public UserProblemResponse updateUserProblem(Long userId, Long problemId) {
         UserProblems userProblems = userProblemRepo
                 .findByUser_UserIdAndProblem_ProblemId(userId, problemId).orElseThrow(() ->
                new UserProblemNotFoundException(
@@ -87,7 +119,7 @@ public class UserProblemService {
 
         userProblemRepo.save(userProblems);
 
-        return userProblems;
+        return getUserProblemResponse(problemId, userProblems, today);
     }
 
     //delete a user problem object
