@@ -1,6 +1,7 @@
 package com.dsaclock.controllers;
 
 import com.dsaclock.dto.RegisterRequest;
+import com.dsaclock.dto.UserProblemResponse;
 import com.dsaclock.dto.UserResponse;
 import com.dsaclock.dto.UserUpdateRequest;
 import com.dsaclock.entities.Problems;
@@ -114,7 +115,7 @@ public class UserController {
 
     //get all problems of the current user
     @GetMapping("/me/problems")
-    public List<Problems> getUserProblems() {
+    public List<UserProblemResponse> getUserProblems() {
 
         Authentication auth =
                 SecurityContextHolder
