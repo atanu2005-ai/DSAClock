@@ -11,7 +11,10 @@ import java.util.Optional;
 
 @Service
 public class ProblemService {
-    ProblemRepo problemRepo;
+
+    //problem repo reference
+    private final ProblemRepo problemRepo;
+
     public ProblemService(ProblemRepo problemRepo) {  //repository instance constructor
         this.problemRepo = problemRepo;
     }
