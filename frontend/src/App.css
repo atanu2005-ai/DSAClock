@@ -160,3 +160,87 @@ main {
 .auth-card button:hover {
   background-color: #ffb87d;
 }
+
+/*problems page*/
+
+.problems-page {
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.problems-page h1 {
+  margin-bottom: 32px;
+}
+
+.problem-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.problem-card {
+  padding: 16px 20px;
+
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  background-color: #222;
+  border: 1px solid #333;
+  border-radius: 8px;
+
+  text-decoration: none;
+}
+
+.problem-card:hover {
+  border-color: #f5a86c;
+}
+
+.problem-title {
+  color: #f5f5f5;
+  font-weight: bold;
+}
+
+.problem-difficulty {
+  color: #a8a8a8;
+}
+
+/*problem details page*/
+
+.problem-details {
+  max-width: 900px;
+  min-height: calc(100vh - 64px);
+  display: flex;
+  flex-direction: column;
+  margin: 0 auto;
+}
+
+.problem-details h1 {
+  margin: 0 0 24px;
+}
+
+.problem-details button {
+  display: block;
+  width: fit-content;
+  margin-top: auto;
+  margin-bottom: 20px;
+  margin-left: auto;
+  margin-right: auto;
+  padding: 14px 140px;
+
+  background-color: #f5a86c;
+  color: #181818;
+
+  border: none;
+  border-radius: 8px;
+
+  font-size: 1.5rem;
+  font-weight: bold;
+  cursor: pointer;
+
+  transition: background-color 0.2s;
+}
+
+.problem-details button:hover {
+  background-color: #ffb87d;
+}
