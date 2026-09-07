@@ -1,5 +1,9 @@
 #root {
   min-height: 100vh;
+
+  background: rgba(24, 24, 24, 0.55);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
 }
 
 .navbar {
@@ -10,7 +14,7 @@
   align-items: center;
   justify-content: space-between;
 
-  border-bottom: 1px solid #333;
+  border-bottom: 2px solid #333;
 }
 
 .logo {
@@ -64,9 +68,28 @@ main {
   line-height: 1.8;
 }
 
-.hero-button {
+.hero-buttons-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.start-buttons {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 32px;
+  gap: 16px;
+}
+
+.problem-buttons {
+  display: flex;
+  gap: 20px;
+}
+
+.hero-buttons {
   margin-top: 32px;
   padding: 12px 24px;
+
 
   background-color: #f5a86c;
   color: #181818;
@@ -75,11 +98,35 @@ main {
   text-decoration: none;
   font-weight: bold;
 
-  transition: background-color 0.2s;
+  transition: all 0.2s ease;
 }
 
-.hero-button:hover {
+.hero-buttons:hover {
   background-color: #ffb87d;
+  transform: translateY(-3px);
+  box-shadow: 0 6px 18px rgba(245, 168, 108, 0.25);
+}
+
+/*auth page auth button */
+
+.auth-buttons {
+  margin-top: 32px;
+  padding: 4px 24px;
+
+  background-color: #f5a86c;
+  color: #181818;
+
+  border-radius: 8px;
+  text-decoration: none;
+  font-weight: bold;
+
+  transition: all 0.2s ease;
+}
+
+.auth-buttons:hover {
+  background-color: #ffb87d;
+  transform: translateY(-3px);
+  box-shadow: 0 6px 18px rgba(245, 168, 108, 0.25);
 }
 
 /*registration from styling*/

@@ -10,9 +10,23 @@ function Home() {
                 Practice. Track. Improve.
             </p>
 
-            <Link to={"/register"} className={"hero-button"}>
-                Get started
-            </Link>
+            <div className={"Hero-buttons-container"}>
+                <div className={"start-buttons"}>
+                    <Link to={"/register"} className={"hero-buttons"}>
+                        Get started
+                    </Link>
+                </div>
+
+                <div className={"problem-buttons"}>
+                    <Link to={"/login"} className={"hero-buttons"}>
+                        Login
+                    </Link>
+                    <Link to={"/problems"} className={"hero-buttons"}>
+                        Problems
+                    </Link>
+                </div>
+            </div>
+
         </main>
     )
 }

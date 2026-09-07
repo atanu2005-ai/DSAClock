@@ -12,5 +12,11 @@ body {
   margin: 0;
   min-width: 320px;
   min-height: 100vh;
+
   background-color: #181818;
+  background-image: url("/homebg2.svg");
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
+  background-attachment: fixed;
 }
