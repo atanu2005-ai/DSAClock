@@ -24,6 +24,11 @@
   text-decoration: none;
 }
 
+.logo img {
+  width: 140px;
+  height: auto;
+}
+
 .nav-links {
   display: flex;
   gap: 24px;
@@ -91,7 +96,7 @@ main {
   padding: 12px 24px;
 
 
-  background-color: #f5a86c;
+  background-color: #F5A86C;
   color: #181818;
 
   border-radius: 8px;
@@ -102,32 +107,13 @@ main {
 }
 
 .hero-buttons:hover {
-  background-color: #ffb87d;
+  background-color: #66bb88;
   transform: translateY(-3px);
-  box-shadow: 0 6px 18px rgba(245, 168, 108, 0.25);
+  box-shadow: 0 6px 18px rgba(102, 187, 136, 0.25);
 }
 
 /*auth page auth button */
 
-.auth-buttons {
-  margin-top: 32px;
-  padding: 4px 24px;
-
-  background-color: #f5a86c;
-  color: #181818;
-
-  border-radius: 8px;
-  text-decoration: none;
-  font-weight: bold;
-
-  transition: all 0.2s ease;
-}
-
-.auth-buttons:hover {
-  background-color: #ffb87d;
-  transform: translateY(-3px);
-  box-shadow: 0 6px 18px rgba(245, 168, 108, 0.25);
-}
 
 /*registration from styling*/
 
@@ -189,23 +175,28 @@ main {
 }
 
 .auth-card button {
+  margin-top: 32px;
   width: 100%;
-  padding: 12px;
+  padding: 10px 0;
 
-  border: none;
-  border-radius: 6px;
+  background-color: #F5A86C;
 
-  background-color: #f5a86c;
   color: #181818;
 
-  font-size: 1rem;
-  font-weight: bold;
+  border: none;
+    border-radius: 8px;
 
+  font-weight: bold;
+  font-size: 16px;
   cursor: pointer;
+
+  transition: all 0.2s ease;
 }
 
 .auth-card button:hover {
-  background-color: #ffb87d;
+  background-color: #66bb88;
+  transform: translateY(-3px);
+  box-shadow: 0 6px 18px rgba(102, 187, 136, 0.25);
 }
 
 /*problems page*/
@@ -213,6 +204,11 @@ main {
 .problems-page {
   max-width: 900px;
   margin: 0 auto;
+  height: calc(100vh - 64px);
+  overflow: hidden;
+
+  padding: 24px 32px;
+  box-sizing: border-box;
 }
 
 .problems-page h1 {
@@ -223,6 +219,10 @@ main {
   display: flex;
   flex-direction: column;
   gap: 12px;
+
+  height: calc(100% - 70px);
+    overflow-y: auto;
+  scrollbar-width: none;
 }
 
 .problem-card {

@@ -4,7 +4,7 @@ function Navbar() {
     return (
         <nav className="navbar">
             <Link to="/" className="logo">
-                DSAClock
+                <img src="/dsaclockLogoFinal.svg" alt="DSAClock" />
             </Link>
 
             <div className="nav-links">

@@ -60,9 +60,8 @@ function Login() {
                         />
                     </div>
 
-                    <div className={"auth-buttons"}>
                         <button type="submit">Login</button>
-                    </div>
+
                 </form>
             </div>
         </main>
