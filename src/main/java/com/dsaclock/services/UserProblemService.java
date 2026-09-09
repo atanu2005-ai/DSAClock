@@ -7,7 +7,6 @@ import com.dsaclock.entities.Users;
 import com.dsaclock.exceptions.UserProblemAlreadyExistsException;
 import com.dsaclock.exceptions.UserProblemNotFoundException;
 import com.dsaclock.repos.UserProblemRepo;
-import org.apache.catalina.User;
 import org.jspecify.annotations.NonNull;
 import org.springframework.stereotype.Service;
 
@@ -58,7 +57,7 @@ public class UserProblemService {
         }
 
         //extract the user and problem with the ids
-        Users user = userService.getUser(userId);//throws user not found exception in user service layer
+        Users user = userService.getUserById(userId);//throws user not found exception in user service layer
 
         Problems problem = problemService.getProblem(problemId); //throws problem not found exception in
                                                                  //problem service layer
@@ -107,6 +106,11 @@ public class UserProblemService {
         int updated_count = userProblems.getRevision_count() + 1; //updated revision count
 
         userProblems.setRevision_count(updated_count); //update revision count
+
+        //-------------------------------------------//
+        Users user = userService.getUserById(userId);
+        user.setUserRevisionCount(user.getUserRevisionCount() + 1); //UPDATE TOTAL USER'S REVISION COUNT
+        //-------------------------------------------//
 
         //REVISION LOGIC
         LocalDate today = LocalDate.now(); //current date
