@@ -18,7 +18,7 @@ public class JwtService {
     //method to generate jwt token
     public String generateToken(String email) {
         Date now = new Date();
-        Date expiry = new Date(now.getTime() + 30 * 60 * 1000);
+        Date expiry = new Date(now.getTime() + 1000 * 60 * 60); //1 hour expiry time
         return Jwts.builder()
                 .subject(email) //subject of the token
                 .signWith(key) //signature key
