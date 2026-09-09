@@ -15,4 +15,7 @@ public interface UserProblemRepo extends JpaRepository<UserProblems, Long> {
 
     //using unique constraint to check if this pair of user and problem exists
     boolean existsByUserUserIdAndProblemProblemId(Long userId, Long problemId);
+
+    //method to count total rows of a user
+    int countByUser_UserId(Long userId);
 }
