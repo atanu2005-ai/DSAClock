@@ -8,7 +8,7 @@ function Problems() {
     useEffect(() => {
         fetch('http://localhost:8080/api/problems')
             .then(response => response.json())
-            .then(date => setProblems(date))
+            .then(data => setProblems(data))
     }, [])
     return (
         <main className="problems-page">

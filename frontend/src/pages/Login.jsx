@@ -4,31 +4,42 @@ import {useNavigate, useNavigation} from "react-router-dom";
 function Login() {
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
+    const [error, setError] = useState("")
 
     const navigate = useNavigate()
 
     async function handleLogin(event) {
         event.preventDefault()
 
-        const credentials = {
-            email,
-            password
+        try {
+            const credentials = {
+                email,
+                password
+            }
+
+            const response = await
+                fetch('http://localhost:8080/api/login', { //fetch post user endpoint
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(credentials)
+                })
+
+            if(!response.ok) {
+                throw new Error('Invalid email or password');
+            }
+
+            const data = await response.json();
+
+            localStorage.setItem('token', data.token);
+
+            window.dispatchEvent(new Event("authChange"));
+
+            navigate('/problems') //goes to problems page after login
+        }catch (error) {
+            setError(error.message);
         }
-
-        const response = await
-            fetch('http://localhost:8080/api/login', { //fetch post user endpoint
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(credentials)
-            })
-
-        const data = await response.json();
-
-        localStorage.setItem('token', data.token)
-
-        navigate('/problems') //goes to problems page after login
     }
 
     return (
@@ -60,7 +71,9 @@ function Login() {
                         />
                     </div>
 
-                        <button type="submit">Login</button>
+                    {error && <p className="login-error">{error}</p>}
+
+                    <button type="submit">Login</button>
 
                 </form>
             </div>
