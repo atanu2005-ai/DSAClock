@@ -3,8 +3,6 @@ package com.dsaclock.entities;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 
-import java.security.AuthProvider;
-
 // -----------Users Entity------------
 @Entity
 @Table(name = "Users")
@@ -28,6 +26,10 @@ public class Users {
     @Column(nullable = true)
     private String password;
 
+    //revision count
+    @Column(nullable = false)
+    private int userRevisionCount = 0;
+
     //auth provider
     @Enumerated(EnumType.STRING)
     private AuthProvider authProvider;
@@ -45,6 +47,10 @@ public class Users {
         this.email = email;
     }
 
+    public void setUserRevisionCount(int userRevisionCount) {
+        this.userRevisionCount = userRevisionCount;
+    }
+
     public void setAuthProvider(AuthProvider authProvider) {
         this.authProvider = authProvider;
     }
@@ -60,6 +66,10 @@ public class Users {
 
     public String getUsername() {
         return username;
+    }
+
+    public int getUserRevisionCount() {
+        return userRevisionCount;
     }
 
     public String getEmail() {
