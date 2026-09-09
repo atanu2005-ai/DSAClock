@@ -4,6 +4,7 @@ import com.dsaclock.dto.*;
 import com.dsaclock.entities.Users;
 import com.dsaclock.exceptions.UserAlreadyExistsException;
 import com.dsaclock.exceptions.UserNotFoundException;
+import com.dsaclock.repos.UserProblemRepo;
 import com.dsaclock.repos.UserRepo;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -11,12 +12,14 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class UserService {
     //user repo reference
     private final UserRepo userRepo;
+
+    //user problem repo reference
+    private final UserProblemRepo userProblemRepo;
 
     //password encoder reference
     private final PasswordEncoder passwordEncoder;
@@ -27,8 +30,9 @@ public class UserService {
     //jwt service reference
     private final JwtService jwtService;
 
-    public UserService(UserRepo userRepo, PasswordEncoder passwordEncoder, AuthenticationManager authenticationManager, JwtService jwtService) {
+    public UserService(UserRepo userRepo, UserProblemRepo userProblemRepo, PasswordEncoder passwordEncoder, AuthenticationManager authenticationManager, JwtService jwtService) {
         this.userRepo = userRepo;
+        this.userProblemRepo = userProblemRepo;
         this.passwordEncoder = passwordEncoder;
         this.authenticationManager = authenticationManager;
         this.jwtService = jwtService;
@@ -39,12 +43,28 @@ public class UserService {
         return userRepo.findAll();
     }
 
-    //return a single user with id
-    public Users getUser(Long userId) { //find user by id
+    //get a user obj
+    public Users getUserById(Long userId) { //find user by id
+        return userRepo.findById(userId).orElseThrow(() ->
+                new UserNotFoundException("User not found"));
+    }
 
-       return userRepo.findById(userId).orElseThrow(() ->
+    //user profile
+    public UserProfileResponse getUserProfile(Long userId) { //find user by id
+
+        Users user = userRepo.findById(userId).orElseThrow(() ->
                 new UserNotFoundException("User not found"));
 
+        UserProfileResponse response = new UserProfileResponse();
+        response.setId(user.getUserId());
+        response.setUsername(user.getUsername());
+        response.setEmail(user.getEmail());
+
+        int problemsSolved = userProblemRepo.countByUser_UserId(userId); //get total problems solved by user
+        response.setTotalProblemsSolved(problemsSolved);
+        response.setTotalRevisions(user.getUserRevisionCount()); //get total revisions by user
+
+        return response;
     }
 
     //check unique email in table
