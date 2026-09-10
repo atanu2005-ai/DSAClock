@@ -1,5 +1,6 @@
 package com.dsaclock.config;
 
+import com.dsaclock.security.CustomOAuth2AuthRequestResolver;
 import com.dsaclock.security.JwtFilter;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Bean;
@@ -10,6 +11,11 @@ import org.springframework.security.config.annotation.authentication.configurati
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.oauth2.client.registration.ClientRegistration;
+import org.springframework.security.oauth2.client.registration.ClientRegistrationRepository;
+import org.springframework.security.oauth2.client.web.AuthorizationRequestRepository;
+import org.springframework.security.oauth2.client.web.HttpSessionOAuth2AuthorizationRequestRepository;
+import org.springframework.security.oauth2.core.endpoint.OAuth2AuthorizationRequest;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
@@ -23,17 +29,37 @@ public class SecurityConfig {
     //jwt filter reference
     private final JwtFilter jwtFilter;
 
+    //client registration repository reference
+    private final ClientRegistrationRepository clientRegistrationRepository;
+
     //auth success handler reference
     private final AuthenticationSuccessHandler oauthsuccessHandler;
 
-    public SecurityConfig(JwtFilter jwtFilter, AuthenticationSuccessHandler oauthsuccessHandler) {
+    public SecurityConfig(JwtFilter jwtFilter,
+                          ClientRegistrationRepository clientRegistrationRepository,
+                          AuthenticationSuccessHandler oauthsuccessHandler) {
         this.jwtFilter = jwtFilter;
+        this.clientRegistrationRepository = clientRegistrationRepository;
         this.oauthsuccessHandler = oauthsuccessHandler;
     }
 
 
     @Bean //filter chain bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) {
+    public SecurityFilterChain securityFilterChain(HttpSecurity http,
+                                                   AuthorizationRequestRepository<OAuth2AuthorizationRequest>
+                                                           oauth2AuthorizationRequestRepository) throws Exception {
+
+
+
+        CustomOAuth2AuthRequestResolver resolver =
+                new CustomOAuth2AuthRequestResolver(clientRegistrationRepository);
+
+        ClientRegistration google =
+                clientRegistrationRepository.findByRegistrationId("google");
+
+        System.out.println("CLIENT REGISTRATION: ");
+        System.out.println(google);
+
         return http
                 .csrf(csrf -> csrf.disable()) //disabling csrf protection
                 .cors(Customizer.withDefaults())
@@ -48,14 +74,22 @@ public class SecurityConfig {
             //AUTHENTICATION FREE REGISTRATION
             auth.requestMatchers(HttpMethod.POST,("/api/users")).permitAll();
 
-            //AUTHENTICATION FREE LOGIN
+            //AUTHENTICATION FREE  LOCAL LOGIN
             auth.requestMatchers(HttpMethod.POST,("/api/login")).permitAll();
+
+            //GOOGLE LOGIN
+            auth.requestMatchers("/oauth2/**", "/login/oauth2/**").permitAll();
 
             //AUTHENTICATED ENDPOINTS
             auth.anyRequest().authenticated();
         })
                 .oauth2Login(oauth ->
-                        oauth.successHandler(oauthsuccessHandler))
+                        oauth.authorizationEndpoint(endpoint ->
+                                endpoint.authorizationRequestResolver(resolver)
+                                        .authorizationRequestRepository(
+                                                oauth2AuthorizationRequestRepository))
+                                .successHandler(oauthsuccessHandler))
+
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class) //goes through jwt filter first
                 .build();
     }
