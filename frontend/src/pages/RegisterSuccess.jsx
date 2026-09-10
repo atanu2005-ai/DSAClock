@@ -1,4 +1,4 @@
-import {useLocation} from "react-router-dom";
+import {Link, useLocation} from "react-router-dom";
 
 function RegisterSuccess() {
     const location = useLocation()
@@ -6,6 +6,10 @@ function RegisterSuccess() {
     return (
         <main>
             <h1>Registration successful, welcome {username}!</h1>
+            
+            <Link to={"/problems"} className={"hero-buttons"}>
+                Go to Problems
+            </Link>
         </main>
     )
 }

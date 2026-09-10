@@ -1,12 +1,21 @@
-import { useState } from 'react'
-import {useNavigate, useNavigation} from "react-router-dom";
+import { useEffect, useState } from 'react'
+import {Link, useNavigate, useNavigation} from "react-router-dom";
 
 function Login() {
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
     const [error, setError] = useState("")
+    const [googleError, setGoogleError] = useState("")
 
     const navigate = useNavigate()
+
+    const params = new URLSearchParams(window.location.search);
+    const errorForGoogleLogin = params.get("error");
+    useEffect(() => {
+        if (googleError) {
+            window.history.replaceState({}, "", window.location.pathname);//replace state with default page after reading once
+        }
+    })
 
     async function handleLogin(event) {
         event.preventDefault()
@@ -50,6 +59,11 @@ function Login() {
 
                 <form onSubmit={handleLogin}>
                     <div className="form-group">
+                        {error === "user_not_found" && ( //for Google login
+                            <p className={"error-message"}>
+                                No user found
+                            </p>
+                        )}
                         <label htmlFor="email">Email</label>
                         <input
                             id="email"
@@ -74,6 +88,15 @@ function Login() {
                     {error && <p className="login-error">{error}</p>}
 
                     <button type="submit">Login</button>
+
+                    <button className={"google-button"}
+                    onClick={() => {
+                        window.location.href =
+                            "http://localhost:8080/oauth2/authorization/google?action=login&prompt=select_account";
+                    }}
+                    >
+                        <img src="/googleIcon.svg" alt={"Google"} />
+                    </button>
 
                 </form>
             </div>

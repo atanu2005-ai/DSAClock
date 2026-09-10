@@ -1,8 +1,14 @@
-import { Link } from 'react-router-dom'
-import { useState, useEffect } from 'react'
+import { Link, useLocation } from 'react-router-dom';
+import { useState, useEffect } from 'react';
 
 function Navbar() {
+    const location = useLocation();
+    useEffect(() => {
+        setSidebarOpen(false);
+    }, [location.pathname]);
+
     const [isLoggedIn, setIsLoggedIn] = useState(false);
+    const [sidebarOpen, setSidebarOpen] = useState(false);
 
     useEffect(() => {
         const checkAuth = () => {
@@ -18,17 +24,17 @@ function Navbar() {
                     Authorization: `Bearer ${token}`
                 }
             })
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error("Invalid token");
-                }
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error("Invalid token");
+                    }
 
-                setIsLoggedIn(true);
-            })
-            .catch(() => {
-                localStorage.removeItem("token");
-                setIsLoggedIn(false);
-            });
+                    setIsLoggedIn(true);
+                })
+                .catch(() => {
+                    localStorage.removeItem("token");
+                    setIsLoggedIn(false);
+                });
         };
 
         checkAuth();
@@ -41,25 +47,70 @@ function Navbar() {
     }, []);
 
     return (
-        <nav className="navbar">
-            <Link to="/" className="logo">
-                <img src="/dsaclockLogoFinal.svg" alt="DSAClock" />
-            </Link>
+        <>
+            <nav className="navbar">
 
-            <div className="nav-links">
-                {isLoggedIn ? (
-                    <Link to="/Profile">
-                        <img className={"profile-icon"} src={"/profileLogo.svg"} alt="Profile" />
+                <div className="navbar-brand">
+
+                    <button
+                        className="menu-button"
+                        onClick={() => setSidebarOpen(!sidebarOpen)}
+                    >
+                        <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            width="50"
+                            height="50"
+                            viewBox="0 0 50 50"
+                        >
+                            <path
+                                d="M0,9v2h50v-2zM0,24v2h50v-2zM0,39v2h50v-2z"
+                                fill="currentColor"
+                            />
+                        </svg>
+                    </button>
+
+                    <Link to="/" className="logo">
+                        <img
+                            src="/dsaclockLogoFinal.svg"
+                            alt="DSAClock"
+                        />
                     </Link>
-                ) : (
-                    <>
-                        <Link to="/login">Login</Link>
-                        <Link to="/register">Register</Link>
-                    </>
-                )}
-            </div>
-        </nav>
-    )
+
+                </div>
+
+                <div className="nav-links">
+
+                    {isLoggedIn ? (
+                        <Link to="/Profile">
+                            <img
+                                className="profile-icon"
+                                src="/profileLogo.svg"
+                                alt="Profile"
+                            />
+                        </Link>
+                    ) : (
+                        <>
+                            <Link to="/login">Login</Link>
+                            <Link to="/register">Register</Link>
+                        </>
+                    )}
+
+                </div>
+
+            </nav>
+
+            <aside className={`sidebar ${sidebarOpen ? "open" : ""}`}>
+                <Link to="/problems">
+                    Problems
+                </Link>
+
+                <Link to="/my-problems">
+                    My Problems
+                </Link>
+
+            </aside>
+        </>
+    );
 }
 
-export default Navbar
+export default Navbar;

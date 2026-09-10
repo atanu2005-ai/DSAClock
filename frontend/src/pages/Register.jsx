@@ -1,4 +1,4 @@
-import {useState} from "react";
+import {useState, useEffect} from "react";
 import {useNavigate, useNavigation} from "react-router-dom";
 
 function Register() {
@@ -7,8 +7,17 @@ function Register() {
     const [username, setUsername] = useState('')
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
+    const [googleError, setGoogleError] = useState("")
 
     const navigate = useNavigate()
+
+    const params = new URLSearchParams(window.location.search);
+    const error = params.get("error");
+    useEffect(() => {
+        if (error) {
+            window.history.replaceState({}, "", window.location.pathname);//replace state with default page after reading once
+        }
+    })
 
     //input handle method
     async function handleSubmit(event) {
@@ -48,6 +57,11 @@ function Register() {
 
                 <form onSubmit={handleSubmit}>
                     <div className="form-group">
+                        {error === "user_exists" && (
+                            <p className={"error-message"}>
+                                User already exists. Please login instead
+                            </p>
+                        )}
                         <label htmlFor="username">Username</label>
                         <input
                             id="username"
@@ -83,7 +97,16 @@ function Register() {
                         />
                     </div>
 
-                        <button type="submit">Create Account</button>
+                    <button type="submit">Create Account</button>
+
+                    <button className={"google-button"}
+                            onClick={() => {
+                                window.location.href =
+                                    "http://localhost:8080/oauth2/authorization/google?action=register";
+                            }}
+                    >
+                        <img src="/googleIcon.svg" alt={"Google"} />
+                    </button>
                 </form>
             </div>
         </main>

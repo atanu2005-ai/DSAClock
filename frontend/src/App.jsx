@@ -5,6 +5,7 @@ import Login from './pages/Login.jsx'
 import Profile from "./pages/Profile.jsx";
 import Problems from "./pages/Problems.jsx";
 import ProblemDetails from "./pages/ProblemDetails.jsx"
+import UserProblems from "./pages/UserProblems.jsx";
 import Register from './pages/Register.jsx'
 import RegisterSuccess from "./pages/RegisterSuccess.jsx";
 import Navbar from "./components/Navbar.jsx";
@@ -21,6 +22,7 @@ function App() {
           <Route path={"/register-success"} element={<RegisterSuccess/>}/>
             <Route path={"/problems"} element={<Problems/>}/>
             <Route path={"/problems/:problemId"} element={<ProblemDetails/>}/>
+            <Route path={"/my-problems"} element={<UserProblems/>}/>
         </Routes>
       </BrowserRouter>
   )

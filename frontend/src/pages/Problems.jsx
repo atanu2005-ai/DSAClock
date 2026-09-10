@@ -1,15 +1,31 @@
-import {useEffect, useState} from "react";
-import {Link} from "react-router-dom";
+import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 
 function Problems() {
 
-    const [problems, setProblems] = useState([])
+    const [problems, setProblems] = useState([]);
 
     useEffect(() => {
-        fetch('http://localhost:8080/api/problems')
+
+        const params = new URLSearchParams(window.location.search);
+        const token = params.get("token");
+
+        if (token) {
+            localStorage.setItem("token", token);
+        }
+
+        const savedToken = localStorage.getItem("token");
+
+        fetch("http://localhost:8080/api/problems", {
+            headers: {
+                Authorization: `Bearer ${savedToken}`
+            }
+        })
             .then(response => response.json())
-            .then(data => setProblems(data))
-    }, [])
+            .then(data => setProblems(data));
+
+    }, []);
+
     return (
         <main className="problems-page">
             <h1>Problems</h1>
@@ -21,18 +37,18 @@ function Problems() {
                         className="problem-card"
                         key={problem.problemId}
                     >
-          <span className="problem-title">
-            {problem.problemId} : {problem.problem_title}
-          </span>
+                        <span className="problem-title">
+                            {problem.problemId} : {problem.problem_title}
+                        </span>
 
                         <span className="problem-difficulty">
-            {problem.problem_diff}
-          </span>
+                            {problem.problem_diff}
+                        </span>
                     </Link>
                 ))}
             </div>
         </main>
-    )
+    );
 }
 
-export default Problems
+export default Problems;
