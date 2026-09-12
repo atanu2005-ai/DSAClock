@@ -22,6 +22,15 @@ public class Problems {
     //problem url
     private String problem_url;
 
+    //problem slug
+    private String problem_slug;
+
+    //problem likes
+    private Integer problem_likes;
+
+    //problem dislikes
+    private Integer problem_dislikes;
+
     //Getters and setters from here
     public Long getProblemId() {
         return problemId;
@@ -29,6 +38,30 @@ public class Problems {
 
     public String getProblem_url() {
         return problem_url;
+    }
+
+    public String getProblem_slug() {
+        return problem_slug;
+    }
+
+    public void setProblem_slug(String problem_slug) {
+        this.problem_slug = problem_slug;
+    }
+
+    public Integer getProblem_likes() {
+        return problem_likes;
+    }
+
+    public void setProblem_likes(Integer problem_likes) {
+        this.problem_likes = problem_likes;
+    }
+
+    public Integer getProblem_dislikes() {
+        return problem_dislikes;
+    }
+
+    public void setProblem_dislikes(Integer problem_dislikes) {
+        this.problem_dislikes = problem_dislikes;
     }
 
     public void setProblem_url(String problem_url) {
