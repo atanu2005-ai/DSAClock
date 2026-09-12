@@ -12,12 +12,42 @@ public class LeetcodeProblemDTO {
 
     private String url;
 
+    private String title_slug;
+
+    private Integer likes;
+
+    private Integer dislikes;
+
     public Long getFrontend_id() {
         return frontend_id;
     }
 
     public void setFrontend_id(Long frontend_id) {
         this.frontend_id = frontend_id;
+    }
+
+    public String getTitle_slug() {
+        return title_slug;
+    }
+
+    public void setTitle_slug(String title_slug) {
+        this.title_slug = title_slug;
+    }
+
+    public Integer getLikes() {
+        return likes;
+    }
+
+    public void setLikes(Integer likes) {
+        this.likes = likes;
+    }
+
+    public Integer getDislikes() {
+        return dislikes;
+    }
+
+    public void setDislikes(Integer dislikes) {
+        this.dislikes = dislikes;
     }
 
     public String getTitle() {
