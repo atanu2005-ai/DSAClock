@@ -5,9 +5,9 @@ import com.dsaclock.exceptions.ProblemAlreadyExistsException;
 import com.dsaclock.exceptions.ProblemNotFoundException;
 import com.dsaclock.repos.ProblemRepo;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.PathVariable;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class ProblemService {
@@ -15,19 +15,31 @@ public class ProblemService {
     //problem repo reference
     private final ProblemRepo problemRepo;
 
-    public ProblemService(ProblemRepo problemRepo) {  //repository instance constructor
+    //leetcode service reference
+    private final LeetcodeService leetcodeService;
+
+    public ProblemService(ProblemRepo problemRepo, LeetcodeService leetcodeService) {  //repository instance constructor
         this.problemRepo = problemRepo;
+        this.leetcodeService = leetcodeService;
     }
 
     //return all problems in database
     public List<Problems> getProblem() {
-        return problemRepo.findAll();
+        return problemRepo.findAllByOrderByProblemIdAsc();
     }
 
     //return single problem with id
     public Problems getProblem(Long problemId) {
         return problemRepo.findByProblemId(problemId).orElseThrow(() ->
                 new ProblemNotFoundException("No problem with such ID"));
+    }
+
+    //get problem_details of a problem
+    public String getProblem_details(@PathVariable Long problemId) {
+
+        Problems problem = getProblem(problemId);
+
+        return leetcodeService.getProblemDetails(problem.getProblem_slug());
     }
 
     //add new problem
