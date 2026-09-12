@@ -5,6 +5,7 @@ import com.dsaclock.entities.Problems;
 import com.dsaclock.entities.UserProblems;
 import com.dsaclock.entities.Users;
 import com.dsaclock.repos.UserRepo;
+import com.dsaclock.services.LeetcodeService;
 import com.dsaclock.services.ProblemService;
 import com.dsaclock.services.UserProblemService;
 import org.springframework.http.ResponseEntity;
@@ -21,13 +22,13 @@ import java.util.Optional;
 public class ProblemController {
 
     //problem service reference
-    ProblemService problemService;
+    private final ProblemService problemService;
 
     //user problem service reference
-    UserProblemService userProblemService;
+    private final UserProblemService userProblemService;
 
     //user repo reference
-    UserRepo userRepo;
+    private final UserRepo userRepo;
 
     public ProblemController(ProblemService problemService,
                              UserProblemService userProblemService,
@@ -48,6 +49,12 @@ public class ProblemController {
     public Problems getProblems(@PathVariable Long problemId) {
 
         return problemService.getProblem(problemId);
+    }
+
+    //get problem_details of a problem
+    @GetMapping("/{problemId}/details")
+    public String getProblem_details(@PathVariable Long problemId) {
+        return problemService.getProblem_details(problemId);
     }
 
     //add a new problem
@@ -84,7 +91,7 @@ public class ProblemController {
 
     //add a problem to a user
     @PostMapping("{problemId}/add")
-    public UserProblemResponse addUserProblem(@PathVariable Long problemId) { //for solved date
+    public ResponseEntity<Void> addUserProblem(@PathVariable Long problemId) { //for solved date
 
         Authentication auth =
                 SecurityContextHolder
@@ -99,7 +106,9 @@ public class ProblemController {
                         .findByEmail(email) //create user object with th email
                         .orElseThrow(() -> new UsernameNotFoundException("User not found"));
 
-        return userProblemService.addUserProblem(user.getUserId(), problemId);
+        userProblemService.addUserProblem(user.getUserId(), problemId);
+
+        return ResponseEntity.ok().build();
     }
 
     //revise a user problem
