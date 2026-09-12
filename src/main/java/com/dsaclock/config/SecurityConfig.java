@@ -54,12 +54,6 @@ public class SecurityConfig {
         CustomOAuth2AuthRequestResolver resolver =
                 new CustomOAuth2AuthRequestResolver(clientRegistrationRepository);
 
-        ClientRegistration google =
-                clientRegistrationRepository.findByRegistrationId("google");
-
-        System.out.println("CLIENT REGISTRATION: ");
-        System.out.println(google);
-
         return http
                 .csrf(csrf -> csrf.disable()) //disabling csrf protection
                 .cors(Customizer.withDefaults())
