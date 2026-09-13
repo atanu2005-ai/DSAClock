@@ -42,7 +42,7 @@ public class UserProblemService {
         for(UserProblems userProblem : userProblemsList) {
             responses.add(getUserProblemResponse(userProblem.getProblem().getProblemId(),
                     userProblem,
-                    userProblem.getSolved_date()) //construct response obj for each userProblem
+                    userProblem.getSolvedDate()) //construct response obj for each userProblem
             );
         }
 
@@ -70,9 +70,9 @@ public class UserProblemService {
 
         LocalDate today = LocalDate.now(); //current date
 
-        userProblem.setSolved_date(today);
+        userProblem.setSolvedDate(today);
 
-        userProblem.setNext_revision_date(today.plusDays(2)); // revision after 2 days for first time adding
+        userProblem.setNextRevisionDate(today.plusDays(2)); // revision after 2 days for first time adding
 
         userProblemRepo.save(userProblem);
 
@@ -90,7 +90,7 @@ public class UserProblemService {
         response.setTitle(thisProblem.getProblem_title());
         response.setDifficulty(thisProblem.getProblem_diff());
         response.setSolved_date(today);
-        response.setNext_revision_date(userProblem.getNext_revision_date());
+        response.setNext_revision_date(userProblem.getNextRevisionDate());
         response.setRevision_count(userProblem.getRevision_count());
 
         return response;
@@ -116,9 +116,9 @@ public class UserProblemService {
         LocalDate today = LocalDate.now(); //current date
 
         if(updated_count == 1) {
-            userProblems.setNext_revision_date(today.plusDays(3)); //after 1 revision, next revision after 3 days
+            userProblems.setNextRevisionDate(today.plusDays(3)); //after 1 revision, next revision after 3 days
         }else if(updated_count > 1) {
-            userProblems.setNext_revision_date(null);
+            userProblems.setNextRevisionDate(null);
         }
 
         userProblemRepo.save(userProblems);
