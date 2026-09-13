@@ -7,9 +7,27 @@ public class UserProfileResponse {
     private String email;
     private int totalProblemsSolved;
     private int totalRevisions;
+    private int revised;
+    private double revisedPercentage;
 
     public Long getId() {
         return id;
+    }
+
+    public int getRevised() {
+        return revised;
+    }
+
+    public double getRevisedPercentage() {
+        return revisedPercentage;
+    }
+
+    public void setRevisedPercentage(double revisedPercentage) {
+        this.revisedPercentage = revisedPercentage;
+    }
+
+    public void setRevised(int revised) {
+        this.revised = revised;
     }
 
     public void setId(Long id) {
