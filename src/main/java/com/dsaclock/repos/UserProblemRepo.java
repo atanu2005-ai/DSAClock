@@ -1,6 +1,7 @@
 package com.dsaclock.repos;
 
 import com.dsaclock.entities.UserProblems;
+import com.dsaclock.entities.Users;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
@@ -18,4 +19,7 @@ public interface UserProblemRepo extends JpaRepository<UserProblems, Long> {
 
     //method to count total rows of a user
     int countByUser_UserId(Long userId);
+
+    //method to count number of user problems for a user with at least 1 revision
+    int countByUserAndRevisionCountGreaterThan(Users user, int revision_count);
 }
