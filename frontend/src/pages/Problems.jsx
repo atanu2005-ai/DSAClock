@@ -60,7 +60,9 @@ function Problems() {
 
             <div className={"search-container"}>
                 <input
-                    type="number"
+                    type="text"
+                    inputMode={"numeric"}
+                    pattern="[0-9]*"
                     value={searchId}
                     onChange={(e) =>
                         setSearchId(e.target.value)}

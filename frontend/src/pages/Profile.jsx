@@ -44,6 +44,28 @@ function Profile() {
                         <h1>{user?.totalRevisions} <h2>total revisions</h2></h1>
                     </div>
                 </div>
+
+                <div className="revision-progress">
+                    <h2>Revision Progress</h2>
+
+                    <div className={"revision-count"}>
+                        {user?.revised} / {user?.totalProblemsSolved}
+                        <p>problems solved at least once</p>
+                    </div>
+
+                    <div className={"revision-percentage"}>
+                        {user?.revisedPercentage}%
+                    </div>
+
+                    <div className="revision-bar">
+                        <div
+                            className="revision-bar-fill"
+                            style={{
+                                width: `${user?.revisedPercentage ?? 0}%`
+                            }}
+                        />
+                    </div>
+                </div>
             </div>
 
                 <button className={"logout-button"} onClick={handleLogout}>

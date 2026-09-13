@@ -50,9 +50,32 @@ function ProblemDetails() {
         <main className={"problem-details"}>
 
             <h1>{problem?.problem_title}</h1>
+            <p className={"problemdetails-difficulty"}>
+                {problem?.problem_diff}
+            </p>
+
+            <a href={problem?.problem_url}
+               target={"_blank"}
+               rel={"noopener noreferrer"}
+               className={"problem-link"}>
+
+                View on leetcode
+            </a>
 
             <div className={"problem-description"}
                  dangerouslySetInnerHTML={{__html:description}} />
+
+            <div className={"problem-stats"}>
+                <span className={"problem-likes"}>
+
+                    <img src="/likelogo.svg" alt={"likes"} />
+                   {problem?.problem_likes}
+                </span>
+                <span className={"problem-dislikes"}>
+                    <img src="/dislikelogo.svg" alt={"dislikes"}/>
+                   {problem?.problem_dislikes}
+                </span>
+            </div>
 
             <button className={"problem-details-buttons"} onClick={handleAdd}>
                 Add
