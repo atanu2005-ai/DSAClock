@@ -64,6 +64,13 @@ public class UserService {
         response.setTotalProblemsSolved(problemsSolved);
         response.setTotalRevisions(user.getUserRevisionCount()); //get total revisions by user
 
+        int revised = userProblemRepo.countByUserAndRevisionCountGreaterThan(user, 0);
+
+        response.setRevised(revised); //(total solved / problems revised at least once)
+
+        double percentage = problemsSolved == 0 ? 0 : (double) (revised * 100) / problemsSolved;
+        response.setRevisedPercentage(percentage); //revised percentage
+
         return response;
     }
 
