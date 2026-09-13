@@ -27,13 +27,13 @@ public class UserProblems {
     private Problems problem;
 
     //solved date
-    private LocalDate solved_date;
+    private LocalDate solvedDate;
 
     //revision date
-    private LocalDate next_revision_date;
+    private LocalDate nextRevisionDate;
 
     //revision count
-    private int revision_count;
+    private int revisionCount;
 
     //This constructor defines clearly that this entity has a relation with user and problem objects
     public UserProblems(Users user, Problems problem) {
@@ -48,28 +48,28 @@ public class UserProblems {
         return userProblemId;
     }
 
-    public LocalDate getNext_revision_date() {
-        return next_revision_date;
+    public LocalDate getNextRevisionDate() {
+        return nextRevisionDate;
     }
 
-    public void setNext_revision_date(LocalDate next_revision_date) {
-        this.next_revision_date = next_revision_date;
+    public void setNextRevisionDate(LocalDate nextRevisionDate) {
+        this.nextRevisionDate = nextRevisionDate;
     }
 
     public int getRevision_count() {
-        return revision_count;
+        return revisionCount;
     }
 
     public void setRevision_count(int revision_count) {
-        this.revision_count = revision_count;
+        this.revisionCount = revision_count;
     }
 
     public Users getUser() {
         return user;
     }
 
-    public LocalDate getSolved_date() {
-        return solved_date;
+    public LocalDate getSolvedDate() {
+        return solvedDate;
     }
 
     public void setUserProblemId(Long userProblemId) {
@@ -88,8 +88,8 @@ public class UserProblems {
         return problem;
     }
 
-    public void setSolved_date(LocalDate solved_date) {
-        this.solved_date = solved_date;
+    public void setSolvedDate(LocalDate solvedDate) {
+        this.solvedDate = solvedDate;
     }
 
 }
