@@ -2,10 +2,12 @@ package com.dsaclock.services;
 
 import com.dsaclock.dto.UserProblemResponse;
 import com.dsaclock.entities.Problems;
+import com.dsaclock.entities.RevisionActivity;
 import com.dsaclock.entities.UserProblems;
 import com.dsaclock.entities.Users;
 import com.dsaclock.exceptions.UserProblemAlreadyExistsException;
 import com.dsaclock.exceptions.UserProblemNotFoundException;
+import com.dsaclock.repos.RevisionActivityRepo;
 import com.dsaclock.repos.UserProblemRepo;
 import org.jspecify.annotations.NonNull;
 import org.springframework.stereotype.Service;
@@ -19,15 +21,17 @@ import java.util.Optional;
 public class UserProblemService {
 
     //constructor for user problem repo, user service and problem service
-    UserProblemRepo userProblemRepo;
-    UserService userService;
-    ProblemService problemService;
+    private final UserProblemRepo userProblemRepo;
+    private final UserService userService;
+    private final ProblemService problemService;
+    private final RevisionActivityRepo revisionActivityRepo;
     public UserProblemService(UserProblemRepo userProblemRepo,
                               UserService userService,
-                              ProblemService problemService) {
+                              ProblemService problemService, RevisionActivityRepo revisionActivityRepo) {
         this.userProblemRepo = userProblemRepo;
         this.userService = userService;
         this.problemService = problemService;
+        this.revisionActivityRepo = revisionActivityRepo;
     }
 
 
@@ -122,6 +126,24 @@ public class UserProblemService {
         }
 
         userProblemRepo.save(userProblems);
+
+        //HITMAP LOGIC
+        Optional<RevisionActivity> obj = revisionActivityRepo
+                .findByUserUserIdAndActivityRevisionDate(userId, today);
+
+        RevisionActivity revised;
+        if(obj.isPresent()) {
+            revised = obj.get();
+            revised.setOnDateRevisionCount(revised.getOnDateRevisionCount() + 1); //update revision count for that date
+        }else {
+            System.out.println("CREATING NEW ACTIVITY");
+            revised = new RevisionActivity();
+            revised.setUser(user);
+            revised.setActivityRevisionDate(today);
+            revised.setOnDateRevisionCount(1);
+
+            revisionActivityRepo.save(revised); //save new activity for a user for that date
+        }
 
         return getUserProblemResponse(problemId, userProblems, today);
     }
