@@ -4,6 +4,7 @@ import com.dsaclock.dto.*;
 import com.dsaclock.entities.Problems;
 import com.dsaclock.entities.Users;
 import com.dsaclock.repos.UserRepo;
+import com.dsaclock.services.RevisionActivityService;
 import com.dsaclock.services.UserProblemService;
 import com.dsaclock.services.UserService;
 import jakarta.validation.Valid;
@@ -27,11 +28,14 @@ public class UserController {
 
     private final UserProblemService userProblemService; //user problem service reference
 
+    private final RevisionActivityService revisionActivityService; //revision activity service reference
+
     public UserController(UserService userService, UserRepo userRepo,
-                          UserProblemService userProblemService) {
+                          UserProblemService userProblemService, RevisionActivityService revisionActivityService) {
         this.userService = userService;
         this.userRepo = userRepo;
         this.userProblemService = userProblemService;
+        this.revisionActivityService = revisionActivityService;
     }
 
     //get all user data
@@ -128,6 +132,24 @@ public class UserController {
                         .orElseThrow(() -> new UsernameNotFoundException("User not found"));
 
         return userProblemService.getUserProblems(user.getUserId()); //fetch user problems with id of the user
+    }
+
+    @GetMapping("/me/activity")
+    public List<RevisionActivityResponse> getUserActivity() {
+        Authentication auth =
+                SecurityContextHolder
+                        .getContext()
+                        .getAuthentication(); //fetching current user's authentication object
+
+        assert auth != null;
+        String email = auth.getName(); //fetching email of current user using auth object
+
+        Users user =
+                userRepo
+                        .findByEmail(email) //create user object with th email
+                        .orElseThrow(() -> new UsernameNotFoundException("User not found"));
+
+        return revisionActivityService.getActivities(user.getUserId());
     }
 
 }
