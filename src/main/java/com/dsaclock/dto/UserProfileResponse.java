@@ -3,12 +3,22 @@ package com.dsaclock.dto;
 public class UserProfileResponse {
 
     private Long id;
+
     private String username;
+
     private String email;
+
     private int totalProblemsSolved;
+
     private int totalRevisions;
+
     private int revised;
+
     private double revisedPercentage;
+
+    private int currentStreak;
+
+    private int maxStreak;
 
     public Long getId() {
         return id;
@@ -20,6 +30,22 @@ public class UserProfileResponse {
 
     public double getRevisedPercentage() {
         return revisedPercentage;
+    }
+
+    public int getCurrentStreak() {
+        return currentStreak;
+    }
+
+    public void setCurrentStreak(int currentStreak) {
+        this.currentStreak = currentStreak;
+    }
+
+    public int getMaxStreak() {
+        return maxStreak;
+    }
+
+    public void setMaxStreak(int maxStreak) {
+        this.maxStreak = maxStreak;
     }
 
     public void setRevisedPercentage(double revisedPercentage) {
