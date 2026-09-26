@@ -81,13 +81,22 @@ function Navbar() {
                 <div className="nav-links">
 
                     {isLoggedIn ? (
-                        <Link to="/Profile">
-                            <img
-                                className="profile-icon"
-                                src="/profileLogo.svg"
-                                alt="Profile"
-                            />
-                        </Link>
+
+                        <>
+                            <Link to="/problems">
+                                Problems
+                            </Link>
+                            <Link to="/my-problems">
+                                My problems
+                            </Link>
+                            <Link to="/Profile">
+                                <img
+                                    className="profile-icon"
+                                    src="/profileLogo.svg"
+                                    alt="Profile"
+                                />
+                            </Link>
+                        </>
                     ) : (
                         <>
                             <Link to="/login">Login</Link>

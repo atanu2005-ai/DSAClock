@@ -37,7 +37,7 @@
   align-items: center;
   justify-content: center;
 
-  color: #F5A86C;
+  color: #696969;
   cursor: pointer;
 }
 
@@ -48,7 +48,7 @@
 }
 
 .menu-button:hover {
-  color: #66BB88;
+  color: #f5a86c;
 }
 
 .sidebar {
@@ -114,11 +114,12 @@
 
 .nav-links {
   display: flex;
+  align-items: center;
   gap: 24px;
 }
 
 .nav-links a {
-  color: #f5f5f5;
+  color: #696969;
   text-decoration: none;
 }
 
@@ -616,6 +617,7 @@ main {
 
   display: flex;
   flex-direction: column;
+  gap: 24px;
   justify-content: flex-start;
   align-items: center;
 
@@ -630,11 +632,11 @@ main {
 
   background: linear-gradient(
   145deg,
-  rgba(35, 40, 42, 0.96),
-  rgba(20, 24, 26, 0.96)
+  rgba(25, 28, 30, 0.96),
+  rgba(5, 8, 10, 0.96)
   );
 
-  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.45),
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.80),
   0 4px 12px rgba(0, 0, 0, 0.25);
 
   text-align: left;
@@ -690,28 +692,62 @@ main {
 .revision-progress {
   margin-top: 32px;
   padding-top: 24px;
+}
 
-  border-top: 1px solid rgba(255, 255, 255, 0.1);
+.streak-stats {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 28px;
+}
+
+.streak-stat {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.streak-label {
+  color: #696969;
+  font-size: 0.9rem;
 }
 
 .heatmap-container {
   overflow-x: auto;
   width: 100%;
-  border: 1px solid #444;
+  border: none;
   border-radius: 8px;
   padding: 18px 12px;
 }
 
+.month-labels {
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: 18px;
+  column-gap: 4px;
+  margin-bottom: 6px;
+  color: #a8a8a8;
+}
+
+.month-labels span {
+  transform: translateX(40px);
+}
+.month-gap {
+  margin-left: 14px;
+}
+
+.month-start {
+
+}
 .heatmap {
   display: grid;
-  grid-template-rows: repeat(7, 26px);
-  grid-auto-flow: column;
+  grid-template-rows: repeat(7, 22px);
+  column-gap: 4px;
 }
 
 .heatmap-cell {
   width: 18px;
   height: 18px;
-  border-radius: 4px;
+  border-radius: 5px;
 
   border: none;
 
@@ -720,18 +756,6 @@ main {
   display: flex;
   justify-content: center;
   align-items: center;
-}
-
-@media (max-width: 768px) {
-  .heatmap-cell {
-    width: 14px;
-    height: 14px;
-  }
-
-  .heatmap {
-    gap: 2px;
-  }
-
 }
 
 .level-0 { background: #2a2a2a; }
@@ -813,7 +837,7 @@ main {
   font-size: 24px;
   font-weight: 500;
 
-  color: #f5a86c;
+  color: #aeb4b6;
 }
 
 .logout-button {

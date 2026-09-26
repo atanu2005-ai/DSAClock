@@ -9,7 +9,7 @@ function Profile() {
 
     function handleLogout() {
         localStorage.removeItem('token');
-        window.dispatchEvent(new Event("authChange")); // Dispatch a storage event to notify other tabs
+        window.dispatchEvent(new Event("authChange"));
         navigate("/login")
     }
 
@@ -22,16 +22,16 @@ function Profile() {
                     'Authorization': `Bearer ${token}`
                 }
             })
-            .then(response => response.json())
-            .then(data => {setUser(data)})
-            .catch(error => console.error('Error fetching user profile:', error));
+                .then(response => response.json())
+                .then(data => {setUser(data)})
+                .catch(error => console.error('Error fetching user profile:', error));
         }else {
             navigate("/login")
         }
 
     }, []);
 
-    //state for user activity
+//state for user activity
     useEffect(() => {
         fetch("http://localhost:8080/api/users/me/activity", {
             headers: {
@@ -43,7 +43,7 @@ function Profile() {
             .catch(error => console.error("Error fetching activity:", error));
     }, []);
 
-    //lookup object
+//lookup object
     const activityMap = {};
 
     activity.forEach(item => {
@@ -56,29 +56,76 @@ function Profile() {
     console.log("start date: ", startDate);
     console.log("today: ", today);
 
-    //now all 365 days
+//now all 365 days
     const dates = [];
+    const startDay = startDate.getDay();
+    startDate.setDate(startDate.getDate() - startDay);
+
     for(let date = new Date(startDate); date <= today; date.setDate(date.getDate() + 1)) {
         dates.push(new Date(date));
     }
 
-    const heatmapData = dates.map(date => {
+//place every cell explicitly by row and column
+    const heatmapData = [];
+    let column = 0;
+
+    for(let index = 0; index < dates.length; index++) {
+        const date = dates[index];
+        const row = date.getDay();
+
+        let monthChanged = false;
+
+        if(index > 0) {
+            const previousDate = dates[index - 1];
+            monthChanged =
+                date.getMonth() !== previousDate.getMonth() ||
+                date.getFullYear() !== previousDate.getFullYear();
+            const newWeek = row === 0;
+
+            if(monthChanged || newWeek) {
+                column++;
+            }
+        }
+
         const dateKey = date.toISOString().split("T")[0];
 
-        return {
+        heatmapData.push({
             date: dateKey,
-            revisionCount: activityMap[dateKey] || 0
-        };
-    })
+            revisionCount: activityMap[dateKey] || 0,
+            column: column,
+            row: row,
+            monthStart: monthChanged
+        });
+    }
 
-    //heatmap intensity logic
+//heatmap intensity logic
     const getIntensity = (count) => {
         if(count === 0) return "level-0";
         if(count === 1) return "level-1";
-        if(count <= 3) return "level-2"
+        if(count <= 3) return "level-2";
         return "level-4";
     }
 
+//month labels
+    const monthLabels = [];
+
+    heatmapData.forEach((day, index) => {
+        if(index === 0) return;
+        const date = new Date(day.date);
+
+        if (
+            index === 0 ||
+            date.getMonth() !== new Date(heatmapData[index - 1].date).getMonth() ||
+            date.getFullYear() !== new Date(heatmapData[index - 1].date).getFullYear()
+        ) {
+            monthLabels.push({
+                month: date.toLocaleString("default", {
+                    month: "short"
+                }),
+                column: day.column
+            });
+        }
+    });
 
     return (
         <div className={"profile-page"}>
@@ -88,28 +135,59 @@ function Profile() {
 
                 <div className={"profile-stats"}>
                     <div className={"stat"}>
-                       <h1>{user?.totalProblemsSolved} <h2>problems solved</h2></h1>
+                        <h1>{user?.totalProblemsSolved} <h2>problems solved</h2></h1>
                     </div>
 
                     <div className={"stat"}>
                         <h1>{user?.totalRevisions} <h2>total revisions</h2></h1>
                     </div>
                 </div>
+            </div>
 
+            <div className={"profile-card"}>
                 <div className="revision-progress">
                     <h2>Revision Progress</h2>
 
-                    <div className={"heatmap-container"}>
+                    <div className="streak-stats">
+                        <div className="streak-stat">
+                            <span className="streak-label">Current Streak: {user?.currentStreak} days</span>
+                        </div>
+
+                        <div className="streak-stat">
+                            <span className="streak-label">Best Streak: {user?.maxStreak} days</span>
+                        </div>
+                    </div>
+
+                    <div className="heatmap-container">
+
+                        <div className="month-labels">
+                            {monthLabels.map((month, index) => (
+                                <span
+                                    key={`${month.month}-${month.column}-${index}`}
+                                    style={{ gridColumn: month.column + 1 }}
+                                >
+                                {month.month}
+                                </span>
+                            ))}
+                        </div>
+
                         <div className="heatmap">
-                            {heatmapData.map(day => (
+                            {heatmapData.map((day) => (
                                 <div
                                     key={day.date}
-                                    className= {`heatmap-cell ${getIntensity(day.revisionCount)}`}
+                                    className={`heatmap-cell ${getIntensity(day.revisionCount)} ${
+                                        day.monthStart ? "month-start" : ""
+                                    }`}
+                                    style={{
+                                        gridColumn: day.column + 1,
+                                        gridRow: day.row + 1
+                                    }}
                                     title={`${day.date}: ${day.revisionCount} revisions`}
                                 >
                                 </div>
                             ))}
                         </div>
+
                     </div>
 
                     <div className={"revision-count"}>
@@ -151,4 +229,5 @@ function Profile() {
         </div>
     );
 }
+
 export default Profile;
