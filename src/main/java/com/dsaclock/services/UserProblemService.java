@@ -142,8 +142,8 @@ public class UserProblemService {
             revised.setActivityRevisionDate(today);
             revised.setOnDateRevisionCount(1);
 
-            revisionActivityRepo.save(revised); //save new activity for a user for that date
         }
+        revisionActivityRepo.save(revised); //save new activity for a user for that date
 
         return getUserProblemResponse(problemId, userProblems, today);
     }
