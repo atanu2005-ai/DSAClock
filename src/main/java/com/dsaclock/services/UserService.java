@@ -1,17 +1,23 @@
 package com.dsaclock.services;
 
 import com.dsaclock.dto.*;
+import com.dsaclock.entities.RevisionActivity;
 import com.dsaclock.entities.Users;
 import com.dsaclock.exceptions.UserAlreadyExistsException;
 import com.dsaclock.exceptions.UserNotFoundException;
+import com.dsaclock.repos.RevisionActivityRepo;
 import com.dsaclock.repos.UserProblemRepo;
 import com.dsaclock.repos.UserRepo;
+import org.springframework.cglib.core.Local;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 public class UserService {
@@ -30,12 +36,16 @@ public class UserService {
     //jwt service reference
     private final JwtService jwtService;
 
-    public UserService(UserRepo userRepo, UserProblemRepo userProblemRepo, PasswordEncoder passwordEncoder, AuthenticationManager authenticationManager, JwtService jwtService) {
+    //Revision activity repo reference
+    private final RevisionActivityRepo revisionActivityRepo;
+
+    public UserService(UserRepo userRepo, UserProblemRepo userProblemRepo, PasswordEncoder passwordEncoder, AuthenticationManager authenticationManager, JwtService jwtService, RevisionActivityRepo revisionActivityRepo) {
         this.userRepo = userRepo;
         this.userProblemRepo = userProblemRepo;
         this.passwordEncoder = passwordEncoder;
         this.authenticationManager = authenticationManager;
         this.jwtService = jwtService;
+        this.revisionActivityRepo = revisionActivityRepo;
     }
 
     //return all users
@@ -70,6 +80,54 @@ public class UserService {
 
         double percentage = problemsSolved == 0 ? 0 : (double) (revised * 100) / problemsSolved;
         response.setRevisedPercentage(percentage); //revised percentage
+
+        //CURRENT STREAK COUNTING ALGO
+        List<RevisionActivity> list = revisionActivityRepo.findByUserUserId(userId);
+
+        int currentStreak = 0;
+
+        Set<LocalDate> activityDates = list.stream() //collecting all dates from the user's activity objs
+                .map(RevisionActivity::getActivityRevisionDate)
+                .collect(Collectors.toSet());
+
+        LocalDate today = LocalDate.now();
+
+        int daysAgo;
+        LocalDate currentDate;
+        if(activityDates.contains(today)) { //WHEN TODAY HAS ACTIVITY
+            daysAgo = 0;
+            currentDate = today;
+        }else { //IF NO ACTIVITY TODAY, CHECK TILL LAST DATE
+            daysAgo = 1;
+            currentDate = today.minusDays(1);
+        }
+        while(activityDates.contains(currentDate)) {
+            currentStreak++;
+            daysAgo++;
+            currentDate = today.minusDays(daysAgo);
+        }
+
+        response.setCurrentStreak(currentStreak); //setting calculated current streak
+
+        //MAX STREAK ALGO
+        int maxStreak = 0;
+        int current = 0;
+        int daysAgoForMaxStreak = 365 * 5;
+        while(daysAgoForMaxStreak >= 0) {
+            LocalDate date = LocalDate.now().minusDays(daysAgoForMaxStreak);
+
+            if(activityDates.contains(date)) {
+                current++;
+            }else {
+                current = 0;
+            }
+
+            maxStreak = Math.max(maxStreak, current);
+
+            daysAgoForMaxStreak--;
+        }
+
+        response.setMaxStreak(maxStreak);
 
         return response;
     }
