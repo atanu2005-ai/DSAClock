@@ -54,8 +54,13 @@ function UserProblems() {
 
             <div className="user-problem-list">
                 {userProblems.map(problem => (
-                    <div className="user-problem-card" key={problem.problemId}>
-                        <h2>{problem.title}</h2>
+                    <div className="user-problem-card"
+                         key={problem.problemId}>
+
+                        <Link className="user-problem-link" to={`/problems/${problem.problemId}`}>
+                            <h2>{problem.problemId}: {problem.title}</h2>
+                        </Link>
+
                         <span>{problem.difficulty}</span>
                         <p>Solved date: {problem.solved_date}</p>
                         <p>Next revision date: {problem.next_revision_date}</p>

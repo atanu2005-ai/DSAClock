@@ -499,6 +499,7 @@ main {
   min-height: 250px;
   line-height: 1.7;
   font-size: 16px;
+  color: #cfcfcf;
 }
 
 .problem-description p {
@@ -612,19 +613,44 @@ main {
 /*Profile page*/
 .profile-page {
   min-height: calc(100vh - 64px);
-  padding-top: 64px;
+  padding: 32px 0;
   position: relative;
+  width: 100%;
 
+  display: grid;
+  grid-template-columns: 330px 1fr;
+  column-gap: normal;
+  align-items: start;
+}
+
+@media (max-width: 768px) {
+  .profile-page {
+    grid-template-columns: 1fr;
+  }
+}
+
+* {
+  box-sizing: border-box;
+}
+
+.profile-left {
   display: flex;
+  min-width: 0;
   flex-direction: column;
-  gap: 24px;
-  justify-content: flex-start;
   align-items: center;
+  gap: 40px;
+}
 
+.profile-right {
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
 }
 
 .profile-card {
-  width: 90%;
+  width: 95%;
   padding: 32px;
 
   border: 1px solid rgba(255, 255, 255, 0.12);
@@ -680,13 +706,13 @@ main {
 .stat h1 {
   margin: 0;
   font-size: 2.5rem;
-  color: #66bb88;
+  color: #cfcfcf;
 }
 
 .stat h2 {
   margin: 0;
   font-size: 1.5rem;
-  color: #f5a86c;
+  color: #a8a8a8;
 }
 
 .revision-progress {
@@ -759,10 +785,27 @@ main {
 }
 
 .level-0 { background: #2a2a2a; }
-.level-1 { background: #3fa85d; }
-.level-2 { background: #66bb88; }
-.level-3 { background: #7bc99a; }
-.level-4 { background: #91d6ab; }
+.level-1 { background: #0e4429; }
+.level-2 { background: #22a447; }
+.level-3 { background: #39d353; }
+.level-4 { background: #6ee787; }
+
+.heatmap-container::-webkit-scrollbar {
+  height: 8px; /* horizontal scrollbar */
+}
+
+.heatmap-container::-webkit-scrollbar-track {
+  background: #222;
+}
+
+.heatmap-container::-webkit-scrollbar-thumb {
+  background: #444444;
+  border-radius: 999px;
+}
+
+.heatmap-container::-webkit-scrollbar-thumb:hover{
+  background: #696969;
+}
 
 .revision-progress h2 {
   margin: 0 0 20px;
@@ -772,15 +815,35 @@ main {
   color: #f5a86c;
 }
 
+.progress-info {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 40px;
+}
+
+.progress-item {
+  padding: 0 40px 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
 .revision-count {
-  padding-block: inherit;
-  font-size: 28px;
+  width: 140px;
+  margin-top: 8px;
+  padding: 0;
+  font-size: 20px;
   font-weight: 700;
-  color: #f1f1f1;
+  color: #cfcfcf;
+
+  text-align: center;
 }
 
 .revision-count p {
-  font-size: 20px;
+  margin-top: 4px;
+  font-size: 14px;
+
+  text-align: center;
 }
 
 .revision-percentage {
@@ -797,7 +860,7 @@ main {
   width: 140px;
   height: 140px;
 
-  margin: 0 auto 16px;
+  margin: 80px 0 16px;
 
   overflow: visible;
 }
@@ -896,6 +959,7 @@ main {
   margin: 0 auto;
   min-height: 120px;
   padding: 20px 24px;
+  text-decoration: none;
 
   border: 1px solid rgba(255, 255, 255, 0.12);
   border-radius: 14px;
@@ -913,10 +977,15 @@ main {
   color: #66bb88;
 }
 
+.user-problem-link {
+  text-decoration: none;
+}
+
 .user-problem-card h2 {
   margin: 0;
   font-size: 1.25rem;
   color: #f5a86c;
+  text-decoration: none;
 }
 
 .user-problem-card > span {

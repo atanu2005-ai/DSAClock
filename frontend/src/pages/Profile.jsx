@@ -102,7 +102,7 @@ function Profile() {
     const getIntensity = (count) => {
         if(count === 0) return "level-0";
         if(count === 1) return "level-1";
-        if(count <= 3) return "level-2";
+        if(count > 1 && count <= 3) return "level-2";
         return "level-4";
     }
 
@@ -129,103 +129,148 @@ function Profile() {
 
     return (
         <div className={"profile-page"}>
-            <div className={"profile-card"}>
-                <h1>{user?.username}'s profile</h1>
-                <p>{user?.email}</p>
+            <div className={"profile-left"}>
+                <div className={"profile-card"}>
 
-                <div className={"profile-stats"}>
-                    <div className={"stat"}>
-                        <h1>{user?.totalProblemsSolved} <h2>problems solved</h2></h1>
-                    </div>
-
-                    <div className={"stat"}>
-                        <h1>{user?.totalRevisions} <h2>total revisions</h2></h1>
-                    </div>
                 </div>
+                <button className={"logout-button"} onClick={handleLogout}>
+                    Logout
+                </button>
             </div>
 
-            <div className={"profile-card"}>
-                <div className="revision-progress">
-                    <h2>Revision Progress</h2>
+            <div className={"profile-right"}>
+                <div className={"profile-card"}>
+                    <h1>{user?.username}'s profile</h1>
+                    <p>{user?.email}</p>
 
-                    <div className="streak-stats">
-                        <div className="streak-stat">
-                            <span className="streak-label">Current Streak: {user?.currentStreak} days</span>
+                    <div className={"profile-stats"}>
+                        <div className={"stat"}>
+                            <h1>{user?.totalProblemsSolved} <h2>problems solved</h2></h1>
                         </div>
 
-                        <div className="streak-stat">
-                            <span className="streak-label">Best Streak: {user?.maxStreak} days</span>
+                        <div className={"stat"}>
+                            <h1>{user?.totalRevisions} <h2>total revisions</h2></h1>
                         </div>
                     </div>
+                </div>
 
-                    <div className="heatmap-container">
+                <div className={"profile-card"}>
+                    <div className="revision-progress">
+                        <h2>Revision Progress</h2>
 
-                        <div className="month-labels">
-                            {monthLabels.map((month, index) => (
-                                <span
-                                    key={`${month.month}-${month.column}-${index}`}
-                                    style={{ gridColumn: month.column + 1 }}
-                                >
+                        <div className="streak-stats">
+                            <div className="streak-stat">
+                                <span className="streak-label">Current Streak: {user?.currentStreak} days</span>
+                            </div>
+
+                            <div className="streak-stat">
+                                <span className="streak-label">Best Streak: {user?.maxStreak} days</span>
+                            </div>
+                        </div>
+
+                        <div className="heatmap-container">
+
+                            <div className="month-labels">
+                                {monthLabels.map((month, index) => (
+                                    <span
+                                        key={`${month.month}-${month.column}-${index}`}
+                                        style={{ gridColumn: month.column + 1 }}
+                                    >
                                 {month.month}
                                 </span>
-                            ))}
+                                ))}
+                            </div>
+
+                            <div className="heatmap">
+                                {heatmapData.map((day) => (
+                                    <div
+                                        key={day.date}
+                                        className={`heatmap-cell ${getIntensity(day.revisionCount)} ${
+                                            day.monthStart ? "month-start" : ""
+                                        }`}
+                                        style={{
+                                            gridColumn: day.column + 1,
+                                            gridRow: day.row + 1
+                                        }}
+                                        title={`${day.date}: ${day.revisionCount} revisions`}
+                                    >
+                                    </div>
+                                ))}
+                            </div>
+
                         </div>
 
-                        <div className="heatmap">
-                            {heatmapData.map((day) => (
-                                <div
-                                    key={day.date}
-                                    className={`heatmap-cell ${getIntensity(day.revisionCount)} ${
-                                        day.monthStart ? "month-start" : ""
-                                    }`}
-                                    style={{
-                                        gridColumn: day.column + 1,
-                                        gridRow: day.row + 1
-                                    }}
-                                    title={`${day.date}: ${day.revisionCount} revisions`}
-                                >
+                        <div className={"progress-info"}>
+                            <div className={"progress-item"}>
+                                <div className="progress-ring">
+                                    <svg width="140" height="140">
+                                        <circle
+                                            className="progress-ring-bg"
+                                            cx="70"
+                                            cy="70"
+                                            r="60"
+                                        />
+
+                                        <circle
+                                            className="progress-ring-fill"
+                                            cx="70"
+                                            cy="70"
+                                            r="60"
+                                            style={{
+                                                strokeDashoffset:
+                                                    377 - (377 * (user?.revisedPercentage ?? 0)) / 100
+                                            }}
+                                        />
+                                    </svg>
+
+                                    <div className="progress-text">
+                                        {(user?.revisedPercentage ?? 0).toFixed(1)}%
+                                    </div>
+
                                 </div>
-                            ))}
-                        </div>
+                                <div className={"revision-count"}>
+                                    {user?.revised} / {user?.totalProblemsSolved}
+                                    <p>problems revised at least once</p>
+                                </div>
+                            </div>
 
-                    </div>
+                            <div className={"progress-item"}>
+                                <div className="progress-ring">
+                                    <svg width="140" height="140">
+                                        <circle
+                                            className="progress-ring-bg"
+                                            cx="70"
+                                            cy="70"
+                                            r="60"
+                                        />
 
-                    <div className={"revision-count"}>
-                        {user?.revised} / {user?.totalProblemsSolved}
-                        <p>problems revised at least once</p>
-                    </div>
+                                        <circle
+                                            className="progress-ring-fill"
+                                            cx="70"
+                                            cy="70"
+                                            r="60"
+                                            style={{
+                                                strokeDashoffset:
+                                                    377 - (377 * (100 - (user?.revisedPercentage ?? 0))) / 100
+                                            }}
+                                        />
+                                    </svg>
 
-                    <div className="progress-ring">
-                        <svg width="140" height="140">
-                            <circle
-                                className="progress-ring-bg"
-                                cx="70"
-                                cy="70"
-                                r="60"
-                            />
+                                    <div className="progress-text">
+                                        {(100 - user?.revisedPercentage ?? 0).toFixed(1)}%
+                                    </div>
 
-                            <circle
-                                className="progress-ring-fill"
-                                cx="70"
-                                cy="70"
-                                r="60"
-                                style={{
-                                    strokeDashoffset:
-                                        377 - (377 * (user?.revisedPercentage ?? 0)) / 100
-                                }}
-                            />
-                        </svg>
-
-                        <div className="progress-text">
-                            {(user?.revisedPercentage ?? 0).toFixed(1)}%
+                                </div>
+                                <div className={"revision-count"}>
+                                    {user?.totalProblemsSolved - user?.revised} / {user?.totalProblemsSolved}
+                                    <p>problems are yet to be revised</p>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <button className={"logout-button"} onClick={handleLogout}>
-                Logout
-            </button>
         </div>
     );
 }
