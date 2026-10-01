@@ -38,6 +38,22 @@ public class Users {
         GOOGLE
     }
 
+    //about
+    @Column(length = 500)
+    private String about;
+
+    //leetcode profile url
+    private String leetcodeProfileUrl;
+
+    //GitHub profile url
+    private String githubProfileUrl;
+
+    //LinkedIn profile url
+    private String linkedinProfileUrl;
+
+    //Twitter profile url
+    private String twitterProfileUrl;
+
     //setters
     public void setUsername(String username) {
         this.username = username;
@@ -45,6 +61,50 @@ public class Users {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public void setUserId(Long userId) {
+        this.userId = userId;
+    }
+
+    public String getAbout() {
+        return about;
+    }
+
+    public void setAbout(String about) {
+        this.about = about;
+    }
+
+    public String getLeetcodeProfileUrl() {
+        return leetcodeProfileUrl;
+    }
+
+    public void setLeetcodeProfileUrl(String leetcodeProfileUrl) {
+        this.leetcodeProfileUrl = leetcodeProfileUrl;
+    }
+
+    public String getGithubProfileUrl() {
+        return githubProfileUrl;
+    }
+
+    public void setGithubProfileUrl(String githubProfileUrl) {
+        this.githubProfileUrl = githubProfileUrl;
+    }
+
+    public String getLinkedinProfileUrl() {
+        return linkedinProfileUrl;
+    }
+
+    public void setLinkedinProfileUrl(String linkedinProfileUrl) {
+        this.linkedinProfileUrl = linkedinProfileUrl;
+    }
+
+    public String getTwitterProfileUrl() {
+        return twitterProfileUrl;
+    }
+
+    public void setTwitterProfileUrl(String twitterProfileUrl) {
+        this.twitterProfileUrl = twitterProfileUrl;
     }
 
     public void setUserRevisionCount(int userRevisionCount) {
