@@ -641,6 +641,63 @@ main {
   gap: 40px;
 }
 
+.profile-card {
+  width: 100%;
+  padding: 24px;
+  box-sizing: border-box;
+  border-radius: 14px;
+
+  background: linear-gradient(
+          145deg,
+          rgba(25, 28, 30, 0.96),
+          rgba(5, 8, 10, 0.96)
+  );
+
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.25);
+}
+
+.profile-info h2 {
+  margin: 0 0 22px;
+  color: #f5f5f5;
+  font-size: 24px;
+}
+
+.about-section {
+  margin-bottom: 24px;
+}
+
+.about-section h3,
+.social-links h3 {
+  margin: 0 0 10px;
+  color: #66bb88;
+  font-size: 16px;
+}
+
+.about-section p {
+  margin: 0;
+  color: #bdbdbd;
+  font-size: 14px;
+  line-height: 1.6;
+  overflow-wrap: anywhere;
+}
+
+.social-links {
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
+}
+
+.social-links a {
+  color: #d0d0d0;
+  font-size: 14px;
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+.social-links a:hover {
+  color: #f5a86c;
+}
+
 .profile-right {
   display: flex;
   min-width: 0;
@@ -822,7 +879,7 @@ main {
 }
 
 .progress-item {
-  padding: 0 40px 0;
+  padding: 0 45px 0;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -837,6 +894,11 @@ main {
   color: #cfcfcf;
 
   text-align: center;
+}
+
+.revision-count span {
+    font-size: 14px;
+    color: #a8a8a8;
 }
 
 .revision-count p {

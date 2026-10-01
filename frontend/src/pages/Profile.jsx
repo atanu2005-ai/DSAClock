@@ -127,12 +127,51 @@ function Profile() {
         }
     });
 
+    const totalSolved = user?.totalProblemsSolved || 0;
+    const totalRevised = user?.totalRevisions;
+    const reviseRatio = totalSolved > 0 ? (totalRevised / totalSolved) : 0;
     return (
         <div className={"profile-page"}>
             <div className={"profile-left"}>
                 <div className={"profile-card"}>
+                    <div className={"profile-info"}>
+                        <h2>@{user?.username}</h2>
+                    </div>
 
+                    <div className={"about-section"}>
+                        <h3>About</h3>
+                        <p>{user?.about || "Write something about you"}</p>
+                    </div>
+
+                    <div className={"social-links"}>
+                        <h3>Socials</h3>
+
+                        {user?.leetcodeProfileUrl && (
+                            <a href={user.leetcodeProfileUrl} target={"_blank"} rel={"noreferrer"}>
+                                Leetcode
+                            </a>
+                        )}
+
+                        {user?.githubProfileUrl && (
+                            <a href={user.githubProfileUrl} target={"_blank"} rel={"noreferrer"}>
+                                Leetcode
+                            </a>
+                        )}
+
+                        {user?.linkedinProfileUrl && (
+                            <a href={user.linkedinProfileUrl} target={"_blank"} rel={"noreferrer"}>
+                                Leetcode
+                            </a>
+                        )}
+
+                        {user?.twitterProfileUrl && (
+                            <a href={user.twitterProfileUrl} target={"_blank"} rel={"noreferrer"}>
+                                Leetcode
+                            </a>
+                        )}
+                    </div>
                 </div>
+
                 <button className={"logout-button"} onClick={handleLogout}>
                     Logout
                 </button>
@@ -140,7 +179,7 @@ function Profile() {
 
             <div className={"profile-right"}>
                 <div className={"profile-card"}>
-                    <h1>{user?.username}'s profile</h1>
+                    <h1>{user?.username}'s stats</h1>
                     <p>{user?.email}</p>
 
                     <div className={"profile-stats"}>
@@ -229,8 +268,41 @@ function Profile() {
 
                                 </div>
                                 <div className={"revision-count"}>
-                                    {user?.revised} / {user?.totalProblemsSolved}
+                                    {user?.revised} <span> out of </span>{user?.totalProblemsSolved}
                                     <p>problems revised at least once</p>
+                                </div>
+                            </div>
+
+                            <div className={"progress-item"}>
+                                <div className="progress-ring">
+                                    <svg width="140" height="140">
+                                        <circle
+                                            className="progress-ring-bg"
+                                            cx="70"
+                                            cy="70"
+                                            r="60"
+                                        />
+
+                                        <circle
+                                            className="progress-ring-fill"
+                                            cx="70"
+                                            cy="70"
+                                            r="60"
+                                            style={{
+                                                strokeDashoffset:
+                                                    377 - (377 * (user?.revisedTwicePercentage ?? 0)) / 100
+                                            }}
+                                        />
+                                    </svg>
+
+                                    <div className="progress-text">
+                                        {(user?.revisedTwicePercentage ?? 0).toFixed(1)}%
+                                    </div>
+
+                                </div>
+                                <div className={"revision-count"}>
+                                    {user?.revisedAtLeastTwice}<span> out of </span>{user?.totalProblemsSolved}
+                                    <p>problems revised at least twice</p>
                                 </div>
                             </div>
 
@@ -262,8 +334,42 @@ function Profile() {
 
                                 </div>
                                 <div className={"revision-count"}>
-                                    {user?.totalProblemsSolved - user?.revised} / {user?.totalProblemsSolved}
+                                    {user?.totalProblemsSolved - user?.revised} <span> out of </span>
+                                    {user?.totalProblemsSolved}
                                     <p>problems are yet to be revised</p>
+                                </div>
+                            </div>
+
+                            <div className="progress-item">
+                                <div className="progress-ring">
+                                    <svg width="140" height="140">
+                                        <circle
+                                            className="progress-ring-bg"
+                                            cx="70"
+                                            cy="70"
+                                            r="60"
+                                        />
+
+                                        <circle
+                                            className="progress-ring-fill"
+                                            cx="70"
+                                            cy="70"
+                                            r="60"
+                                            style={{
+                                                strokeDashoffset:
+                                                    377 - (377 * Math.min(reviseRatio / 2, 1))
+                                            }}
+                                        />
+                                    </svg>
+
+                                    <div className="progress-text">
+                                        {reviseRatio.toFixed(1)}
+                                    </div>
+                                </div>
+
+                                <div className="revision-count">
+                                    {totalRevised} <span> revisions for </span> {totalSolved}
+                                    <p>problems with an average of {reviseRatio}</p>
                                 </div>
                             </div>
                         </div>
