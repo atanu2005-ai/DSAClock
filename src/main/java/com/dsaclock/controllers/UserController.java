@@ -72,7 +72,7 @@ public class UserController {
 
     //update user if exists
     @PatchMapping("/me")
-    public UserResponse updateUser(@RequestBody UserUpdateRequest request) {
+    public ResponseEntity<UserProfileResponse> updateUser(@RequestBody UserUpdateRequest request) {
 
         Authentication auth =
                 SecurityContextHolder
