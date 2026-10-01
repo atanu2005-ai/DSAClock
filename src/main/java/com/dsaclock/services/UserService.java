@@ -8,7 +8,7 @@ import com.dsaclock.exceptions.UserNotFoundException;
 import com.dsaclock.repos.RevisionActivityRepo;
 import com.dsaclock.repos.UserProblemRepo;
 import com.dsaclock.repos.UserRepo;
-import org.springframework.cglib.core.Local;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -75,11 +75,17 @@ public class UserService {
         response.setTotalRevisions(user.getUserRevisionCount()); //get total revisions by user
 
         int revised = userProblemRepo.countByUserAndRevisionCountGreaterThan(user, 0);
-
         response.setRevised(revised); //(total solved / problems revised at least once)
 
         double percentage = problemsSolved == 0 ? 0 : (double) (revised * 100) / problemsSolved;
         response.setRevisedPercentage(percentage); //revised percentage
+
+        int revisedAtLeastTwice = userProblemRepo.countByUserAndRevisionCountGreaterThan(user, 1);
+        response.setRevisedAtLeastTwice(revisedAtLeastTwice); //problems revised at least twice
+
+        double revisedTwicePercentage = problemsSolved ==
+                0 ? 0 : (double) (revisedAtLeastTwice * 100) / problemsSolved;
+        response.setRevisedTwicePercentage(revisedTwicePercentage); //revised twice percentage
 
         //CURRENT STREAK COUNTING ALGO
         List<RevisionActivity> list = revisionActivityRepo.findByUserUserId(userId);
@@ -178,34 +184,39 @@ public class UserService {
         return response;
     }
 
-    //update a user data
-    public UserResponse updateUser(Long userId, UserUpdateRequest request) {
+    //update a user details
+    public ResponseEntity<UserProfileResponse> updateUser(Long userId, UserUpdateRequest request) {
 
         Users existingUser = userRepo.findById(userId).orElseThrow(() ->
                 new UserNotFoundException("This user doesn't even exist bro!"));
 
         if(request.getUsername() != null) {
-            existingUser.setUsername(request.getUsername()); //updating username if request obj have that
+            existingUser.setUsername(request.getUsername());
         }
 
-        if(request.getEmail() != null) {
-            existingUser.setEmail(request.getEmail()); //updating user email if request obj have that
+        if(request.getAbout() != null)  {
+            existingUser.setAbout(request.getAbout());
         }
 
-        if(request.getPassword() != null) {
-
-            //updating password if the request obj have that
-            existingUser.setPassword(passwordEncoder.encode(request.getPassword()));
+        if(request.getLeetcodeProfileUrl() != null) {
+            existingUser.setLeetcodeProfileUrl(request.getLeetcodeProfileUrl());
         }
 
-        Users user = userRepo.save(existingUser);
+        if(request.getGithubProfileUrl() != null) {
+            existingUser.setGithubProfileUrl(request.getGithubProfileUrl());
+        }
 
-        UserResponse response = new UserResponse();
+        if(request.getLinkedinProfileUrl() != null) {
+            existingUser.setLinkedinProfileUrl(request.getLinkedinProfileUrl());
+        }
 
-        response.setUserId(user.getUserId());
-        response.setUsername(user.getUsername());
+        if(request.getTwitterProfileUrl() != null) {
+            existingUser.setTwitterProfileUrl(request.getTwitterProfileUrl());
+        }
 
-        return response;
+        userRepo.save(existingUser);
+
+        return ResponseEntity.ok(getUserProfile(userId));
     }
 
     //delete user
