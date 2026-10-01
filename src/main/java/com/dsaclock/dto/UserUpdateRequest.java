@@ -1,19 +1,18 @@
 package com.dsaclock.dto;
 
-import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 
 public class UserUpdateRequest {
 
-    @NotBlank
     private String username;
 
-    @NotBlank
-    @Email
-    private String email;
+    private String about;
 
-    @NotBlank
-    private  String password;
+    private String leetcodeProfileUrl;
+
+    private String githubProfileUrl;
+
+    private String linkedinProfileUrl;
 
     public String getUsername() {
         return username;
@@ -23,19 +22,45 @@ public class UserUpdateRequest {
         this.username = username;
     }
 
-    public String getEmail() {
-        return email;
+    public String getAbout() {
+        return about;
     }
 
-    public void setEmail(String email) {
-        this.email = email;
+    public void setAbout(String about) {
+        this.about = about;
     }
 
-    public String getPassword() {
-        return password;
+    public String getLeetcodeProfileUrl() {
+        return leetcodeProfileUrl;
     }
 
-    public void setPassword(String password) {
-        this.password = password;
+    public void setLeetcodeProfileUrl(String leetcodeProfileUrl) {
+        this.leetcodeProfileUrl = leetcodeProfileUrl;
     }
+
+    public String getGithubProfileUrl() {
+        return githubProfileUrl;
+    }
+
+    public void setGithubProfileUrl(String githubProfileUrl) {
+        this.githubProfileUrl = githubProfileUrl;
+    }
+
+    public String getLinkedinProfileUrl() {
+        return linkedinProfileUrl;
+    }
+
+    public void setLinkedinProfileUrl(String linkedinProfileUrl) {
+        this.linkedinProfileUrl = linkedinProfileUrl;
+    }
+
+    public String getTwitterProfileUrl() {
+        return twitterProfileUrl;
+    }
+
+    public void setTwitterProfileUrl(String twitterProfileUrl) {
+        this.twitterProfileUrl = twitterProfileUrl;
+    }
+
+    private String twitterProfileUrl;
 }
