@@ -69,6 +69,11 @@ public class UserService {
         response.setId(user.getUserId());
         response.setUsername(user.getUsername());
         response.setEmail(user.getEmail());
+        response.setAbout(user.getAbout());
+        response.setLeetcodeProfileUrl(user.getLeetcodeProfileUrl());
+        response.setGithubProfileUrl(user.getGithubProfileUrl());
+        response.setLinkedinProfileUrl(user.getLinkedinProfileUrl());
+        response.setTwitterProfileUrl(user.getTwitterProfileUrl());
 
         int problemsSolved = userProblemRepo.countByUser_UserId(userId); //get total problems solved by user
         response.setTotalProblemsSolved(problemsSolved);
