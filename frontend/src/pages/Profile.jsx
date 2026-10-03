@@ -6,6 +6,53 @@ function Profile() {
     const [user, setUser] = useState(null);
     const [activity, setActivity] = useState([]);
     const navigate = useNavigate();
+    const [showEditForm, setShowEditForm] = useState(false);
+    const [editForm, setEditForm] = useState({
+        username: "",
+        about: "",
+        leetcodeProfileUrl: "",
+        githubProfileUrl: "",
+        linkedinProfileUrl: "",
+        twitterProfileUrl: ""
+    });
+
+    useEffect(() => {
+        if(showEditForm && user) {
+            setEditForm({
+                username: user?.username || "",
+                about: user?.about || "",
+                leetcodeProfileUrl: user?.leetcodeProfileUrl || "",
+                githubProfileUrl: user?.githubProfileUrl || "",
+                linkedinProfileUrl: user?.linkedinProfileUrl || "",
+                twitterProfileUrl: user?.twitterProfileUrl || ""
+            });
+        }
+    }, [showEditForm, user]);
+
+    async function handleEditSubmit(e) {
+        e.preventDefault();
+
+        const token = localStorage.getItem("token");
+
+        const response = await fetch(
+            "http://localhost:8080/api/users/me",
+            {
+                method: "PATCH",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": `Bearer ${token}`
+                },
+                body: JSON.stringify(editForm)
+            }
+        );
+
+        if (response.ok) {
+            const updatedUser = await response.json();
+
+            setUser(updatedUser);
+            setShowEditForm(false);
+        }
+    }
 
     function handleLogout() {
         localStorage.removeItem('token');
@@ -31,6 +78,14 @@ function Profile() {
 
     }, []);
 
+    useEffect(() => {
+        document.body.style.overflow = showEditForm ? "hidden" : "";
+
+        return () => {
+            document.body.style.overflow = "";
+        };
+    }, [showEditForm]);
+
 //state for user activity
     useEffect(() => {
         fetch("http://localhost:8080/api/users/me/activity", {
@@ -53,8 +108,6 @@ function Profile() {
     const today = new Date();
     const startDate = new Date(today);
     startDate.setFullYear(today.getFullYear() - 1);
-    console.log("start date: ", startDate);
-    console.log("today: ", today);
 
 //now all 365 days
     const dates = [];
@@ -134,39 +187,66 @@ function Profile() {
         <div className={"profile-page"}>
             <div className={"profile-left"}>
                 <div className={"profile-card"}>
-                    <div className={"profile-info"}>
-                        <h2>@{user?.username}</h2>
+
+                    <div className={"profile-header"}>
+                        <div className={"profile-info"}>
+                            <h1>@{user?.username}</h1>
+                        </div>
+
+                        <button className ="edit-profile-button" onClick={() => setShowEditForm(true)}>
+                            edit profile
+                        </button>
                     </div>
 
-                    <div className={"about-section"}>
+                    <div className={"profile-info"}>
                         <h3>About</h3>
+                        <hr className={"card-divider"}/>
+                    </div>
+                    <div className={"about-section"}>
                         <p>{user?.about || "Write something about you"}</p>
                     </div>
 
-                    <div className={"social-links"}>
+                    <div className={"profile-info"}>
                         <h3>Socials</h3>
-
+                        <hr className={"card-divider"}/>
+                    </div>
+                    <div className={"social-links"}>
                         {user?.leetcodeProfileUrl && (
-                            <a href={user.leetcodeProfileUrl} target={"_blank"} rel={"noreferrer"}>
-                                Leetcode
+                            <a href={user.leetcodeProfileUrl}
+                               target={"_blank"}
+                               rel={"noreferrer"}
+                                aria-label={"LeetCode"}>
+                                <img src={"LeetcodeIcon.svg"} alt={"Leetcode"}/>
                             </a>
                         )}
 
                         {user?.githubProfileUrl && (
-                            <a href={user.githubProfileUrl} target={"_blank"} rel={"noreferrer"}>
-                                Leetcode
+                            <a href={user.githubProfileUrl}
+                               target={"_blank"}
+                               rel={"noreferrer"}
+                                aria-label={"GitHub"}
+                            >
+                                <img src={"GithubIcon.svg"} alt={"Github"}/>
                             </a>
                         )}
 
                         {user?.linkedinProfileUrl && (
-                            <a href={user.linkedinProfileUrl} target={"_blank"} rel={"noreferrer"}>
-                                Leetcode
+                            <a href={user.linkedinProfileUrl}
+                               target={"_blank"}
+                               rel={"noreferrer"}
+                                aria-label={"LinkedIn"}
+                            >
+                                <img src={"LinkedInIcon.svg"} alt={"LinkedIn"}/>
                             </a>
                         )}
 
                         {user?.twitterProfileUrl && (
-                            <a href={user.twitterProfileUrl} target={"_blank"} rel={"noreferrer"}>
-                                Leetcode
+                            <a href={user.twitterProfileUrl}
+                               target={"_blank"}
+                               rel={"noreferrer"}
+                                aria-label={"X / Twitter"}
+                            >
+                                <img src={"TwitterIcon.svg"} alt={"Twitter/X"}/>
                             </a>
                         )}
                     </div>
@@ -376,6 +456,103 @@ function Profile() {
                     </div>
                 </div>
             </div>
+
+            {showEditForm && (
+                <div className="modal-overlay">
+                    <div className="edit-profile-modal">
+                        <h2>Edit Profile</h2>
+
+                        <form onSubmit={handleEditSubmit}>
+
+                            <label>Username</label>
+                            <input
+                                type="text"
+                                value={editForm.username}
+                                onChange={(e) =>
+                                    setEditForm({
+                                        ...editForm,
+                                        username: e.target.value
+                                    })
+                                }
+                            />
+
+                            <label>About</label>
+                            <textarea
+                                value={editForm.about}
+                                onChange={(e) =>
+                                    setEditForm({
+                                        ...editForm,
+                                        about: e.target.value
+                                    })
+                                }
+                            />
+
+                            <label>LeetCode</label>
+                            <input
+                                type="url"
+                                value={editForm.leetcodeProfileUrl}
+                                onChange={(e) =>
+                                    setEditForm({
+                                        ...editForm,
+                                        leetcodeProfileUrl: e.target.value
+                                    })
+                                }
+                            />
+
+                            <label>GitHub</label>
+                            <input
+                                type="url"
+                                value={editForm.githubProfileUrl}
+                                onChange={(e) =>
+                                    setEditForm({
+                                        ...editForm,
+                                        githubProfileUrl: e.target.value
+                                    })
+                                }
+                            />
+
+                            <label>LinkedIn</label>
+                            <input
+                                type="url"
+                                value={editForm.linkedinProfileUrl}
+                                onChange={(e) =>
+                                    setEditForm({
+                                        ...editForm,
+                                        linkedinProfileUrl: e.target.value
+                                    })
+                                }
+                            />
+
+                            <label>X / Twitter</label>
+                            <input
+                                type="url"
+                                value={editForm.twitterProfileUrl}
+                                onChange={(e) =>
+                                    setEditForm({
+                                        ...editForm,
+                                        twitterProfileUrl: e.target.value
+                                    })
+                                }
+                            />
+
+                            <div className="edit-actions">
+                                <button
+                                    type="button"
+                                    onClick={() => setShowEditForm(false)}
+                                >
+                                    Cancel
+                                </button>
+
+                                <button type="submit">
+                                    Save Changes
+                                </button>
+                            </div>
+
+                        </form>
+
+                    </div>
+                </div>
+            )}
 
         </div>
     );
