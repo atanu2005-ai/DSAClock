@@ -363,22 +363,31 @@ main {
 }
 
 .problems-page h1 {
-  margin-bottom: 32px;
+  margin-bottom: 58px;
   text-shadow: 2px 2px 6px rgba(0, 0, 0, 0.8);
 }
 
 .search-container {
+  margin: 0 auto 28px;
+  width: 100%;
+  max-width: 350px;
+  align-items: center;
   display: flex;
   gap: 10px;
-  margin-bottom: 28px;
+}
+
+.search-icon {
+  width: 28px;
+  height: 28px;
+  flex-shrink: 0;
 }
 
 .search-container input {
-  width: 220px;
+  width: 380px;
   padding: 10px 14px;
 
   border: 1px solid #444;
-  border-radius: 8px;
+  border-radius: 28px;
 
   background: #222;
   color: white;
@@ -390,26 +399,6 @@ main {
 .search-container input:focus {
   outline: none;
   border-color: #F5A86C;
-}
-
-.search-container button {
-  padding: 10px 18px;
-
-  border: none;
-  border-radius: 8px;
-
-  background: #F5A86C;
-  color: #181818;
-
-  font-family: inherit;
-  font-weight: 600;
-
-  cursor: pointer;
-  transition: 0.2s;
-}
-
-.search-container button:hover {
-  background: #66bb88;
 }
 
 .problem-list {
@@ -430,7 +419,7 @@ main {
   align-items: center;
 
   border: 1px solid rgba(255, 255, 255, 0.12);
-  border-radius: 14px;
+  border-radius: 28px;
 
   background: linear-gradient(
           145deg,
@@ -623,7 +612,7 @@ main {
   align-items: start;
 }
 
-@media (max-width: 768px) {
+@media (max-width: 918px) {
   .profile-page {
     grid-template-columns: 1fr;
   }
@@ -729,17 +718,19 @@ main {
 
 .social-links {
   display: flex;
-  flex-direction: row;
-  gap: 14px;
+  flex-direction: column;
+  gap: 10px;
 }
 
 .social-links a {
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-start;
 
-  width: 32px;
+  width: 100%;
   height: 32px;
+
+  gap: 10px;
 
   text-decoration: none;
   border-radius: 7px;
@@ -752,7 +743,17 @@ main {
   height: 20px;
   object-fit: contain;
 
+  flex-shrink: 0;
+
   transition: transform 0.2s ease, opacity 0.2s ease;
+}
+
+.social-links a span {
+  font-size: 14px;
+  color: #b8b8b8;
+  line-height: 1;
+
+  transition: color 0.2s ease;
 }
 
 .social-links a:hover {

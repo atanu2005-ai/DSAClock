@@ -6,6 +6,7 @@ function Problems() {
     const [problems, setProblems] = useState([]);
     const [searchId, setSearchId] = useState("");
     const [searchResult, setSearchResult] = useState(null);
+    const [loading, setLoading] = useState(true);
 
     useEffect(() => {
 
@@ -18,94 +19,88 @@ function Problems() {
 
         const savedToken = localStorage.getItem("token");
 
-        fetch("http://localhost:8080/api/problems", {
-            headers: {
-                Authorization: `Bearer ${savedToken}`
-            }
-        })
-            .then(response => response.json())
-            .then(data => setProblems(data));
+        try {
+            fetch("http://localhost:8080/api/problems", {
+                headers: {
+                    Authorization: `Bearer ${savedToken}`
+                }
+            })
+                .then(response => response.json())
+                .then(data => setProblems(data));
+        }catch (error) {
+            console.log("failed to fetch problems");
+        }finally {
+            setLoading(false);
+        }
 
     }, []);
 
     //search handler
-    const handleSearch = () => {
-        const target = Number(searchId)
+    const handleSearch = (value = searchId) => {
+        const query = value.trim();
 
-        let left = 0;
-        let right = problems.length - 1;
-
-        while(left <= right) {
-            const mid = Math.floor((left + right) / 2);
-            const id = problems[mid].problemId;
-
-            if(id === target) {
-                setSearchResult(problems[mid]);
-                return;
-            }
-
-            if(id < target) {
-                left = mid + 1;
-            }else {
-                right = mid - 1;
-            }
+        if (!query) {
+            setSearchResult([]);
+            return;
         }
-        setSearchResult(null)
-    }
+
+        // Search by problem ID when input is numeric
+        if (/^\d+$/.test(query)) {
+            const target = Number(query);
+
+            const result = problems.find(
+                (problem) => Number(problem.problemId) === target
+            );
+
+            setSearchResult(result ? [result] : []);
+            return;
+        }
+
+        // Search by problem title when input contains text
+        const results = problems.filter((problem) =>
+            problem.problem_title
+                ?.toLowerCase()
+                .includes(query.toLowerCase())
+        );
+
+        setSearchResult(results);
+    };
 
 
     return (
         <main className="problems-page">
-            <h1>Problems</h1>
-
             <div className={"search-container"}>
+                <img src={"/searchIcon.svg"} alt={"search"} className={"search-icon"}/>
                 <input
                     type="text"
-                    inputMode={"numeric"}
-                    pattern="[0-9]*"
                     value={searchId}
-                    onChange={(e) =>
-                        setSearchId(e.target.value)}
-                    placeholder="Search by problem ID"
+                    onChange={(e) => {
+                        const value = e.target.value;
+                        setSearchId(value);
+                        handleSearch(value);
+                    }}
+
+                    placeholder="Search by problem ID or title"
                 />
 
-                <button onClick={handleSearch}>
-                    Search
-                </button>
             </div>
 
             <div className="problem-list">
-                {searchResult ? (
+                {(searchId.trim() ? searchResult : problems).map(problem => (
                     <Link
-                        to={`/problems/${searchResult.problemId}`}
+                        to={`/problems/${problem.problemId}`}
                         className="problem-card"
-                        key={searchResult.problemId}
+                        key={problem.problemId}
                     >
-                        <span className="problem-title">
-                            {searchResult.problemId} : {searchResult.problem_title}
-                        </span>
-
-                        <span className="problem-difficulty">
-                            {searchResult.problem_diff}
-                        </span>
-                    </Link>
-                ) : (
-                    problems.map(problem => (
-                            <Link
-                                to={`/problems/${problem.problemId}`}
-                                className="problem-card"
-                                key={problem.problemId}
-                            >
                         <span className="problem-title">
                             {problem.problemId} : {problem.problem_title}
                         </span>
 
-                                <span className="problem-difficulty">
+                        <span className="problem-difficulty">
                             {problem.problem_diff}
                         </span>
-                            </Link>
-                        ))
-                )}
+                    </Link>
+                ))}
             </div>
         </main>
     );

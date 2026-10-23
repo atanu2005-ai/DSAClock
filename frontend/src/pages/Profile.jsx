@@ -78,6 +78,18 @@ function Profile() {
 
     }, []);
 
+    //for extracting username from URLs
+    const getUsernameFromUrl = (url) => {
+        if (!url) return "";
+
+        try {
+            const pathname = new URL(url).pathname;
+            return pathname.split("/").filter(Boolean).pop();
+        } catch {
+            return url;
+        }
+    };
+
     useEffect(() => {
         document.body.style.overflow = showEditForm ? "hidden" : "";
 
@@ -215,8 +227,13 @@ function Profile() {
                             <a href={user.leetcodeProfileUrl}
                                target={"_blank"}
                                rel={"noreferrer"}
-                                aria-label={"LeetCode"}>
+                                aria-label={"LeetCode"}
+                            >
                                 <img src={"LeetcodeIcon.svg"} alt={"Leetcode"}/>
+
+                                <span>
+                                    {getUsernameFromUrl(user.leetcodeProfileUrl)}
+                                </span>
                             </a>
                         )}
 
@@ -227,6 +244,10 @@ function Profile() {
                                 aria-label={"GitHub"}
                             >
                                 <img src={"GithubIcon.svg"} alt={"Github"}/>
+
+                                <span>
+                                    {getUsernameFromUrl(user.githubProfileUrl)}
+                                </span>
                             </a>
                         )}
 
@@ -237,6 +258,10 @@ function Profile() {
                                 aria-label={"LinkedIn"}
                             >
                                 <img src={"LinkedInIcon.svg"} alt={"LinkedIn"}/>
+
+                                <span>
+                                    {getUsernameFromUrl(user.linkedinProfileUrl)}
+                                </span>
                             </a>
                         )}
 
@@ -247,6 +272,10 @@ function Profile() {
                                 aria-label={"X / Twitter"}
                             >
                                 <img src={"TwitterIcon.svg"} alt={"Twitter/X"}/>
+
+                                <span>
+                                    {getUsernameFromUrl(user.twitterProfileUrl)}
+                                </span>
                             </a>
                         )}
                     </div>
@@ -276,6 +305,8 @@ function Profile() {
                 <div className={"profile-card"}>
                     <div className="revision-progress">
                         <h2>Revision Progress</h2>
+
+                        <hr className={"card-divider"}/>
 
                         <div className="streak-stats">
                             <div className="streak-stat">
