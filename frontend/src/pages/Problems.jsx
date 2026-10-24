@@ -1,5 +1,6 @@
-import {use, useEffect, useState} from "react";
+import {useEffect, useState} from "react";
 import { Link } from "react-router-dom";
+import ProblemCardSkeleton from "./ProblemCardSkeleton.jsx";
 
 function Problems() {
 
@@ -9,7 +10,6 @@ function Problems() {
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-
         const params = new URLSearchParams(window.location.search);
         const token = params.get("token");
 
@@ -19,20 +19,31 @@ function Problems() {
 
         const savedToken = localStorage.getItem("token");
 
-        try {
-            fetch("http://localhost:8080/api/problems", {
-                headers: {
-                    Authorization: `Bearer ${savedToken}`
+        async function fetchProblems() {
+            try {
+                const response = await fetch(
+                    "http://localhost:8080/api/problems",
+                    {
+                        headers: {
+                            Authorization: `Bearer ${savedToken}`
+                        }
+                    }
+                );
+
+                if (!response.ok) {
+                    throw new Error("Failed to fetch problems");
                 }
-            })
-                .then(response => response.json())
-                .then(data => setProblems(data));
-        }catch (error) {
-            console.log("failed to fetch problems");
-        }finally {
-            setLoading(false);
+
+                const data = await response.json();
+                setProblems(data);
+            } catch (error) {
+                console.error("Failed to fetch problems:", error);
+            } finally {
+                setLoading(false);
+            }
         }
 
+        fetchProblems();
     }, []);
 
     //search handler
@@ -85,23 +96,29 @@ function Problems() {
 
             </div>
 
-            <div className="problem-list">
-                {(searchId.trim() ? searchResult : problems).map(problem => (
-                    <Link
-                        to={`/problems/${problem.problemId}`}
-                        className="problem-card"
-                        key={problem.problemId}
-                    >
-                        <span className="problem-title">
-                            {problem.problemId} : {problem.problem_title}
-                        </span>
+                <div className="problem-list">
+                    {loading ? (
+                        Array.from({ length: 10 }).map((_, index) => (
+                            <ProblemCardSkeleton key={index} />
+                        ))
+                        ) : (
+                        (searchId.trim() ? searchResult : problems)?.map((problem) => (
+                            <Link
+                                to={`/problems/${problem.problemId}`}
+                                className="problem-card"
+                                key={problem.problemId}
+                            >
+                                <span className="problem-title">
+                                    {problem.problemId} : {problem.problem_title}
+                                </span>
 
-                        <span className="problem-difficulty">
-                            {problem.problem_diff}
-                        </span>
-                    </Link>
-                ))}
-            </div>
+                                <span className="problem-difficulty">
+                                    {problem.problem_diff}
+                                </span>
+                            </Link>
+                        ))
+                    )}
+                </div>
         </main>
     );
 }

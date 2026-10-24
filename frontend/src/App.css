@@ -449,6 +449,76 @@ main {
   color: #a8a8a8;
 }
 
+/* Skeleton card */
+.skeleton-card {
+  padding: 14px 18px;
+
+  display: flex;
+  align-items: center;
+  border-radius: 28px;
+}
+
+/* Shimmer effect */
+.skeleton {
+  background: linear-gradient(
+          90deg,
+          #292e30 25%,
+          #383e40 50%,
+          #292e30 75%
+  );
+
+  background-size: 200% 100%;
+  animation: skeleton-shimmer 1.5s ease-in-out infinite;
+  border-radius: 8px;
+}
+
+/* Icon placeholder */
+.skeleton-icon {
+  width: 24px;
+  height: 24px;
+  border-radius: 30px;
+}
+
+/* Content section */
+.skeleton-content {
+  flex: 1;
+}
+
+/* Title placeholder */
+.skeleton-title {
+  width: 55%;
+  height: 15px;
+  margin-left: 2px;
+}
+
+.skeleton-content {
+  flex: 1;
+  min-width: 0;
+}
+
+.skeleton-tags {
+  display: flex;
+  margin-left: auto;
+  flex: 0 0 80px;
+  justify-content: flex-end;
+}
+
+.skeleton-tag {
+  width: 50px;
+  height: 18px;
+  flex-shrink: 0;
+}
+
+@keyframes skeleton-shimmer {
+  0% {
+    background-position: 200% 0;
+  }
+
+  100% {
+    background-position: -200% 0;
+  }
+}
+
 /*problem details page*/
 
 .problem-details {

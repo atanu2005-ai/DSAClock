@@ -288,7 +288,7 @@ function Profile() {
 
             <div className={"profile-right"}>
                 <div className={"profile-card"}>
-                    <h1>{user?.username}'s stats</h1>
+                    <h1>{user?.username}'s dashboard</h1>
                     <p>{user?.email}</p>
 
                     <div className={"profile-stats"}>
