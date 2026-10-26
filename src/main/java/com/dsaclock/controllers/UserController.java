@@ -1,14 +1,12 @@
 package com.dsaclock.controllers;
 
 import com.dsaclock.dto.*;
-import com.dsaclock.entities.Problems;
 import com.dsaclock.entities.Users;
 import com.dsaclock.repos.UserRepo;
 import com.dsaclock.services.RevisionActivityService;
 import com.dsaclock.services.UserProblemService;
 import com.dsaclock.services.UserService;
 import jakarta.validation.Valid;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -16,7 +14,6 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/users")
@@ -63,11 +60,16 @@ public class UserController {
         return ResponseEntity.ok(userService.getUserProfile(user.getUserId()));
     }
 
-    //add new user
+    //initiate registration
     @PostMapping
-    public UserResponse setUser(@Valid @RequestBody RegisterRequest request) {
+    public ResponseEntity<?> initiateRegistration(@Valid @RequestBody RegisterRequest request) {
 
-        return userService.setUser(request);
+        userService.initiateRegister(request.getUsername(),
+                request.getEmail(),
+                request.getPassword());
+
+        return ResponseEntity.accepted().body(
+                "OTP sent to your email. Please verify to complete registration");
     }
 
     //update user if exists
