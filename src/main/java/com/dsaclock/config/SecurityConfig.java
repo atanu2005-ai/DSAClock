@@ -71,6 +71,9 @@ public class SecurityConfig {
             //AUTHENTICATION FREE  LOCAL LOGIN
             auth.requestMatchers(HttpMethod.POST,("/api/login")).permitAll();
 
+            //AUTHENTICATION FREE OTP VERIFICATION
+            auth.requestMatchers(HttpMethod.POST,("/api/verify")).permitAll();
+
             //GOOGLE LOGIN
             auth.requestMatchers("/oauth2/**", "/login/oauth2/**").permitAll();
 
