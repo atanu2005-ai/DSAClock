@@ -8,6 +8,7 @@ import com.dsaclock.exceptions.UserNotFoundException;
 import com.dsaclock.repos.RevisionActivityRepo;
 import com.dsaclock.repos.UserProblemRepo;
 import com.dsaclock.repos.UserRepo;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -16,7 +17,9 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 
 @Service
@@ -39,13 +42,20 @@ public class UserService {
     //Revision activity repo reference
     private final RevisionActivityRepo revisionActivityRepo;
 
-    public UserService(UserRepo userRepo, UserProblemRepo userProblemRepo, PasswordEncoder passwordEncoder, AuthenticationManager authenticationManager, JwtService jwtService, RevisionActivityRepo revisionActivityRepo) {
+    //email service reference
+    private final EmailService emailService;
+
+    private final Map<String, PendingRegistration> pendingRegistrationMap =
+            new ConcurrentHashMap<>();
+
+    public UserService(UserRepo userRepo, UserProblemRepo userProblemRepo, PasswordEncoder passwordEncoder, AuthenticationManager authenticationManager, JwtService jwtService, RevisionActivityRepo revisionActivityRepo, EmailService emailService) {
         this.userRepo = userRepo;
         this.userProblemRepo = userProblemRepo;
         this.passwordEncoder = passwordEncoder;
         this.authenticationManager = authenticationManager;
         this.jwtService = jwtService;
         this.revisionActivityRepo = revisionActivityRepo;
+        this.emailService = emailService;
     }
 
     //return all users
@@ -148,15 +158,27 @@ public class UserService {
         return userRepo.existsByEmail(email);
     }
 
+    //initiate user registration
+    public void initiateRegister(String username, String email, String password) {
+
+        //saving credentials in concurrent map until otp verification
+        String encodedPassword = passwordEncoder.encode(password);
+
+        PendingRegistration pending = new PendingRegistration(username, email, encodedPassword);
+
+        pendingRegistrationMap.put(email.toLowerCase(), pending);
+
+        emailService.sendOtp(email);
+    }
     //add new user
-    public UserResponse setUser(RegisterRequest request) { //add new user
+    public UserResponse setUser(PendingRegistration pending) { //add new user
 
         Users user = new Users();
 
         //setting properties of request object to the new user object
-        user.setUsername(request.getUsername());
-        user.setEmail(request.getEmail());
-        user.setPassword(passwordEncoder.encode(request.getPassword())); // encoding given password
+        user.setUsername(pending.username());
+        user.setEmail(pending.email());
+        user.setPassword(pending.EncodedPassword()); // encoding given password
 
         if(userRepo.findByEmail(user.getEmail()).isPresent()) {
             throw new UserAlreadyExistsException("User with this email already exists");
@@ -165,6 +187,8 @@ public class UserService {
         //saving the new user object and keeping it as a new user object named savedUser
         Users savedUser = userRepo.save(user);
 
+        System.out.println("user saved");
+
         //creating a user response object
         UserResponse response = new UserResponse();
 
@@ -172,7 +196,11 @@ public class UserService {
         response.setUserId(savedUser.getUserId());
         response.setUsername(savedUser.getUsername());
 
-        return response; //returning the response object
+        return response;
+    }
+
+    public PendingRegistration getPendingRegistration(String email) {
+        return pendingRegistrationMap.get(email);
     }
 
     //USER LOGIN
