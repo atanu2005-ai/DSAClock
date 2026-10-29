@@ -92,6 +92,7 @@ public class UserProblemService {
 
         response.setProblemId(problemId);
         response.setTitle(thisProblem.getProblem_title());
+        response.setUrl(thisProblem.getProblem_url());
         response.setDifficulty(thisProblem.getProblem_diff());
         response.setSolved_date(today);
         response.setNext_revision_date(userProblem.getNextRevisionDate());
