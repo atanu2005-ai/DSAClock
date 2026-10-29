@@ -1,6 +1,7 @@
 import {Link} from "react-router-dom";
 import {useState, useEffect} from "react";
 import { useNavigate } from "react-router-dom";
+import {BadgeCheck, ClipboardCheck, ClockCheck, ChartNoAxesCombined} from "lucide-react";
 
 function Profile() {
     const [user, setUser] = useState(null);
@@ -203,6 +204,9 @@ function Profile() {
                     <div className={"profile-header"}>
                         <div className={"profile-info"}>
                             <h1>@{user?.username}</h1>
+                            <div className={"username-badge"}>
+                                <BadgeCheck size={20}/>
+                            </div>
                         </div>
 
                         <button className ="edit-profile-button" onClick={() => setShowEditForm(true)}>
@@ -212,16 +216,16 @@ function Profile() {
 
                     <div className={"profile-info"}>
                         <h3>About</h3>
-                        <hr className={"card-divider"}/>
                     </div>
+                    <hr className={"card-divider"}/>
                     <div className={"about-section"}>
                         <p>{user?.about || "Write something about you"}</p>
                     </div>
 
                     <div className={"profile-info"}>
                         <h3>Socials</h3>
-                        <hr className={"card-divider"}/>
                     </div>
+                    <hr className={"card-divider"}/>
                     <div className={"social-links"}>
                         {user?.leetcodeProfileUrl && (
                             <a href={user.leetcodeProfileUrl}
@@ -292,20 +296,35 @@ function Profile() {
                     <p>{user?.email}</p>
 
                     <div className={"profile-stats"}>
-                        <div className={"stat"}>
-                            <h1>{user?.totalProblemsSolved} <h2>problems solved</h2></h1>
+                        <div className={"stat-box"}>
+                            <div className={"stat"}>
+                                <h1>{user?.totalProblemsSolved} <h2>problems solved</h2></h1>
+                            </div>
+                            <div className={"stat-icons"}>
+                                <ClipboardCheck size={30} color={"#f5a86c"}/>
+                            </div>
                         </div>
 
-                        <div className={"stat"}>
-                            <h1>{user?.totalRevisions} <h2>total revisions</h2></h1>
+                        <div className={"stat-box"}>
+                            <div className={"stat"}>
+                                <h1>{user?.totalRevisions} <h2>total revisions</h2></h1>
+                            </div>
+                            <div className={"stat-icons"}>
+                                <ClockCheck size={30} color={"#f5a86c"}/>
+                            </div>
                         </div>
                     </div>
                 </div>
 
                 <div className={"profile-card"}>
                     <div className="revision-progress">
-                        <h2>Revision Progress</h2>
 
+                        <div className={"revision-progress-title"}>
+                            <div className={"revision-icon"}>
+                                <ChartNoAxesCombined size={30} color={"#f5a86c"}/>
+                            </div>
+                            <h2>Revision progress</h2>
+                        </div>
                         <hr className={"card-divider"}/>
 
                         <div className="streak-stats">
