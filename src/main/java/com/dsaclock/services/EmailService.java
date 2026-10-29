@@ -20,7 +20,7 @@ public class EmailService {
 
         String subject = "DSAClock - Email verification";
 
-        String body = "Your email verification OTP is" + otp +
+        String body = "Your email verification OTP is " + otp +
                 "\n\n This code will expire in 5 minutes" +
                 "\n If you didn't request this, please ignore";
 
