@@ -8,6 +8,8 @@ public class UserProblemResponse {
 
     private String title;
 
+    private String url;
+
     private String difficulty;
 
     private LocalDate solved_date;
@@ -15,6 +17,14 @@ public class UserProblemResponse {
     private LocalDate next_revision_date;
 
     private int revision_count;
+
+    public String getUrl() {
+        return url;
+    }
+
+    public void setUrl(String url) {
+        this.url = url;
+    }
 
     public Long getProblemId() {
         return problemId;
