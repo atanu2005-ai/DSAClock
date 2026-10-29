@@ -48,7 +48,7 @@
 }
 
 .menu-button:hover {
-  color: #f5a86c;
+  color: #66BB88;
 }
 
 .sidebar {
@@ -356,7 +356,6 @@ main {
   max-width: 1150px;
   margin: 0 auto;
   height: calc(100vh - 64px);
-  overflow: hidden;
 
   padding: 24px 32px;
   box-sizing: border-box;
@@ -749,6 +748,22 @@ main {
   margin-bottom: 22px;
 }
 
+.profile-info {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 6px;
+}
+
+.profile-info h1 {
+  font-size: 20px;
+  margin-right: 0;
+}
+
+.username-badge {
+  margin: 4px 0 0;
+}
+
 .profile-info h3 {
   margin: 10px 0 2px;
   color: #696969;
@@ -972,15 +987,16 @@ main {
   gap: 20px;
 }
 
-.stat {
+.stat-box {
   flex: 1;
-
-  padding: 20px;
-
-  border: 2px solid #333;
-  border-radius: 10px;
-
+  padding: 0px;
   text-align: center;
+}
+
+.stat {
+  border: 2px solid #333;
+  border-radius: 20px;
+  padding: 20px;
 }
 
 .stat h1 {
@@ -993,6 +1009,10 @@ main {
   margin: 0;
   font-size: 1.5rem;
   color: #a8a8a8;
+}
+
+.stat-icons {
+  margin: 30px auto auto;
 }
 
 .revision-progress {
@@ -1087,12 +1107,23 @@ main {
   background: #696969;
 }
 
-.revision-progress h2 {
+.revision-progress-title {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 6px;
+}
+
+.revision-progress-title h2 {
   margin: 0 0 20px;
 
   font-size: 24px;
   font-weight: 400;
   color: #f5a86c;
+}
+
+.revision-icon {
+  margin-bottom: 20px;
 }
 
 .progress-info {
@@ -1223,6 +1254,7 @@ main {
 .user-problems-page {
   min-height: calc(100vh - 64px);
   padding: 40px 32px;
+
 }
 
 .user-problems-page h1 {

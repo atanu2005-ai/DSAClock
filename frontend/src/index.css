@@ -3,7 +3,9 @@
   color: #f5f5f5;
   background-color: #181818;
 }
-
+html {
+  scrollbar-gutter: stable;
+}
 * {
   box-sizing: border-box;
 }
