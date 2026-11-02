@@ -8,6 +8,8 @@ import com.dsaclock.entities.Users;
 import com.dsaclock.services.OtpService;
 import com.dsaclock.services.PendingRegistration;
 import com.dsaclock.services.UserService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -18,6 +20,11 @@ import org.springframework.security.core.AuthenticationException;
 
 @RestController
 @RequestMapping("api/")
+@Tag(
+        name = "Authentication",
+        description = "APIs for authentication requests."
+)
+
 public class AuthController {
 
     //user service reference
@@ -32,6 +39,10 @@ public class AuthController {
     }
 
     @PostMapping("/login")
+    @Operation(
+            summary = "Login",
+            description = "Logs in user with user credentials"
+    )
     public ResponseEntity<?> login(@RequestBody LoginRequest request) {
 
         try {
@@ -43,6 +54,10 @@ public class AuthController {
     }
 
     @PostMapping("/verify")
+    @Operation(
+            summary = "Verification",
+            description = "Verifies user with given otp while registering"
+    )
     public ResponseEntity<UserResponse> verifyOtp(@RequestBody VerifyRequestBody requestBody) {
         System.out.println("controller verify otp reached");
         boolean verified = otpService.verifyOtp(requestBody.email(), requestBody.otp());

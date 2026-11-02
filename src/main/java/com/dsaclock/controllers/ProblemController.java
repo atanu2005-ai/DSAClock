@@ -8,6 +8,9 @@ import com.dsaclock.repos.UserRepo;
 import com.dsaclock.services.LeetcodeService;
 import com.dsaclock.services.ProblemService;
 import com.dsaclock.services.UserProblemService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -19,6 +22,10 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/problems")
+@Tag(
+        name = "Problems",
+        description = "APIs to do operations on problems."
+)
 public class ProblemController {
 
     //problem service reference
@@ -40,25 +47,34 @@ public class ProblemController {
 
     //get all problems
     @GetMapping
+    @Operation(
+            summary = "Get all problems",
+            description = "Retrieves all problems available in database"
+    )
     public List<Problems> getProblems() {
         return problemService.getProblem();
     }
 
     //get a problem by id
     @GetMapping("/{problemId}")
-    public Problems getProblems(@PathVariable Long problemId) {
+    @Operation(summary = "Get problem by ID")
+    public Problems getProblems(@Parameter(description = "Unique identifier of problems")
+                                    @PathVariable Long problemId) {
 
         return problemService.getProblem(problemId);
     }
 
     //get problem_details of a problem
     @GetMapping("/{problemId}/details")
-    public String getProblem_details(@PathVariable Long problemId) {
+    @Operation(summary = "Get problem details by ID")
+    public String getProblem_details(@Parameter(description = "Unique identifier of problems")
+                                         @PathVariable Long problemId) {
         return problemService.getProblem_details(problemId);
     }
 
     //add a new problem
     @PostMapping
+    @Operation(summary = "Add new problem")
     public Problems addProblem(@RequestBody Problems problem) {
         problemService.addProblem(problem);
         return problem;
@@ -66,7 +82,8 @@ public class ProblemController {
 
     //update a problem
     @PutMapping("/{problemId}")
-    public ResponseEntity<?> updateProblem(
+    @Operation(summary = "Update problem by ID")
+    public ResponseEntity<?> updateProblem(@Parameter(description = "Unique identifier of problems")
             @PathVariable Long problemId,
             @RequestBody Problems problem) {
 
@@ -78,7 +95,9 @@ public class ProblemController {
 
     //delete a problem
     @DeleteMapping("/{problemId}")
-    public ResponseEntity<?> deleteProblem(@PathVariable Long problemId) {
+    @Operation(summary = "Delete problem by ID")
+    public ResponseEntity<?> deleteProblem(@Parameter(description = "Unique identifier of problems")
+                                               @PathVariable Long problemId) {
 
         problemService.deleteProblem(problemId);
 
@@ -91,7 +110,9 @@ public class ProblemController {
 
     //add a problem to a user
     @PostMapping("{problemId}/add")
-    public ResponseEntity<Void> addUserProblem(@PathVariable Long problemId) { //for solved date
+    @Operation(summary = "Add new problem")
+    public ResponseEntity<Void> addUserProblem(@Parameter(description = "Unique identifier of problems")
+                                                   @PathVariable Long problemId) { //for solved date
 
         Authentication auth =
                 SecurityContextHolder
@@ -113,7 +134,9 @@ public class ProblemController {
 
     //revise a user problem
     @PutMapping("{problemId}/revise")
-    public ResponseEntity<UserProblemResponse> reviseProblem(@PathVariable Long problemId) {
+    @Operation(summary = "Revise a problem by ID")
+    public ResponseEntity<UserProblemResponse> reviseProblem(@Parameter(description = "Unique identifier of problems")
+                                                                 @PathVariable Long problemId) {
 
         Authentication auth =
                 SecurityContextHolder
@@ -134,7 +157,9 @@ public class ProblemController {
 
     //delete a user problem
     @DeleteMapping("/{problemId}/delete")
-    public ResponseEntity<?> deleteUserProblem(@PathVariable Long problemId) {
+    @Operation(summary = "Delete a problem by ID")
+    public ResponseEntity<?> deleteUserProblem(@Parameter(description = "Unique identifier of problems")
+                                                   @PathVariable Long problemId) {
 
         Authentication auth =
                 SecurityContextHolder
