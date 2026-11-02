@@ -1,7 +1,12 @@
 import {Link} from "react-router-dom";
 import {useState, useEffect} from "react";
 import { useNavigate } from "react-router-dom";
-import {BadgeCheck, ClipboardCheck, ClockCheck, ChartNoAxesCombined} from "lucide-react";
+import {BadgeCheck,
+    ClipboardCheck,
+    ClockCheck,
+    ChartNoAxesCombined,
+    SquarePen
+} from "lucide-react";
 
 function Profile() {
     const [user, setUser] = useState(null);
@@ -209,9 +214,9 @@ function Profile() {
                             </div>
                         </div>
 
-                        <button className ="edit-profile-button" onClick={() => setShowEditForm(true)}>
-                            edit profile
-                        </button>
+                        <div className ="edit-profile-icon" onClick={() => setShowEditForm(true)}>
+                            <SquarePen size={20}/>
+                        </div>
                     </div>
 
                     <div className={"profile-info"}>
@@ -298,7 +303,8 @@ function Profile() {
                     <div className={"profile-stats"}>
                         <div className={"stat-box"}>
                             <div className={"stat"}>
-                                <h1>{user?.totalProblemsSolved} <h2>problems solved</h2></h1>
+                                <h1>{user?.totalProblemsSolved} </h1>
+                                <h2>problems solved</h2>
                             </div>
                             <div className={"stat-icons"}>
                                 <ClipboardCheck size={30} color={"#f5a86c"}/>
@@ -307,7 +313,8 @@ function Profile() {
 
                         <div className={"stat-box"}>
                             <div className={"stat"}>
-                                <h1>{user?.totalRevisions} <h2>total revisions</h2></h1>
+                                <h1>{user?.totalRevisions}</h1>
+                                <h2>total revisions</h2>
                             </div>
                             <div className={"stat-icons"}>
                                 <ClockCheck size={30} color={"#f5a86c"}/>

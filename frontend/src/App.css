@@ -770,26 +770,25 @@ main {
   font-size: 12px;
 }
 
-.edit-profile-button {
+.edit-profile-icon {
   padding: 9px 12px;
-  margin: 22px 0 10px;
-
-  border: 1px solid #444;
-  border-radius: 7px;
+  margin: 22px 0 15px;
 
   background: transparent;
+  border-radius: 30px;
   color: #bdbdbd;
 
   font-family: inherit;
   font-size: 12px;
 
   cursor: pointer;
-  transition: all 0.2s ease;
 }
 
-.edit-profile-button:hover {
-  border-color: #66bb88;
+.edit-profile-icon:hover {
+  background: rgba(245, 168, 108, 0.08);
+  transform: scale(1.1);
   color: #66bb88;
+  transition: transform 0.2s ease, background 0.2s ease;
 }
 
 .about-section {
@@ -1003,6 +1002,8 @@ main {
   margin: 0;
   font-size: 2.5rem;
   color: #cfcfcf;
+  text-shadow: 0 0 8px #aeb4b6;
+
 }
 
 .stat h2 {
@@ -1179,11 +1180,17 @@ main {
   margin: 80px 0 16px;
 
   overflow: visible;
+  transition: transform 0.3s ease;
 }
 
 .progress-ring svg {
   transform: rotate(-90deg);
   overflow: visible;
+  transition: transform 0.3s ease;
+}
+
+.progress-ring svg:hover {
+  transform: rotate(-90deg) scale(1.1);
 }
 
 .progress-ring-bg {
