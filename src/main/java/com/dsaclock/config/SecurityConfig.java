@@ -71,6 +71,13 @@ public class SecurityConfig {
             //AUTHENTICATION FREE  LOCAL LOGIN
             auth.requestMatchers(HttpMethod.POST,("/api/login")).permitAll();
 
+            //SWAGGER
+            auth.requestMatchers(
+                            "/swagger-ui/**",
+                            "/swagger-ui.html",
+                            "/v3/api-docs/**"
+                    ).permitAll();
+
             //AUTHENTICATION FREE OTP VERIFICATION
             auth.requestMatchers(HttpMethod.POST,("/api/verify")).permitAll();
 
