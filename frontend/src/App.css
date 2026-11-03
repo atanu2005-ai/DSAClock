@@ -1,22 +1,33 @@
 #root {
   min-height: 100vh;
 
-  background: rgba(24, 24, 24, 0.60);
+  background: #111114;
 }
 
 .navbar {
   height: 64px;
+  width: calc(100% - 150px);
+  max-width: 1450px;
+
   padding: 0 32px;
-  position: sticky;
-  top: 0;
+
+  position: fixed;
+  top: 16px;
+  left: 50%;
+  transform: translateX(-50%);
+
   z-index: 1000;
 
   display: flex;
   align-items: center;
   justify-content: space-between;
 
-  border-bottom: 2px solid #333;
-  background: #171b1d;
+  background: #1C1C1F;
+  border-radius: 30px;
+
+  box-shadow:
+          0 12px 30px rgba(0, 0, 0, 0.3),
+          0 1px 0 rgba(0, 0, 0, 0.2);
 }
 
 .navbar-brand {
@@ -80,6 +91,9 @@
 .sidebar a {
   display: block;
 
+  top: 96px;
+  height: calc(100vh - 96px);
+
   padding: 12px 16px;
 
   color: #f5a86c;
@@ -128,7 +142,7 @@
 }
 
 main {
-  padding: 64px 32px;
+  padding: 112px 32px 64px;
 }
 
 .hero {
@@ -218,11 +232,7 @@ main {
   border: 1px solid rgba(255, 255, 255, 0.12);
   border-radius: 12px;
 
-  background: linear-gradient(
-          145deg,
-          rgba(35, 40, 42, 0.96),
-          rgba(20, 24, 26, 0.96)
-  );
+  background: #1C1C1F;
 
   box-shadow: 0 20px 50px rgba(0, 0, 0, 0.45),
   0 4px 12px rgba(0, 0, 0, 0.25);
@@ -353,11 +363,13 @@ main {
 /*problems page*/
 
 .problems-page {
+  display: flex;
+  flex-direction: column;
   max-width: 1150px;
   margin: 0 auto;
-  height: calc(100vh - 64px);
+  height: 100vh;
 
-  padding: 24px 32px;
+  padding: 96px 32px 24px;
   box-sizing: border-box;
 }
 
@@ -367,12 +379,13 @@ main {
 }
 
 .search-container {
-  margin: 0 auto 28px;
+  margin: 20px auto;
   width: 100%;
   max-width: 350px;
   align-items: center;
   display: flex;
   gap: 10px;
+  flex-shrink: 0;
 }
 
 .search-icon {
@@ -382,10 +395,12 @@ main {
 }
 
 .search-container input {
+  min-width: 0;
+  flex: 1;
   width: 380px;
   padding: 10px 14px;
 
-  border: 1px solid #444;
+  border: none;
   border-radius: 28px;
 
   background: #222;
@@ -402,11 +417,13 @@ main {
 
 .problem-list {
   display: flex;
+  margin-top: 30px;
   flex-direction: column;
   gap: 12px;
 
-  height: calc(100% - 70px);
-    overflow-y: auto;
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
   scrollbar-width: none;
 }
 
@@ -417,18 +434,15 @@ main {
   justify-content: space-between;
   align-items: center;
 
-  border: 1px solid rgba(255, 255, 255, 0.12);
+  border: none;
   border-radius: 28px;
 
-  background: linear-gradient(
-          145deg,
-          rgba(35, 40, 42, 0.96),
-          rgba(20, 24, 26, 0.96)
-  );
+  background: #1C1C1F;
 
   box-shadow:
-          0 12px 30px rgba(0, 0, 0, 0.35),
-          0 3px 8px rgba(0, 0, 0, 0.2);
+          0 16px 40px rgba(0, 0, 0, 0.32),
+          0 2px 8px rgba(0, 0, 0, 0.18),
+          0 1px 0 rgba(0, 0, 0, 0.35);
 
   color: #66bb88;
 
@@ -670,14 +684,14 @@ main {
 
 /*Profile page*/
 .profile-page {
-  min-height: calc(100vh - 64px);
-  padding: 26px 60px;
+  min-height: 100vh;
+  padding: 118px 60px 26px;
   position: relative;
   width: 100%;
 
   display: grid;
   grid-template-columns: 370px 1fr;
-  column-gap: 1px;
+  column-gap: 20px;
   align-items: start;
 }
 
@@ -694,27 +708,24 @@ main {
 .profile-left {
   display: flex;
   min-width: 0;
+  margin-left: 30px;
   flex-direction: column;
   align-items: center;
   gap: 40px;
 }
 
 .profile-card {
-  width: 95%;
-  padding: 32px;
+  width: 100%;
+  padding: 22px 24px;
 
-  border: 1px solid rgba(255, 255, 255, 0.12);
+  border: none;
   border-radius: 12px;
 
-  background: linear-gradient(
-          145deg,
-          rgba(25, 28, 30, 0.96),
-          rgba(5, 8, 10, 0.96)
-  );
-
-  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.80),
-  0 4px 12px rgba(0, 0, 0, 0.25);
-
+  background: #1C1C1F;
+  box-shadow:
+          0 16px 40px rgba(0, 0, 0, 0.32),
+          0 2px 8px rgba(0, 0, 0, 0.18),
+          0 1px 0 rgba(0, 0, 0, 0.35);
   text-align: left;
   color: #66bb88;
 }
@@ -796,7 +807,7 @@ main {
 }
 
 .about-section p {
-  color: #f5f5f5;
+  color: #b8b8b8;
   font-size: 14px;
 }
 
@@ -973,6 +984,7 @@ main {
 .profile-right {
   display: flex;
   min-width: 0;
+  margin-right: 30px;
   flex-direction: column;
   align-items: center;
   gap: 20px;
@@ -988,13 +1000,13 @@ main {
 
 .stat-box {
   flex: 1;
-  padding: 0px;
+  padding: 0;
   text-align: center;
 }
 
 .stat {
   border: 2px solid #333;
-  border-radius: 20px;
+  border-radius: 60px;
   padding: 20px;
 }
 
@@ -1085,7 +1097,7 @@ main {
   align-items: center;
 }
 
-.level-0 { background: #2a2a2a; }
+.level-0 { background: #333333; }
 .level-1 { background: #0e4429; }
 .level-2 { background: #22a447; }
 .level-3 { background: #39d353; }
@@ -1130,7 +1142,7 @@ main {
 .progress-info {
   display: flex;
   flex-wrap: wrap;
-  gap: 40px;
+  gap: 28px;
 }
 
 .progress-item {
@@ -1141,7 +1153,8 @@ main {
 }
 
 .revision-count {
-  width: 140px;
+  width: 100%;
+  max-width: 150px;
   margin-top: 8px;
   padding: 0;
   font-size: 20px;
@@ -1154,7 +1167,10 @@ main {
 .revision-count span {
     font-size: 14px;
     color: #a8a8a8;
+  text-align: center;
 }
+
+
 
 .revision-count p {
   margin-top: 4px;
@@ -1186,7 +1202,7 @@ main {
 .progress-ring svg {
   transform: rotate(-90deg);
   overflow: visible;
-  transition: transform 0.3s ease;
+  transition: transform 0.2s ease;
 }
 
 .progress-ring svg:hover {
@@ -1196,20 +1212,20 @@ main {
 .progress-ring-bg {
   fill: none;
   stroke: #2a2f31;
-  stroke-width: 10;
+  stroke-width: 7;
 }
 
 .progress-ring-fill {
   fill: none;
   stroke: #66bb88;
-  stroke-width: 10;
+  stroke-width:7;
 
   stroke-linecap: round;
 
   stroke-dasharray: 377;
   transition: stroke-dashoffset 0.8s ease;
 
-  filter: drop-shadow(0 0 6px #66BB88);
+ /* filter: drop-shadow(0 0 6px #66BB88);*/
 }
 
 .progress-text {
