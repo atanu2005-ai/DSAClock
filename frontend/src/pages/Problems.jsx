@@ -24,9 +24,9 @@ function Problems() {
                 const response = await fetch(
                     "http://localhost:8080/api/problems",
                     {
-                        headers: {
-                            Authorization: `Bearer ${savedToken}`
-                        }
+                        headers: savedToken
+                            ? { Authorization: `Bearer ${savedToken}` }
+                            : {}
                     }
                 );
 
@@ -95,6 +95,7 @@ function Problems() {
                 />
 
             </div>
+            <hr className={"card-divider"}/>
 
                 <div className="problem-list">
                     {loading ? (

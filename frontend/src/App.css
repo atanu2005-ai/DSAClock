@@ -5,14 +5,14 @@
 }
 
 .navbar {
-  height: 64px;
-  width: calc(100% - 150px);
+  height: 58px;
+  width: calc(100% - 24px);
   max-width: 1450px;
 
-  padding: 0 32px;
+  padding: 0 16px;
 
   position: fixed;
-  top: 16px;
+  top: 8px;
   left: 50%;
   transform: translateX(-50%);
 
@@ -141,12 +141,8 @@
   color: #f5a86c;
 }
 
-main {
-  padding: 112px 32px 64px;
-}
-
 .hero {
-  min-height: calc(100vh - 64px);
+  min-height: calc(100dvh - 64px);
 
   display: flex;
   flex-direction: column;
@@ -160,14 +156,14 @@ main {
   margin: 0 0 16px;
 
   color: #f5a86c;
-  font-size: 4rem;
+  font-size: clamp(2rem, 8vw, 4rem);
 }
 
 .hero p {
   margin: 0;
 
   color: #cfcfcf;
-  font-size: 1.2rem;
+  font-size: clamp(0.95rem, 3vw, 1.2rem);
   line-height: 1.8;
 }
 
@@ -179,6 +175,7 @@ main {
 
 .start-buttons {
   display: flex;
+  flex-wrap: wrap;
   justify-content: center;
   margin-bottom: 32px;
   gap: 16px;
@@ -216,7 +213,12 @@ main {
 /*registration from styling*/
 
 .auth-page {
-  min-height: calc(100vh - 64px);
+  min-height: 100vh;
+
+  background-image: url("/homebg2.svg");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
 
   display: flex;
   justify-content: center;
@@ -226,7 +228,9 @@ main {
 }
 
 .auth-card {
-  width: 40%;
+  width: 100%;
+  max-width: 480px;
+  margin-top: 36px;
   padding: 32px;
 
   border: 1px solid rgba(255, 255, 255, 0.12);
@@ -306,6 +310,29 @@ main {
   background-color: #66bb88;
   transform: translateY(-3px);
   box-shadow: 0 6px 18px rgba(102, 187, 136, 0.25);
+}
+
+.auth-card span {
+  display: block;
+  font-size: 12px;
+  color: #aeb4b6;
+}
+
+.auth-divider {
+  display: flex;
+  margin-top: 26px;
+  align-items: center;
+  gap: 12px;
+  color: #888;
+  font-size: 12px;
+}
+
+.auth-divider::before,
+.auth-divider::after {
+  content: "";
+  flex: 1;
+  height: 1px;
+  background: #444;
 }
 
 .auth-card .google-button {
@@ -417,6 +444,9 @@ main {
 
 .problem-list {
   display: flex;
+  box-sizing: border-box;
+  max-width: 1120px;
+  /*padding: 0 60px;*/
   margin-top: 30px;
   flex-direction: column;
   gap: 12px;
@@ -434,10 +464,10 @@ main {
   justify-content: space-between;
   align-items: center;
 
-  border: none;
+  border: 1px solid #101010;
   border-radius: 28px;
 
-  background: #1C1C1F;
+  background: #292929;
 
   box-shadow:
           0 16px 40px rgba(0, 0, 0, 0.32),
@@ -464,7 +494,7 @@ main {
 
 /* Skeleton card */
 .skeleton-card {
-  padding: 14px 18px;
+  padding: 16px 20px;
 
   display: flex;
   align-items: center;
@@ -536,7 +566,7 @@ main {
 
 .problem-details {
   max-width: 900px;
-  min-height: calc(100vh - 64px);
+  min-height: 100vh;
   position: relative;
   display: flex;
   flex-direction: column;
@@ -658,10 +688,11 @@ main {
 }
 
 .problem-details button {
+  width: 100%;
+  max-width: 400px;
   display: block;
-  width: fit-content;
   margin: auto auto 20px;
-  padding: 14px 140px;
+  padding: 14px 20px;
 
   background-color: #f5a86c;
   color: #181818;
@@ -669,7 +700,7 @@ main {
   border: none;
   border-radius: 8px;
 
-  font-size: 1.5rem;
+  font-size: 1.1rem;
   font-weight: bold;
   cursor: pointer;
 
@@ -1388,3 +1419,51 @@ main {
   font-weight: 600;
 }
 
+/*===================
+MOBILE STYLING
+=====================*/
+@media (max-width: 600px) {
+  .logo img {
+    width: 105px;
+    height: auto;
+    margin-top: 5%;
+  }
+  .navbar {
+    width: calc(100% - 20px);
+    height: 44px;
+    padding: 0 12px;
+  }
+
+  .logo img {
+    width: 100px;
+  }
+
+  .nav-links {
+    gap: 10px;
+  }
+
+  .nav-links a {
+    font-size: 12px;
+  }
+
+  .auth-card p {
+    font-size: 12px;
+  }
+  .auth-card button:hover {
+    transform: none;
+    background-color: #F5A86C;
+    color: #181818;
+    box-shadow: none;
+  }
+
+  .hero-buttons:hover {
+    background-color: #F5A86C;
+    color: #181818;
+    transform: none;
+    box-shadow: none;
+  }
+
+  main {
+    padding: 112px 32px 64px;
+  }
+}

@@ -89,6 +89,10 @@ function Login() {
 
                     <button type="submit">Login</button>
 
+                    <div className={"auth-divider"}>
+                        <span>login with Google</span>
+                    </div>
+
                     <button className={"google-button"}
                     onClick={() => {
                         window.location.href =

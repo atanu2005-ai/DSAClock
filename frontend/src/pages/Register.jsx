@@ -97,8 +97,11 @@ function Register() {
                         />
                     </div>
 
-                    <button type="submit">Create Account</button>
+                    <button type="submit">Sign up</button>
 
+                    <div className={"auth-divider"}>
+                        <span>Sign up with Google</span>
+                    </div>
                     <button className={"google-button"}
                             onClick={() => {
                                 window.location.href =
