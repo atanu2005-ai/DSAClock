@@ -87,8 +87,6 @@ function UserProblems() {
 
     return (
         <div className="user-problems-page">
-            <h1>My Problems</h1>
-
             <div className="search-container">
                 <img
                     src="/searchIcon.svg"

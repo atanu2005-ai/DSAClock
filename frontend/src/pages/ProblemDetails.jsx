@@ -1,88 +1,158 @@
-import {useParams} from "react-router-dom";
-import {useEffect, useState} from "react";
-import {useNavigate} from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
 
 function ProblemDetails() {
 
-    const {problemId} = useParams()
-    const [problem, setProblem] = useState(null)
-    const navigate = useNavigate()
+    const { problemId } = useParams();
+    const navigate = useNavigate();
+
+    const [problem, setProblem] = useState(null);
+    const [description, setDescription] = useState("");
+    const [showConfirm, setShowConfirm] = useState(false);
+    const [isAdding, setIsAdding] = useState(false);
 
     useEffect(() => {
         fetch(`http://localhost:8080/api/problems/${problemId}`)
             .then(response => response.json())
-            .then(data => setProblem(data))
-    }, [problemId])
-
-    //for thr problem description
-    const [description, setDescription] = useState("")
+            .then(data => setProblem(data));
+    }, [problemId]);
+    console.log(problem?.problem_diff);
 
     useEffect(() => {
         fetch(`http://localhost:8080/api/problems/${problemId}/details`)
             .then(response => response.text())
-            .then(data => setDescription(data))
-    }, [problemId])
+            .then(data => setDescription(data));
+    }, [problemId]);
 
-    //for handling add button
-    const handleAdd = () => {
-        fetch(`http://localhost:8080/api/problems/${problemId}/add`, {
-            method: "POST",
-            headers: {
-                "Authorization": `Bearer ${localStorage.getItem("token")}`
+    // Add problem to user's collection
+    const handleAdd = async () => {
+        setIsAdding(true);
+
+        try {
+            const response = await fetch(
+                `http://localhost:8080/api/problems/${problemId}/add`,
+                {
+                    method: "POST",
+                    headers: {
+                        Authorization: `Bearer ${localStorage.getItem("token")}`
+                    }
+                }
+            );
+
+            if (response.ok) {
+                navigate("/my-problems");
+                return;
             }
-        })
-            .then(async response => {
-                if(response.ok) {
-                    navigate("/my-problems");
-                    return;
-                }
 
-                if(response.status === 409) {
-                    alert("problem already added")
-                    return;
-                }
+            if (response.status === 409) {
+                alert("Problem already added");
+                setShowConfirm(false);
+                return;
+            }
 
-                throw new Error("Failed to add problem")
-            })
-    }
+            throw new Error("Failed to add problem");
+
+        } catch (error) {
+            console.error("Failed to add problem:", error);
+            alert("Something went wrong. Please try again.");
+        } finally {
+            setIsAdding(false);
+        }
+    };
 
     return (
-        <main className={"problem-details"}>
+        <main className="problem-details">
 
-            <h1>{problem?.problem_title}</h1>
-            <p className={"problemdetails-difficulty"}>
-                {problem?.problem_diff}
-            </p>
+            <div className={"problem-details-card"}>
+                <div className={"problem-details-header"}>
+                    <h1>{problem?.problem_title}</h1>
 
-            <a href={problem?.problem_url}
-               target={"_blank"}
-               rel={"noopener noreferrer"}
-               className={"problem-link"}>
+                    <a
+                        href={problem?.problem_url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="problem-link"
+                    >
+                        <img src={"/LeetcodeIcon.svg"} alt={"leetcode"}/>
+                    </a>
 
-                View on leetcode
-            </a>
+                    <p className="problem-details-difficulty">
+                        {problem?.problem_diff}
+                    </p>
 
-            <div className={"problem-description"}
-                 dangerouslySetInnerHTML={{__html:description}} />
+                </div>
 
-            <div className={"problem-stats"}>
-                <span className={"problem-likes"}>
+                <hr className={"card-divider"}/>
 
-                    <img src="/likelogo.svg" alt={"likes"} />
-                   {problem?.problem_likes}
-                </span>
-                <span className={"problem-dislikes"}>
-                    <img src="/dislikelogo.svg" alt={"dislikes"}/>
-                   {problem?.problem_dislikes}
-                </span>
+                <div
+                    className="problem-description"
+                    dangerouslySetInnerHTML={{ __html: description }}
+                />
+
+                <div className="problem-stats">
+                    <span className="problem-likes">
+                        <img src="/likelogo.svg" alt="likes" />
+                        {problem?.problem_likes}
+                    </span>
+
+                    <span className="problem-dislikes">
+                        <img src="/dislikelogo.svg" alt="dislikes" />
+                        {problem?.problem_dislikes}
+                    </span>
+                </div>
+
+                <button
+                    className="problem-details-buttons"
+                    onClick={() => setShowConfirm(true)}
+                >
+                    Add
+                </button>
             </div>
 
-            <button className={"problem-details-buttons"} onClick={handleAdd}>
-                Add
-            </button>
+            {/* Confirmation Modal */}
+            {showConfirm && (
+                <div
+                    className="modal-overlay"
+                    onClick={() => !isAdding && setShowConfirm(false)}
+                >
+                    <div
+                        className="add-problem-modal"
+                        role="dialog"
+                        aria-modal="true"
+                        aria-labelledby="add-problem-title"
+                        onClick={e => e.stopPropagation()}
+                    >
+                        <h2 id="add-problem-title">Add Problem?</h2>
+
+                        <p>
+                            Are you sure you want to add
+                            <strong> {problem?.problem_title} </strong>
+                            to your collection?
+                        </p>
+
+                        <div className="add-problem-actions">
+                            <button
+                                className="cancel-add"
+                                onClick={() => setShowConfirm(false)}
+                                disabled={isAdding}
+                            >
+                                Cancel
+                            </button>
+
+                            <button
+                                className="confirm-add"
+                                onClick={handleAdd}
+                                disabled={isAdding}
+                            >
+                                {isAdding ? "Adding..." : "Confirm"}
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
 
         </main>
-    )
+    );
 }
 
-export default ProblemDetails
+export default ProblemDetails;
