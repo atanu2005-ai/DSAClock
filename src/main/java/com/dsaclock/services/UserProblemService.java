@@ -76,7 +76,7 @@ public class UserProblemService {
 
         userProblem.setSolvedDate(today);
 
-        userProblem.setNextRevisionDate(today.plusDays(2)); // revision after 2 days for first time adding
+        userProblem.setNextRevisionDate(today.plusDays(7)); // revision after 2 days for first time adding
 
         userProblemRepo.save(userProblem);
 
@@ -121,11 +121,9 @@ public class UserProblemService {
         LocalDate today = LocalDate.now(); //current date
 
         if(updated_count == 1) {
-            userProblems.setNextRevisionDate(today.plusDays(7)); //after 1 revision, next revision after 7 days
-        }else if(updated_count == 2) { //after 2 revisions, next revision after 21 days
-            userProblems.setNextRevisionDate(today.plusDays(21));
-        }else {
-            userProblems.setNextRevisionDate(today.plusDays(90)); //once in a while revision reminder after 90 days
+            userProblems.setNextRevisionDate(today.plusDays(21)); //after 1 revision, next revision after 7 days
+        }else { //after 2 revisions, revise in 90 days interval
+            userProblems.setNextRevisionDate(today.plusDays(90));
         }
 
         userProblemRepo.save(userProblems);
