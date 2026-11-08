@@ -1,16 +1,5 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import "./UserProblems.css";
-
-function formatTimelineDate(date) {
-    if (!date) return "—";
-
-    const [year, month, day] = date.split("-");
-    return new Date(Number(year), Number(month) - 1, Number(day)).toLocaleDateString(
-        "en-GB",
-        { day: "2-digit", month: "short", year: "numeric" }
-    );
-}
 
 function UserProblems() {
     const [userProblems, setUserProblems] = useState([]);
@@ -55,7 +44,7 @@ function UserProblems() {
         }
 
         // Search by exact problem ID when input is numeric
-        if (/^\\d+$/.test(query)) {
+        if (/^\d+$/.test(query)) {
             const result = userProblems.find(
                 (problem) => Number(problem.problemId) === Number(query)
             );
@@ -120,62 +109,37 @@ function UserProblems() {
             <div className="user-problem-list">
                 {(searchId.trim() ? searchResult : userProblems).map(
                     (problem) => (
-                        <article
+                        <div
                             className="user-problem-card"
                             key={problem.problemId}
                         >
-                            <div className="user-problem-content">
-                                <div className="user-problem-heading">
-                                    <Link
-                                        className="user-problem-link"
-                                        target="_blank"
-                                        rel="noopener noreferrer"
-                                        to={problem.url}
-                                    >
-                                        <h2>
-                                            {problem.problemId} : {problem.title}
-                                        </h2>
-                                    </Link>
+                            <Link
+                                className="user-problem-link"
+                                target={"_blank"}
+                                rel={"noopener noreferrer"}
+                                to={problem.url}
+                            >
+                                <h2>
+                                    {problem.problemId} : {problem.title}
+                                </h2>
+                            </Link>
 
-                                    <span className="user-problem-difficulty">
-                                        {problem.difficulty}
-                                    </span>
-                                </div>
+                            <span>{problem.difficulty}</span>
 
-                                <div className="user-problem-timeline">
-                                    <div className="timeline-rail" aria-hidden="true">
-                                        <span className="timeline-dot timeline-dot-solved" />
-                                        <span className="timeline-stem" />
-                                        <span className="timeline-dot timeline-dot-next" />
-                                    </div>
+                            <p>Solved date: {problem.solved_date}</p>
+                            <p>
+                                Next revision date: {problem.next_revision_date}
+                            </p>
 
-                                    <div className="timeline-details">
-                                        <div className="timeline-event">
-                                            <span className="timeline-label">Solved</span>
-                                            <time>{formatTimelineDate(problem.solved_date)}</time>
-                                        </div>
+                            <button
+                                className="revise-button"
+                                onClick={() => handleRevise(problem.problemId)}
+                            >
+                                Revise
+                            </button>
 
-                                        <div className="timeline-event">
-                                            <span className="timeline-label">Next revision</span>
-                                            <time>{formatTimelineDate(problem.next_revision_date)}</time>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div className="user-problem-actions">
-                                <span className="user-problem-revision-count">
-                                    {problem.revision_count} {problem.revision_count === 1 ? "revision" : "revisions"}
-                                </span>
-
-                                <button
-                                    className="revise-button"
-                                    onClick={() => handleRevise(problem.problemId)}
-                                >
-                                    Revise
-                                </button>
-                            </div>
-                        </article>
+                            <p>Times revised: {problem.revision_count}</p>
+                        </div>
                     )
                 )}
             </div>
