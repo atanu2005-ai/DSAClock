@@ -1,4 +1,4 @@
-import { Link, useLocation } from 'react-router-dom';
+import { Link, NavLink, useLocation } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 
 function Navbar() {
@@ -99,24 +99,24 @@ function Navbar() {
                     {isLoggedIn ? (
 
                         <>
-                            <Link to="/problems">
+                            <NavLink to="/problems">
                                 Problems
-                            </Link>
-                            <Link to="/my-problems">
+                            </NavLink>
+                            <NavLink to="/my-problems">
                                 My problems
-                            </Link>
-                            <Link to="/Profile">
+                            </NavLink>
+                            <NavLink to="/Profile">
                                 <img
                                     className="profile-icon"
                                     src="/profileLogo.svg"
                                     alt="Profile"
                                 />
-                            </Link>
+                            </NavLink>
                         </>
                     ) : (
                         <>
-                            <Link to="/login">Login</Link>
-                            <Link to="/register">Sign up</Link>
+                            <NavLink to="/login">Login</NavLink>
+                            <NavLink to="/register">Sign up</NavLink>
                         </>
                     )}
 
