@@ -1,5 +1,5 @@
 import {Link} from "react-router-dom";
-import {useState, useEffect} from "react";
+import {useState, useEffect, useRef} from "react";
 import { useNavigate } from "react-router-dom";
 import {BadgeCheck,
     ClipboardCheck,
@@ -11,6 +11,7 @@ import {BadgeCheck,
 function Profile() {
     const [user, setUser] = useState(null);
     const [activity, setActivity] = useState([]);
+    const heatmapContainerRef = useRef(null);
     const navigate = useNavigate();
     const [showEditForm, setShowEditForm] = useState(false);
     const [editForm, setEditForm] = useState({
@@ -116,6 +117,13 @@ function Profile() {
             .catch(error => console.error("Error fetching activity:", error));
     }, []);
 
+    useEffect(() => {
+        const heatmapContainer = heatmapContainerRef.current;
+        if (heatmapContainer) {
+            heatmapContainer.scrollLeft = heatmapContainer.scrollWidth;
+        }
+    }, [activity]);
+
 //lookup object
     const activityMap = {};
 
@@ -127,7 +135,6 @@ function Profile() {
     const startDate = new Date(today);
     startDate.setFullYear(today.getFullYear() - 1);
 
-//now all 365 days
     const dates = [];
     const startDay = startDate.getDay();
     startDate.setDate(startDate.getDate() - startDay);
@@ -136,7 +143,8 @@ function Profile() {
         dates.push(new Date(date));
     }
 
-//place every cell explicitly by row and column
+// Place every cell explicitly by row and column. A month always begins in a
+// fresh column; months ending on Saturday or Sunday get an additional spacer.
     const heatmapData = [];
     let column = 0;
 
@@ -151,14 +159,22 @@ function Profile() {
             monthChanged =
                 date.getMonth() !== previousDate.getMonth() ||
                 date.getFullYear() !== previousDate.getFullYear();
-            const newWeek = row === 0;
 
-            if(monthChanged || newWeek) {
+            if(monthChanged) {
+                if(previousDate.getDay() >= 5) {
+                    column++;
+                }
+                column++;
+            } else if(row === 0) {
                 column++;
             }
         }
 
-        const dateKey = date.toISOString().split("T")[0];
+        const dateKey = [
+            date.getFullYear(),
+            String(date.getMonth() + 1).padStart(2, "0"),
+            String(date.getDate()).padStart(2, "0")
+        ].join("-");
 
         heatmapData.push({
             date: dateKey,
@@ -177,23 +193,18 @@ function Profile() {
         return "level-4";
     }
 
-//month labels
+// Month labels begin in the second column of each month.
     const monthLabels = [];
 
     heatmapData.forEach((day, index) => {
-        if(index === 0) return;
-        const date = new Date(day.date);
-
-        if (
-            index === 0 ||
-            date.getMonth() !== new Date(heatmapData[index - 1].date).getMonth() ||
-            date.getFullYear() !== new Date(heatmapData[index - 1].date).getFullYear()
-        ) {
+        if(day.monthStart || index === 0) {
+            const [year, month] = day.date.split("-").map(Number);
+            const date = new Date(year, month - 1, 1);
             monthLabels.push({
                 month: date.toLocaleString("default", {
                     month: "short"
                 }),
-                column: day.column
+                column: day.column + 1
             });
         }
     });
@@ -344,7 +355,7 @@ function Profile() {
                             </div>
                         </div>
 
-                        <div className="heatmap-container">
+                        <div className="heatmap-container" ref={heatmapContainerRef}>
 
                             <div className="month-labels">
                                 {monthLabels.map((month, index) => (
@@ -506,7 +517,7 @@ function Profile() {
 
                                 <div className="revision-count">
                                     {totalRevised} <span> revisions for </span> {totalSolved}
-                                    <p>problems with an average of {reviseRatio}</p>
+                                    <p>problems with an average of {reviseRatio.toFixed(2)}</p>
                                 </div>
                             </div>
                         </div>
