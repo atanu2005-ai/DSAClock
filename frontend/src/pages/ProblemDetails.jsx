@@ -1,5 +1,6 @@
 import { useParams, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
+import ConfirmationModal from "../components/ConfirmationModal.jsx";
 
 function ProblemDetails() {
 
@@ -109,46 +110,16 @@ function ProblemDetails() {
                 </button>
             </div>
 
-            {/* Confirmation Modal */}
             {showConfirm && (
-                <div
-                    className="modal-overlay"
-                    onClick={() => !isAdding && setShowConfirm(false)}
-                >
-                    <div
-                        className="add-problem-modal"
-                        role="dialog"
-                        aria-modal="true"
-                        aria-labelledby="add-problem-title"
-                        onClick={e => e.stopPropagation()}
-                    >
-                        <h2 id="add-problem-title">Add Problem?</h2>
-
-                        <p>
-                            Are you sure you want to add
-                            <strong> {problem?.problem_title} </strong>
-                            to your collection?
-                        </p>
-
-                        <div className="add-problem-actions">
-                            <button
-                                className="cancel-add"
-                                onClick={() => setShowConfirm(false)}
-                                disabled={isAdding}
-                            >
-                                Cancel
-                            </button>
-
-                            <button
-                                className="confirm-add"
-                                onClick={handleAdd}
-                                disabled={isAdding}
-                            >
-                                {isAdding ? "Adding..." : "Confirm"}
-                            </button>
-                        </div>
-                    </div>
-                </div>
+                <ConfirmationModal
+                    title="Add Problem?"
+                    message={<>Are you sure you want to add <strong>{problem?.problem_title}</strong> to your collection?</>}
+                    isBusy={isAdding}
+                    onCancel={() => setShowConfirm(false)}
+                    onConfirm={handleAdd}
+                    confirmText="Confirm"
+                    busyText="Adding..."
+                />
             )}
 
         </main>
