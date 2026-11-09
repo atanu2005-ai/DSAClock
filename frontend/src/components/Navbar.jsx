@@ -3,12 +3,20 @@ import { useState, useEffect } from 'react';
 
 function Navbar() {
     const location = useLocation();
+    const [isLoggedIn, setIsLoggedIn] = useState(false);
+    const [sidebarOpen, setSidebarOpen] = useState(false);
+
     useEffect(() => {
         setSidebarOpen(false);
     }, [location.pathname]);
 
-    const [isLoggedIn, setIsLoggedIn] = useState(false);
-    const [sidebarOpen, setSidebarOpen] = useState(false);
+    useEffect(() => {
+        document.body.style.overflow = sidebarOpen ? "hidden" : "";
+
+        return () => {
+            document.body.style.overflow = "";
+        };
+    }, [sidebarOpen]);
 
     useEffect(() => {
         const checkAuth = () => {
@@ -48,13 +56,21 @@ function Navbar() {
 
     return (
         <>
-            <nav className="navbar">
+            <nav
+                className="navbar"
+                onClick={() => sidebarOpen && setSidebarOpen(false)}
+            >
 
                 <div className="navbar-brand">
 
                     <button
                         className="menu-button"
-                        onClick={() => setSidebarOpen(!sidebarOpen)}
+                        onClick={(event) => {
+                            event.stopPropagation();
+                            setSidebarOpen(!sidebarOpen);
+                        }}
+                        aria-label="Toggle navigation menu"
+                        aria-expanded={sidebarOpen}
                     >
                         <svg
                             xmlns="http://www.w3.org/2000/svg"
@@ -108,16 +124,21 @@ function Navbar() {
 
             </nav>
 
-            <aside className={`sidebar ${sidebarOpen ? "open" : ""}`}>
-                <Link to="/problems">
-                    Problems
-                </Link>
-
-                <Link to="/my-problems">
-                    My Problems
-                </Link>
-
-            </aside>
+            <div
+                className={`sidebar-overlay ${sidebarOpen ? "open" : ""}`}
+                onClick={() => setSidebarOpen(false)}
+                aria-hidden={!sidebarOpen}
+            >
+                <aside
+                    className="sidebar"
+                    aria-label="Navigation menu"
+                    onClick={(event) => event.stopPropagation()}
+                >
+                    <Link to="/problems">Problems</Link>
+                    <hr className="sidebar-divider" />
+                    <Link to="/my-problems">My Problems</Link>
+                </aside>
+            </div>
         </>
     );
 }

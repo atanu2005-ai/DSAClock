@@ -109,11 +109,16 @@ function Problems() {
                                 className="problem-card"
                                 key={problem.problemId}
                             >
-                                <span className="problem-title">
-                                    {problem.problemId} : {problem.problem_title}
+                                <span className="problem-heading">
+                                    <span className="problem-id">
+                                        {problem.problemId}
+                                    </span>
+                                    <span className="problem-title">
+                                        {problem.problem_title}
+                                    </span>
                                 </span>
 
-                                <span className="problem-difficulty">
+                                <span className={`problem-difficulty difficulty-${problem.problem_diff?.toLowerCase()}`}>
                                     {problem.problem_diff}
                                 </span>
                             </Link>

@@ -62,49 +62,69 @@
   color: #66BB88;
 }
 
-.sidebar {
+.sidebar-overlay {
   position: fixed;
-  overflow: auto;
-
-  top: 64px;
-  left: 0;
-
-  width: 240px;
-  height: calc(100vh - 64px);
-
-  padding: 24px 16px;
-
-  background: #171b1d;
-  border-right: none;
-
-  z-index: 100;
-
-  transform: translateX(-100%);
-  transition: transform 0.2s ease;
+  inset: 0;
+  z-index: 999;
+  background: rgba(0, 0, 0, 0.48);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 220ms ease;
 }
 
-.sidebar.open {
-  transform: translateX(0);
-  box-shadow: 6px 0 18px rgba(0, 0, 0, 0.36);
+.sidebar-overlay.open {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.sidebar {
+  position: absolute;
+  top: 74px;
+  left: max(12px, calc((100vw - 1450px) / 2));
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: 260px;
+  max-width: calc(100vw - 24px);
+  padding: 14px;
+  border: none;
+  border-radius: 18px;
+  background: linear-gradient(145deg, #202023, #151518);
+  box-shadow: 0 18px 48px rgba(0, 0, 0, 0.48);
+  opacity: 0;
+  transform: translateY(-12px) scale(0.98);
+  transform-origin: top left;
+  transition: transform 220ms ease, opacity 180ms ease;
+  pointer-events: none;
+}
+
+.sidebar-overlay.open .sidebar {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+  pointer-events: auto;
 }
 
 .sidebar a {
   display: block;
-
-  top: 96px;
-  height: calc(100vh - 96px);
-
-  padding: 12px 16px;
-
-  color: #f5a86c;
+  padding: 14px 16px;
+  border-radius: 10px;
+  color: #f5f5f5;
   text-decoration: none;
-
-  border-radius: 8px;
+  transition: color 160ms ease, background-color 160ms ease;
 }
 
-.sidebar a:hover {
-  color: #66bb88;
-  background: rgba(102, 187, 136, 0.08);
+.sidebar a:hover,
+.sidebar a:focus-visible {
+  color: #f5a86c;
+  background: rgba(245, 168, 108, 0.1);
+  outline: none;
+}
+
+.sidebar-divider {
+  width: calc(100% - 16px);
+  margin: 0 auto;
+  border: 0;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .logo {
@@ -142,7 +162,11 @@
 }
 
 .hero {
-  min-height: calc(100dvh - 64px);
+  min-height: 100dvh;
+  background-image: url("/homebg2.svg");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
 
   display: flex;
   flex-direction: column;
@@ -483,6 +507,31 @@
   border-color: #f5a86c;
 }
 
+.problem-heading {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  min-width: 0;
+}
+
+.problem-id {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 auto;
+  min-width: 24px;
+  height: 24px;
+  padding: 0 10px;
+  box-sizing: border-box;
+  border: none;
+  border-radius: 999px;
+  background: #222;
+  color: #f5f5f5;
+  font-size: 0.85rem;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+
 .problem-title {
   color: #f5f5f5;
   font-weight: normal;
@@ -490,6 +539,18 @@
 
 .problem-difficulty {
   color: #a8a8a8;
+}
+
+.problem-difficulty.difficulty-easy {
+  color: #00AF9B;
+}
+
+.problem-difficulty.difficulty-medium {
+  color: #FFB800;
+}
+
+.problem-difficulty.difficulty-hard {
+  color: #FF375F;
 }
 
 /* Skeleton card */
@@ -1529,6 +1590,12 @@
 MOBILE STYLING
 =====================*/
 @media (max-width: 600px) {
+  .sidebar {
+    top: 60px;
+    left: 10px;
+    max-width: calc(100vw - 20px);
+  }
+
   .logo img {
     width: 105px;
     height: auto;
